@@ -5,6 +5,8 @@ import sys, os, json, argparse, random, math
 from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
+from structure import ChimeraQPU
+
 DEFAULT_CHIMERA_DEGREE = 12
 DEFAULT_CONFIG_FILE = '_config'
 
@@ -27,6 +29,9 @@ def main(args):
         edges = set([tuple(coupler) for coupler in couplers])
         nodes = solver.properties['qubits']
 
+        chimera_degree = int(math.ceil(math.sqrt(len(nodes)/8.0)))
+        print_err('inferred square chimera of degree %d on "%s"' % (chimera_degree, args.solver_name))
+
     else:
         chimera_degree = DEFAULT_CHIMERA_DEGREE
         if args.chimera_degree != None:
@@ -34,6 +39,7 @@ def main(args):
 
         print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % chimera_degree)
 
+        # the hard coded 4 here assumes an 4x2 unit cell
         arcs = get_chimera_adjacency(chimera_degree, chimera_degree, 4)
 
         # turn arcs into edges
@@ -55,20 +61,14 @@ def main(args):
     print_err(len(edges))
     print_err(len(nodes))
 
-    c_count = {i : int(math.floor(i / 8)) for i in nodes}
-    c_row = { i : int(math.floor(c_count[i] / 12)) for i in nodes}
-    c_col = { i : c_count[i] % 12 for i in nodes}
+    qpu = ChimeraQPU(nodes, edges, chimera_degree)
+    print_err(qpu)
 
     if args.chimera_degree != None:
-        cd = args.chimera_degree
-        assert(cd >= 1)
-        nodes = [n for n in nodes if ((c_row[n]+1 <= cd and c_col[n]+1 <= cd))]
-        edges = [(i,j) for i,j in edges if (i in nodes and j in nodes)]
+        qpu = qpu.chimera_degree_filter(args.chimera_degree)
+        print_err(qpu)
 
-    print_err(len(edges))
-    print_err(len(nodes))
-
-    H = ran_generator(edges, steps = 1)
+    H = ran_generator(qpu, steps = 1)
 
     print_err(H)
 
@@ -79,8 +79,8 @@ def main(args):
 
 
 
-def ran_generator(edges, steps = 1):
-    H = {edge : -1.0 if random.random() <= 0.5 else 1.0 for edge in edges}
+def ran_generator(qpu, steps = 1):
+    H = {edge : -1.0 if random.random() <= 0.5 else 1.0 for edge in qpu.edges}
     return H
 
 
