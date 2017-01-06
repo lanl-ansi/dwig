@@ -1,8 +1,31 @@
 import copy, math
 
+
 class QPUConfiguration(object):
-    def __init__(qpu, field, coupling):
-        pass
+    def __init__(self, qpu, fields={}, couplings={}):
+        self.qpu = qpu
+        self.fields = fields
+        self.couplings = couplings
+
+        for k, v in fields.items():
+            assert(qpu.site_range[0] <= v and qpu.site_range[1] >= v)
+            assert(k in qpu.sites)
+
+        for k, v in couplings.items():
+            assert(qpu.coupler_range[0] <= v and qpu.coupler_range[1] >= v)
+            assert(k in qpu.couplers)
+
+    def qubist_hamiltonian(self):
+        lines = []
+        lines.append('%d %d' % (max([site.index for site in self.qpu.sites]), len(self.fields) + len(self.couplings)))
+        for i, v in self.fields.items():
+            lines.append('%d %d %f' % (i.index, i.index, v))
+        for (i ,j), v in self.couplings.items():
+            lines.append('%d %d %f' % (i.index, j.index, v))
+        return '\n'.join(lines)
+
+    def __str__(self):
+        return 'fields: '+str(self.fields)+'\ncouplings: '+str(self.couplings)
 
 
 class ChimeraQPU(object):
@@ -28,9 +51,9 @@ class ChimeraQPU(object):
 
 
 class ChimeraSite(object):
-    def __init__(self, index, chimera_degree):
+    def __init__(self, index, chimera_degree, unit_cell_size = 8):
         self.index = index
-        self.chimera_cell = int(math.floor(index / 8))
+        self.chimera_cell = int(math.floor(index / unit_cell_size))
         self.chimera_row = int(math.floor(self.chimera_cell / chimera_degree))
         self.chimera_column = int(self.chimera_cell % chimera_degree)
 

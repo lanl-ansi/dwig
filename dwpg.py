@@ -6,6 +6,7 @@ from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
 from structure import ChimeraQPU
+from structure import QPUConfiguration
 
 DEFAULT_CHIMERA_DEGREE = 12
 DEFAULT_CONFIG_FILE = '_config'
@@ -24,15 +25,12 @@ def main(args):
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
         print_err(qpu)
 
-    H = ran_generator(qpu, steps = 1)
+    qpu_config = ran_generator(qpu, steps = 1)
 
-    print_err(H)
+    print_err(qpu_config)
 
     if args.qubist_hamiltonian:
-        print('%d %d' % (max(sites), len(H)))
-        for (i ,j), v in H.items():
-            print('%d %d %f' % (i, j, v))
-
+        print(qpu_config.qubist_hamiltonian())
 
 def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
     if not url is None and not token is None and not solver_name is None:
@@ -82,8 +80,8 @@ def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_de
 
 
 def ran_generator(qpu, steps = 1):
-    H = {coupler : -1.0 if random.random() <= 0.5 else 1.0 for coupler in qpu.couplers}
-    return H
+    couplings = {coupler : -1.0 if random.random() <= 0.5 else 1.0 for coupler in qpu.couplers}
+    return QPUConfiguration(qpu, {}, couplings)
 
 
 # prints a line to standard error
