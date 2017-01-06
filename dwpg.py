@@ -15,14 +15,34 @@ def main(args):
     if not args.seed is None:
         random.seed(args.seed)
 
-    if not args.dw_url is None and not args.dw_token is None and not args.solver_name is None:
-        print_err('QPU connection details found, accessing "%s" at "%s"' % (args.solver_name, args.dw_url))
-        if args.dw_proxy is None: 
-            remote_connection = RemoteConnection(args.dw_url, args.dw_token)
-        else:
-            remote_connection = RemoteConnection(args.dw_url, args.dw_token, args.dw_proxy)
+    nodes, edges, chimera_degree = get_qpu_specs(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
 
-        solver = remote_connection.get_solver(args.solver_name)
+    qpu = ChimeraQPU(nodes, edges, chimera_degree)
+    print_err(qpu)
+
+    if args.chimera_degree != None:
+        qpu = qpu.chimera_degree_filter(args.chimera_degree)
+        print_err(qpu)
+
+    H = ran_generator(qpu, steps = 1)
+
+    print_err(H)
+
+    if args.qubist_hamiltonian:
+        print('%d %d' % (max(nodes), len(H)))
+        for (i ,j), v in H.items():
+            print('%d %d %f' % (i, j, v))
+
+
+def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
+    if not url is None and not token is None and not solver_name is None:
+        print_err('QPU connection details found, accessing "%s" at "%s"' % (solver_name, url))
+        if proxy is None: 
+            remote_connection = RemoteConnection(url, token)
+        else:
+            remote_connection = RemoteConnection(url, token, proxy)
+
+        solver = remote_connection.get_solver(solver_name)
 
         couplers = solver.properties['couplers']
 
@@ -30,12 +50,12 @@ def main(args):
         nodes = solver.properties['qubits']
 
         chimera_degree = int(math.ceil(math.sqrt(len(nodes)/8.0)))
-        print_err('inferred square chimera of degree %d on "%s"' % (chimera_degree, args.solver_name))
+        print_err('inferred square chimera of degree %d on "%s"' % (chimera_degree, solver_name))
 
     else:
         chimera_degree = DEFAULT_CHIMERA_DEGREE
-        if args.chimera_degree != None:
-            chimera_degree = args.chimera_degree
+        if chimera_degree == None:
+            chimera_degree = DEFAULT_CHIMERA_DEGREE
 
         print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % chimera_degree)
 
@@ -58,25 +78,7 @@ def main(args):
     for i,j in edges:
         assert(i < j)
 
-    print_err(len(edges))
-    print_err(len(nodes))
-
-    qpu = ChimeraQPU(nodes, edges, chimera_degree)
-    print_err(qpu)
-
-    if args.chimera_degree != None:
-        qpu = qpu.chimera_degree_filter(args.chimera_degree)
-        print_err(qpu)
-
-    H = ran_generator(qpu, steps = 1)
-
-    print_err(H)
-
-    if args.qubist_hamiltonian:
-        print('%d %d' % (max(nodes), len(H)))
-        for (i ,j), v in H.items():
-            print('%d %d %f' % (i, j, v))
-
+    return nodes, edges, chimera_degree
 
 
 def ran_generator(qpu, steps = 1):
@@ -115,6 +117,7 @@ def load_config(args):
             print('unable to open conifguration file: %s' % config_file_path)
             quit()
 
+    return args
 
 def build_cli_parser():
     parser = argparse.ArgumentParser()
@@ -146,6 +149,4 @@ def build_cli_parser():
 
 if __name__ == '__main__':
     parser = build_cli_parser()
-    args = parser.parse_args()
-    load_config(args)
-    main(args)
+    main(load_config(parser.parse_args()))
