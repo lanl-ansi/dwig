@@ -6,28 +6,28 @@ class QPUConfiguration(object):
 
 
 class ChimeraQPU(object):
-    def __init__(self, nodes, edges, chimera_degree, node_range = (-2.0, 2.0), edge_range = (-1.0, 1.0)):
-        self.nodes = set([ChimeraNode(node, chimera_degree) for node in nodes])
+    def __init__(self, sites, couplers, chimera_degree, site_range = (-2.0, 2.0), coupler_range = (-1.0, 1.0)):
+        self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
         
-        node_lookup = { cn.index : cn for cn in self.nodes }
-        self.edges = set([(node_lookup[i],node_lookup[j]) for i,j in edges])
+        site_lookup = { cn.index : cn for cn in self.sites }
+        self.couplers = set([(site_lookup[i],site_lookup[j]) for i,j in couplers])
         self.chimera_degree = chimera_degree
-        self.node_range = node_range
-        self.edge_range = edge_range
+        self.site_range = site_range
+        self.coupler_range = coupler_range
 
     def chimera_degree_filter(self, chimera_degree):
         assert(chimera_degree >= 1)
 
-        filtered_nodes = set([n.index for n in self.nodes if n.is_chimera_degree(chimera_degree)])
-        filtered_edges = [(i.index, j.index) for i,j in self.edges if (i.index in filtered_nodes and j.index in filtered_nodes)]
+        filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree)])
+        filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_nodes, filtered_edges, chimera_degree)
+        return ChimeraQPU(filtered_sites, filtered_couplers, chimera_degree)
 
     def __str__(self):
-        return 'nodes: '+str(self.nodes)+'\nedges: '+str(self.edges)
+        return 'sites: '+str(self.sites)+'\ncouplers: '+str(self.couplers)
 
 
-class ChimeraNode(object):
+class ChimeraSite(object):
     def __init__(self, index, chimera_degree):
         self.index = index
         self.chimera_cell = int(math.floor(index / 8))

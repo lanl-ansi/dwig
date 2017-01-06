@@ -15,9 +15,9 @@ def main(args):
     if not args.seed is None:
         random.seed(args.seed)
 
-    nodes, edges, chimera_degree = get_qpu_specs(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
+    sites, couplers, chimera_degree = get_qpu_specs(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
 
-    qpu = ChimeraQPU(nodes, edges, chimera_degree)
+    qpu = ChimeraQPU(sites, couplers, chimera_degree)
     print_err(qpu)
 
     if args.chimera_degree != None:
@@ -29,7 +29,7 @@ def main(args):
     print_err(H)
 
     if args.qubist_hamiltonian:
-        print('%d %d' % (max(nodes), len(H)))
+        print('%d %d' % (max(sites), len(H)))
         for (i ,j), v in H.items():
             print('%d %d %f' % (i, j, v))
 
@@ -46,10 +46,10 @@ def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_de
 
         couplers = solver.properties['couplers']
 
-        edges = set([tuple(coupler) for coupler in couplers])
-        nodes = solver.properties['qubits']
+        couplers = set([tuple(coupler) for coupler in couplers])
+        sites = solver.properties['qubits']
 
-        chimera_degree = int(math.ceil(math.sqrt(len(nodes)/8.0)))
+        chimera_degree = int(math.ceil(math.sqrt(len(sites)/8.0)))
         print_err('inferred square chimera of degree %d on "%s"' % (chimera_degree, solver_name))
 
     else:
@@ -62,27 +62,27 @@ def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_de
         # the hard coded 4 here assumes an 4x2 unit cell
         arcs = get_chimera_adjacency(chimera_degree, chimera_degree, 4)
 
-        # turn arcs into edges
-        edges = []
+        # turn arcs into couplers
+        couplers = []
         for i,j in arcs:
             assert(i != j)
             if i < j:
-                edges.append((i,j))
+                couplers.append((i,j))
             else:
-                edges.append((j,i))
-        edges = set(edges)
+                couplers.append((j,i))
+        couplers = set(couplers)
 
-        nodes = set([edge[0] for edge in edges]+[edge[1] for edge in edges])
+        sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
 
-    # sanity check on edges
-    for i,j in edges:
+    # sanity check on couplers
+    for i,j in couplers:
         assert(i < j)
 
-    return nodes, edges, chimera_degree
+    return sites, couplers, chimera_degree
 
 
 def ran_generator(qpu, steps = 1):
-    H = {edge : -1.0 if random.random() <= 0.5 else 1.0 for edge in qpu.edges}
+    H = {coupler : -1.0 if random.random() <= 0.5 else 1.0 for coupler in qpu.couplers}
     return H
 
 
