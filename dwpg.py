@@ -1,40 +1,81 @@
 #!/usr/bin/env python2
 
-import os, json, argparse, random, time
+import sys, os, json, argparse, random, math
 
-import dwave_sapi2 as dw
+from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
-
-CONFIG_FILE_DEFAULT = '_config'
+DEFAULT_CHIMERA_DEGREE = 12
+DEFAULT_CONFIG_FILE = '_config'
 
 
 def main(args):
     if not args.seed is None:
         random.seed(args.seed)
 
-    if args.dw_proxy is None: 
-        remote_connection = RemoteConnection(args.dw_url, args.dw_token)
+    if not args.dw_url is None and not args.dw_token is None and not args.solver_name is None:
+        print_err('QPU connection details found, accessing "%s" at "%s"' % (args.solver_name, args.dw_url))
+        if args.dw_proxy is None: 
+            remote_connection = RemoteConnection(args.dw_url, args.dw_token)
+        else:
+            remote_connection = RemoteConnection(args.dw_url, args.dw_token, args.dw_proxy)
+
+        solver = remote_connection.get_solver(args.solver_name)
+
+        couplers = solver.properties['couplers']
+
+        edges = set([tuple(coupler) for coupler in couplers])
+        nodes = solver.properties['qubits']
+
     else:
-        remote_connection = RemoteConnection(args.dw_url, args.dw_token, args.dw_proxy)
+        chimera_degree = DEFAULT_CHIMERA_DEGREE
+        if args.chimera_degree != None:
+            chimera_degree = args.chimera_degree
 
-    solver = remote_connection.get_solver(args.solver_name)
+        print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % chimera_degree)
 
-    edges = solver.properties['couplers']
-    nodes = solver.properties['qubits']
+        arcs = get_chimera_adjacency(chimera_degree, chimera_degree, 4)
 
-    print(len(edges))
-    print(len(nodes))
+        # turn arcs into edges
+        edges = []
+        for i,j in arcs:
+            assert(i != j)
+            if i < j:
+                edges.append((i,j))
+            else:
+                edges.append((j,i))
+        edges = set(edges)
 
-    edges = set([tuple(edge) for edge in edges])
+        nodes = set([edge[0] for edge in edges]+[edge[1] for edge in edges])
 
-    #c_count = [ int(math.floor(i / 8)) for i in all_nodes]
-    #c_row = [ int(math.floor(c_count[i] / 12)) for i in all_nodes]
-    #c_col = [ c_count[i] % 12 for i in all_nodes]
+    # sanity check on edges
+    for i,j in edges:
+        assert(i < j)
+
+    print_err(len(edges))
+    print_err(len(nodes))
+
+    c_count = {i : int(math.floor(i / 8)) for i in nodes}
+    c_row = { i : int(math.floor(c_count[i] / 12)) for i in nodes}
+    c_col = { i : c_count[i] % 12 for i in nodes}
+
+    if args.chimera_degree != None:
+        cd = args.chimera_degree
+        assert(cd >= 1)
+        nodes = [n for n in nodes if ((c_row[n]+1 <= cd and c_col[n]+1 <= cd))]
+        edges = [(i,j) for i,j in edges if (i in nodes and j in nodes)]
+
+    print_err(len(edges))
+    print_err(len(nodes))
 
     H = ran_generator(edges, steps = 1)
 
-    print(H)
+    print_err(H)
+
+    if args.qubist_hamiltonian:
+        print('%d %d' % (max(nodes), len(H)))
+        for (i ,j), v in H.items():
+            print('%d %d %f' % (i, j, v))
 
 
 
@@ -43,6 +84,9 @@ def ran_generator(edges, steps = 1):
     return H
 
 
+# prints a line to standard error
+def print_err(data):
+    sys.stderr.write(str(data)+'\n')
 
 # loads a configuration file and sets up undefined CLI arguments
 def load_config(args):
@@ -67,7 +111,7 @@ def load_config(args):
                 print('the config file does not appear to be a valid json document: %s' % config_file_path)
                 quit()
     else:
-        if config_file_path != CONFIG_FILE_DEFAULT:
+        if config_file_path != DEFAULT_CONFIG_FILE:
             print('unable to open conifguration file: %s' % config_file_path)
             quit()
 
@@ -75,7 +119,7 @@ def load_config(args):
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-cf', '--config-file', help='a configuration file for specifing common parameters', default=CONFIG_FILE_DEFAULT)
+    parser.add_argument('-cf', '--config-file', help='a configuration file for specifing common parameters', default=DEFAULT_CONFIG_FILE)
 
     parser.add_argument('-url', '--dw-url', help='url of the d-wave machine')
     parser.add_argument('-token', '--dw-token', help='token for accessing the d-wave machine')
@@ -84,6 +128,8 @@ def build_cli_parser():
 
     parser.add_argument('-cd', '--chimera-degree', help='the degree of the square chimera graph', type=int)
     #parser.add_argument('-o', '--output', help='the output file name')
+    parser.add_argument('-dqh', '--qubist-hamiltonian', help='prints a Hamiltonian to stdout that can be read by qubist', action='store_true')
+    
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     #parser.add_argument('-dqp', '--display-qaudratic-program', help='prints the qaudratic program to stdout', action='store_true', default=False)
     #parser.add_argument('-rtl', '--runtime-limit', help='gurobi runtime limit (sec.)', type=int)
