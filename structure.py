@@ -15,6 +15,12 @@ class QPUConfiguration(object):
             assert(qpu.coupler_range[0] <= v and qpu.coupler_range[1] >= v)
             assert(k in qpu.couplers)
 
+    def active_sites(self):
+        active = set(self.fields.keys())
+        active |= set([key[0] for key in self.couplings.keys()])
+        active |= set([key[1] for key in self.couplings.keys()])
+        return active
+
     def qubist_hamiltonian(self):
         lines = []
         lines.append('%d %d' % (max([site.index for site in self.qpu.sites]), len(self.fields) + len(self.couplings)))
@@ -23,6 +29,70 @@ class QPUConfiguration(object):
         for (i ,j), v in self.couplings.items():
             lines.append('%d %d %f' % (i.index, j.index, v))
         return '\n'.join(lines)
+
+    def ising_dict(self):
+        return self._build_dict(True, self.couplings, self.fields, 0.0)
+
+    def bqp_dict(self):
+        offset = 0
+        coefficients = {}
+
+        for site in self.active_sites():
+            coefficients[(site, site)] = 0
+
+        for k,v in self.fields.items():
+            assert(v != 0)
+            coefficients[(k, k)] = 2*v
+            offset += -v
+
+        for (i,j),v in self.couplings.items():
+            assert(v != 0)
+
+            assert(i.index < j.index)
+            if not (i,j) in coefficients:
+                coefficients[(i,j)] = 0
+
+            coefficients[(i,j)] = coefficients[(i,j)] + 4*v
+            coefficients[(i,i)] = coefficients[(i,i)] - 2*v
+            coefficients[(j,j)] = coefficients[(j,j)] - 2*v
+            offset += v
+
+        linear_terms = {}
+        quadratic_terms = {}
+
+        for (i,j),v in coefficients.items():
+            if v != 0.0:
+                if i == j:
+                    linear_terms[i] = v
+                else:
+                    quadratic_terms[(i,j)] = v
+
+        return self._build_dict(False, quadratic_terms, linear_terms, offset)
+
+
+    def _build_dict(self, ising, quadratic_terms, linear_terms, offset):
+        sorted_sites = sorted(self.active_sites(), key=lambda x: x.index)
+
+        quadratic_terms_data = []
+        for (i,j),v in quadratic_terms.items():
+            assert(v != 0)
+            quadratic_terms_data.append({'idx_1':i.index, 'idx_2':j.index, 'coeff':v})
+
+        linear_terms_data = []
+        for k,v in linear_terms.items():
+            assert(v != 0)
+            linear_terms_data.append({'idx':k.index, 'coeff':v})
+
+        data_dict = {
+            'variable_domain': 'ising' if ising else 'binary',
+            'variable_idxs':[site.index for site in sorted_sites],
+            'offset': offset,
+            'linear_terms':linear_terms_data,
+            'quadratic_terms':quadratic_terms_data
+        }
+
+        return data_dict
+
 
     def __str__(self):
         return 'fields: '+\
@@ -39,6 +109,14 @@ class ChimeraQPU(object):
         self.chimera_degree = chimera_degree
         self.site_range = site_range
         self.coupler_range = coupler_range
+
+        for i,j in couplers:
+            assert(i in sites)
+            assert(j in sites)
+
+        for i,j in couplers:
+            assert(i != j)
+
 
     def chimera_degree_filter(self, chimera_degree):
         assert(chimera_degree >= 1)

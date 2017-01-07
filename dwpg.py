@@ -6,7 +6,8 @@ from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
 from structure import ChimeraQPU
-from structure import QPUConfiguration
+
+import generator
 
 DEFAULT_CHIMERA_DEGREE = 12
 DEFAULT_CONFIG_FILE = '_config'
@@ -23,15 +24,25 @@ def main(args):
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
         #print_err(qpu)
 
-    qpu_config = ran_generator(qpu, steps = 1)
+    if args.generator == 'ran':
+        qpu_config = generator.generate_ran(qpu, args.steps)
 
     #print_err(qpu_config)
 
-    if args.qubist_hamiltonian:
+    if args.output_format == 'qh':
         print(qpu_config.qubist_hamiltonian())
+    if args.output_format == 'ising':
+        data = qpu_config.ising_dict()
+        data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
+        print(data_string)
+    if args.output_format == 'binary':
+        data = qpu_config.bqp_dict()
+        data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
+        print(data_string)
 
 
 def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
+
     if not url is None and not token is None and not solver_name is None:
         print_err('QPU connection details found, accessing "%s" at "%s"' % (solver_name, url))
         if proxy is None: 
@@ -84,11 +95,6 @@ def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=N
     return ChimeraQPU(sites, couplers, chimera_degree, site_range, coupler_range)
 
 
-def ran_generator(qpu, steps = 1):
-    couplings = {coupler : -1.0 if random.random() <= 0.5 else 1.0 for coupler in qpu.couplers}
-    return QPUConfiguration(qpu, {}, couplings)
-
-
 # prints a line to standard error
 def print_err(data):
     sys.stderr.write(str(data)+'\n')
@@ -134,13 +140,13 @@ def build_cli_parser():
     parser.add_argument('-proxy', '--dw-proxy', help='proxy for accessing the d-wave machine')
     parser.add_argument('-solver', '--solver-name', help='d-wave solver to use', type=int)
 
-    parser.add_argument('-cd', '--chimera-degree', help='the degree of the square chimera graph', type=int)
-    #parser.add_argument('-o', '--output', help='the output file name')
-    parser.add_argument('-dqh', '--qubist-hamiltonian', help='prints a Hamiltonian to stdout that can be read by qubist', action='store_true')
-    
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
-    #parser.add_argument('-dqp', '--display-qaudratic-program', help='prints the qaudratic program to stdout', action='store_true', default=False)
-    #parser.add_argument('-rtl', '--runtime-limit', help='gurobi runtime limit (sec.)', type=int)
+    parser.add_argument('-cd', '--chimera-degree', help='the degree of the square chimera graph', type=int)
+
+    parser.add_argument('-form', '--output-format', choices=['qh', 'ising', 'binary'], default='qh')
+
+    parser.add_argument('-dqh', '--qubist-hamiltonian', help='prints a Hamiltonian to stdout that can be read by qubist', action='store_true')
+
 
     #parser.add_argument('-g', '--generator', choices=['ran1', 'negative', 'checker', 'frustrated-checker'], default='ran1')
     subparsers = parser.add_subparsers()
