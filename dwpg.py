@@ -26,19 +26,29 @@ def main(args):
 
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.steps)
+    elif args.generator == 'clq':
+        qpu_config = generator.generate_clq(qpu)
+    elif args.generator == 'flc':
+        qpu_config = generator.generate_flc(qpu)
+    elif args.generator == 'wscn':
+        qpu_config = generator.generate_wscn(qpu)
+    else:
+        assert(False) # CLI failed
 
     #print_err(qpu_config)
 
     if args.output_format == 'qh':
         print(qpu_config.qubist_hamiltonian())
-    if args.output_format == 'ising':
+    elif args.output_format == 'ising':
         data = qpu_config.ising_dict()
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
-    if args.output_format == 'binary':
+    elif args.output_format == 'binary':
         data = qpu_config.bqp_dict()
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
+    else:
+        assert(False) # CLI failed
 
 
 def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
@@ -145,15 +155,21 @@ def build_cli_parser():
 
     parser.add_argument('-form', '--output-format', choices=['qh', 'ising', 'binary'], default='qh')
 
-    parser.add_argument('-dqh', '--qubist-hamiltonian', help='prints a Hamiltonian to stdout that can be read by qubist', action='store_true')
 
-
-    #parser.add_argument('-g', '--generator', choices=['ran1', 'negative', 'checker', 'frustrated-checker'], default='ran1')
     subparsers = parser.add_subparsers()
 
-    parser_ran = subparsers.add_parser('ran', help='builds a ran-n problem')
+    parser_ran = subparsers.add_parser('ran', help='generates a RAN-n problem')
     parser_ran.set_defaults(generator='ran')
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
+
+    parser_clq = subparsers.add_parser('clq', help='generates a max clique problem')
+    parser_clq.set_defaults(generator='clq')
+
+    parser_flc = subparsers.add_parser('flc', help='generates a frustrated loop problem')
+    parser_flc.set_defaults(generator='flc')
+
+    parser_wscn = subparsers.add_parser('wscn', help='generates a weak-strong cluster network problem')
+    parser_wscn.set_defaults(generator='wscn')
 
     return parser
 
