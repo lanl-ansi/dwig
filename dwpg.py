@@ -16,23 +16,22 @@ def main(args):
     if not args.seed is None:
         random.seed(args.seed)
 
-    sites, couplers, chimera_degree = get_qpu_specs(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
-
-    qpu = ChimeraQPU(sites, couplers, chimera_degree)
-    print_err(qpu)
+    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
+    #print_err(qpu)
 
     if args.chimera_degree != None:
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
-        print_err(qpu)
+        #print_err(qpu)
 
     qpu_config = ran_generator(qpu, steps = 1)
 
-    print_err(qpu_config)
+    #print_err(qpu_config)
 
     if args.qubist_hamiltonian:
         print(qpu_config.qubist_hamiltonian())
 
-def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
+
+def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
     if not url is None and not token is None and not solver_name is None:
         print_err('QPU connection details found, accessing "%s" at "%s"' % (solver_name, url))
         if proxy is None: 
@@ -50,12 +49,18 @@ def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_de
         chimera_degree = int(math.ceil(math.sqrt(len(sites)/8.0)))
         print_err('inferred square chimera of degree %d on "%s"' % (chimera_degree, solver_name))
 
+        site_range = tuple(solver.properties['h_range'])
+        coupler_range = tuple(solver.properties['j_range'])
+
     else:
         chimera_degree = DEFAULT_CHIMERA_DEGREE
         if chimera_degree == None:
             chimera_degree = DEFAULT_CHIMERA_DEGREE
 
         print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % chimera_degree)
+
+        site_range = (-2.0, 2.0)
+        coupler_range = (-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
         arcs = get_chimera_adjacency(chimera_degree, chimera_degree, 4)
@@ -76,7 +81,7 @@ def get_qpu_specs(url=None, token=None, proxy=None, solver_name=None, chimera_de
     for i,j in couplers:
         assert(i < j)
 
-    return sites, couplers, chimera_degree
+    return ChimeraQPU(sites, couplers, chimera_degree, site_range, coupler_range)
 
 
 def ran_generator(qpu, steps = 1):
@@ -87,6 +92,7 @@ def ran_generator(qpu, steps = 1):
 # prints a line to standard error
 def print_err(data):
     sys.stderr.write(str(data)+'\n')
+
 
 # loads a configuration file and sets up undefined CLI arguments
 def load_config(args):
@@ -116,6 +122,7 @@ def load_config(args):
             quit()
 
     return args
+
 
 def build_cli_parser():
     parser = argparse.ArgumentParser()

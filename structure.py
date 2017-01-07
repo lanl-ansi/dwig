@@ -25,13 +25,15 @@ class QPUConfiguration(object):
         return '\n'.join(lines)
 
     def __str__(self):
-        return 'fields: '+str(self.fields)+'\ncouplings: '+str(self.couplings)
+        return 'fields: '+\
+            ' '.join([str(site)+':'+str(value) for site, value in self.fields.items()]) +\
+            '\ncouplings: '+' '.join(['('+str(i)+', '+str(j)+'):'+str(value) for (i,j), value in self.couplings.items()])
 
 
 class ChimeraQPU(object):
-    def __init__(self, sites, couplers, chimera_degree, site_range = (-2.0, 2.0), coupler_range = (-1.0, 1.0)):
+    def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range):
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
-        
+
         site_lookup = { cn.index : cn for cn in self.sites }
         self.couplers = set([(site_lookup[i],site_lookup[j]) for i,j in couplers])
         self.chimera_degree = chimera_degree
@@ -44,10 +46,12 @@ class ChimeraQPU(object):
         filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree)])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, chimera_degree)
+        return ChimeraQPU(filtered_sites, filtered_couplers, chimera_degree, self.site_range, self.coupler_range)
 
     def __str__(self):
-        return 'sites: '+str(self.sites)+'\ncouplers: '+str(self.couplers)
+        return 'sites: '+\
+            ' '.join([str(site) for site in self.sites])+'\ncouplers: '+\
+            ' '.join(['('+str(i)+', '+str(j)+')' for i,j in self.couplers])
 
 
 class ChimeraSite(object):
@@ -61,4 +65,4 @@ class ChimeraSite(object):
         return self.chimera_row+1 <= chimera_degree and self.chimera_column+1 <= chimera_degree
 
     def __str__(self):
-        return 's_'+str(self.index)
+        return str(self.index)
