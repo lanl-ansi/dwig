@@ -1,17 +1,46 @@
 import copy, math
 
+from common import print_err
+
+def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
+    assert(site_lb + site_ub == 0.0)
+    assert(coupler_lb + coupler_ub == 0.0)
+
+    scaling_factor = 1.0
+
+    for field in fields.values():
+        if field < site_lb:
+            scaling_factor = min(scaling_factor, site_lb/field)
+        if field > site_ub:
+            scaling_factor = min(scaling_factor, site_ub/field)
+
+    for coupling in couplings.values():
+        if coupling < coupler_lb:
+            scaling_factor = min(scaling_factor, coupler_lb/coupling)
+        if coupling > coupler_ub:
+            scaling_factor = min(scaling_factor, coupler_ub/coupling)
+
+    if scaling_factor < 1.0:
+        print_err('info: rescaling field to [%f,%f] and couplings to [%f,%f] with scaling factor %f' % (site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
+        fields = {k:v*scaling_factor for k,v in fields.items()}
+        couplings = {k:v*scaling_factor for k,v in couplings.items()}
+
+    return fields, couplings
+
 
 class QPUConfiguration(object):
     def __init__(self, qpu, fields={}, couplings={}):
-        self.qpu = qpu
-        self.fields = fields
-        self.couplings = couplings
+        scaled_fields, scaled_couplings = rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
 
-        for k, v in fields.items():
+        self.qpu = qpu
+        self.fields = scaled_fields
+        self.couplings = scaled_couplings
+
+        for k, v in self.fields.items():
             assert(qpu.site_range[0] <= v and qpu.site_range[1] >= v)
             assert(k in qpu.sites)
 
-        for k, v in couplings.items():
+        for k, v in self.couplings.items():
             assert(qpu.coupler_range[0] <= v and qpu.coupler_range[1] >= v)
             assert(k in qpu.couplers)
 
@@ -24,9 +53,11 @@ class QPUConfiguration(object):
     def qubist_hamiltonian(self):
         lines = []
         lines.append('%d %d' % (max([site.index for site in self.qpu.sites]), len(self.fields) + len(self.couplings)))
-        for i, v in self.fields.items():
+        for i in sorted(self.fields):
+            v = self.fields[i]
             lines.append('%d %d %f' % (i.index, i.index, v))
-        for (i ,j), v in self.couplings.items():
+        for (i ,j) in sorted(self.couplings):
+            v = self.couplings[(i,j)]
             lines.append('%d %d %f' % (i.index, j.index, v))
         return '\n'.join(lines)
 
@@ -84,7 +115,7 @@ class QPUConfiguration(object):
             linear_terms_data.append({'idx':k.index, 'coeff':v})
 
         data_dict = {
-            'variable_domain': 'ising' if ising else 'binary',
+            'variable_domain': 'spin' if ising else 'boolean',
             'variable_idxs':[site.index for site in sorted_sites],
             'offset': offset,
             'linear_terms':linear_terms_data,

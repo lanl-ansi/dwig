@@ -8,6 +8,7 @@ from dwave_sapi2.remote import RemoteConnection
 from structure import ChimeraQPU
 
 import generator
+from common import print_err
 
 DEFAULT_CHIMERA_DEGREE = 12
 DEFAULT_CONFIG_FILE = '_config'
@@ -25,7 +26,7 @@ def main(args):
         #print_err(qpu)
 
     if args.generator == 'ran':
-        qpu_config = generator.generate_ran(qpu, args.steps)
+        qpu_config = generator.generate_ran(qpu, args.steps, args.field)
     elif args.generator == 'clq':
         qpu_config = generator.generate_clq(qpu)
     elif args.generator == 'flc':
@@ -37,6 +38,7 @@ def main(args):
 
     #print_err(qpu_config)
 
+    #print(args.output_format)
     if args.output_format == 'qh':
         print(qpu_config.qubist_hamiltonian())
     elif args.output_format == 'ising':
@@ -105,11 +107,6 @@ def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=N
     return ChimeraQPU(sites, couplers, chimera_degree, site_range, coupler_range)
 
 
-# prints a line to standard error
-def print_err(data):
-    sys.stderr.write(str(data)+'\n')
-
-
 # loads a configuration file and sets up undefined CLI arguments
 def load_config(args):
     config_file_path = args.config_file
@@ -161,7 +158,8 @@ def build_cli_parser():
     parser_ran = subparsers.add_parser('ran', help='generates a RAN-n problem')
     parser_ran.set_defaults(generator='ran')
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
-
+    parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+    
     parser_clq = subparsers.add_parser('clq', help='generates a max clique problem')
     parser_clq.set_defaults(generator='clq')
 

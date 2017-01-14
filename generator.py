@@ -4,9 +4,19 @@ from structure import QPUConfiguration
 
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
 
-def generate_ran(qpu, steps = 1):
-    couplings = {coupler : -1.0 if random.random() <= 0.5 else 1.0 for coupler in qpu.couplers}
-    return QPUConfiguration(qpu, {}, couplings)
+# specification provided in https://arxiv.org/abs/1508.05087
+def generate_ran(qpu, steps = 1, feild = False):
+    assert(isinstance(steps, int))
+    assert(steps >= 1)
+
+    choices = range(-steps, 0) + range(1, steps+1)
+
+    print(choices)
+    fields = {}
+    if feild:
+        fields = {site : random.choice(choices) for site in qpu.sites}
+    couplings = {coupler : random.choice(choices) for coupler in qpu.couplers}
+    return QPUConfiguration(qpu, fields, couplings)
 
 
 def generate_clq(qpu):
