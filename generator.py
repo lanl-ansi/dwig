@@ -1,5 +1,7 @@
 import random
 
+from common import print_err
+
 from structure import QPUConfiguration
 
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
@@ -11,7 +13,6 @@ def generate_ran(qpu, steps = 1, feild = False):
 
     choices = range(-steps, 0) + range(1, steps+1)
 
-    print(choices)
     fields = {}
     if feild:
         fields = {site : random.choice(choices) for site in qpu.sites}

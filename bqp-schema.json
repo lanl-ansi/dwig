@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "binary quadratic program schema",
+  "type": "object",
+  "required":["variable_idxs", "variable_domain", "offset", "linear_terms", "quadratic_terms"],
+  "properties": {
+    "variable_idxs": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "variable_domain": {
+      "type":"string",
+      "enum":["spin", "boolean"]
+    },
+    "offset" : {
+      "type": "number"
+    },
+    "linear_terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required":["idx", "coeff"],
+        "properties": {
+          "idx" : {
+            "type": "integer"
+          },
+          "coeff":{
+             "type": "number"
+          }
+        }
+      }
+    },
+    "quadratic_terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required":["idx_1", "idx_2", "coeff"],
+        "properties": {
+          "idx_1" : {
+            "type": "integer"
+          },
+          "idx_2" : {
+            "type": "integer"
+          },
+          "coeff":{
+             "type": "number"
+          }
+        }
+      }
+    },
+    "description":{
+      "type": "string"
+    },
+    "solutions":{
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required":["idx", "assignment"],
+        "properties": {
+          "idx" : {
+            "type": "integer"
+          },
+          "description" : {
+            "type": "string"
+          },
+          "objective_val" : {
+            "type": "number"
+          },
+          "assignment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required":["idx", "val"],
+              "properties": {
+                "idx" : {
+                  "type": "integer"
+                },
+                "val":{
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
