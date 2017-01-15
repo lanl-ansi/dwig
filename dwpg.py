@@ -39,9 +39,7 @@ def main(args):
     #print_err(qpu_config)
 
     #print(args.output_format)
-    if args.output_format == 'qh':
-        print(qpu_config.qubist_hamiltonian())
-    elif args.output_format == 'ising':
+    if args.output_format == 'ising':
         data = qpu_config.ising_dict()
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
@@ -150,7 +148,7 @@ def build_cli_parser():
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the degree of the square chimera graph', type=int)
 
-    parser.add_argument('-form', '--output-format', choices=['qh', 'ising', 'binary'], default='qh')
+    parser.add_argument('-form', '--output-format', choices=['ising', 'binary'], default='ising')
 
 
     subparsers = parser.add_subparsers()
