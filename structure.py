@@ -10,16 +10,18 @@ def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
     scaling_factor = 1.0
 
     for field in fields.values():
-        if field < site_lb:
-            scaling_factor = min(scaling_factor, site_lb/field)
-        if field > site_ub:
-            scaling_factor = min(scaling_factor, site_ub/field)
+        if field != 0:
+            if field < site_lb:
+                scaling_factor = min(scaling_factor, site_lb/float(field))
+            if field > site_ub:
+                scaling_factor = min(scaling_factor, site_ub/float(field))
 
     for coupling in couplings.values():
-        if coupling < coupler_lb:
-            scaling_factor = min(scaling_factor, coupler_lb/coupling)
-        if coupling > coupler_ub:
-            scaling_factor = min(scaling_factor, coupler_ub/coupling)
+        if coupling != 0:
+            if coupling < coupler_lb:
+                scaling_factor = min(scaling_factor, coupler_lb/float(coupling))
+            if coupling > coupler_ub:
+                scaling_factor = min(scaling_factor, coupler_ub/float(coupling))
 
     if scaling_factor < 1.0:
         print_err('info: rescaling field to [%f,%f] and couplings to [%f,%f] with scaling factor %f' % (site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))

@@ -12,6 +12,7 @@ def generate_ran(qpu, steps = 1, feild = False):
     assert(steps >= 1)
 
     choices = range(-steps, 0) + range(1, steps+1)
+    choices = [float(x) for x in choices]
 
     fields = {}
     if feild:
