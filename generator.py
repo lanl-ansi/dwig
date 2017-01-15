@@ -15,8 +15,8 @@ def generate_ran(qpu, steps = 1, feild = False):
 
     fields = {}
     if feild:
-        fields = {site : random.choice(choices) for site in qpu.sites}
-    couplings = {coupler : random.choice(choices) for coupler in qpu.couplers}
+        fields = {site : random.choice(choices) for site in sorted(qpu.sites)}
+    couplings = {coupler : random.choice(choices) for coupler in sorted(qpu.couplers)}
     return QPUConfiguration(qpu, fields, couplings)
 
 

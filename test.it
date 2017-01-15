@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python -m py.test --cov dwpg.py --cov common.py --cov generator.py --cov structure.py --cov-report=html $@

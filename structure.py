@@ -106,12 +106,14 @@ class QPUConfiguration(object):
         sorted_sites = sorted(self.active_sites(), key=lambda x: x.index)
 
         quadratic_terms_data = []
-        for (i,j),v in quadratic_terms.items():
+        for (i,j) in sorted(quadratic_terms):
+            v = quadratic_terms[(i,j)]
             assert(v != 0)
             quadratic_terms_data.append({'idx_1':i.index, 'idx_2':j.index, 'coeff':v})
 
         linear_terms_data = []
-        for k,v in linear_terms.items():
+        for k in sorted(linear_terms):
+            v = linear_terms[k]
             assert(v != 0)
             linear_terms_data.append({'idx':k.index, 'coeff':v})
 

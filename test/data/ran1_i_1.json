@@ -1,0 +1,97 @@
+{
+  "linear_terms": [],
+  "offset": 0.0,
+  "quadratic_terms": [
+    {
+      "coeff": 1,
+      "idx_1": 0,
+      "idx_2": 4
+    },
+    {
+      "coeff": 1,
+      "idx_1": 0,
+      "idx_2": 5
+    },
+    {
+      "coeff": -1,
+      "idx_1": 0,
+      "idx_2": 6
+    },
+    {
+      "coeff": -1,
+      "idx_1": 0,
+      "idx_2": 7
+    },
+    {
+      "coeff": 1,
+      "idx_1": 1,
+      "idx_2": 4
+    },
+    {
+      "coeff": -1,
+      "idx_1": 1,
+      "idx_2": 5
+    },
+    {
+      "coeff": 1,
+      "idx_1": 1,
+      "idx_2": 6
+    },
+    {
+      "coeff": -1,
+      "idx_1": 1,
+      "idx_2": 7
+    },
+    {
+      "coeff": -1,
+      "idx_1": 2,
+      "idx_2": 4
+    },
+    {
+      "coeff": 1,
+      "idx_1": 2,
+      "idx_2": 5
+    },
+    {
+      "coeff": 1,
+      "idx_1": 2,
+      "idx_2": 6
+    },
+    {
+      "coeff": 1,
+      "idx_1": 2,
+      "idx_2": 7
+    },
+    {
+      "coeff": -1,
+      "idx_1": 3,
+      "idx_2": 4
+    },
+    {
+      "coeff": 1,
+      "idx_1": 3,
+      "idx_2": 5
+    },
+    {
+      "coeff": 1,
+      "idx_1": 3,
+      "idx_2": 6
+    },
+    {
+      "coeff": -1,
+      "idx_1": 3,
+      "idx_2": 7
+    }
+  ],
+  "variable_domain": "spin",
+  "variable_idxs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ]
+}
