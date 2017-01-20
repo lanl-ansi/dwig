@@ -1,12 +1,13 @@
-# dwpg - D-Wave Problem Generator
+# D-Wave Instance Generator (D-WIG)
 
-This script is used to randomly generate interesting binary quadratic programs that are compatible with a target D-Wave QPU.  It assumes the QPU has a chimera topology.
+This script is used to generate interesting binary quadratic programs, which are compatible with a specific D-Wave QPU.  It assumes the QPU has a chimera topology.
 
-This code includes two tools,
-* dwpg.py - for generating B-QP problems in the bqp-json format
-* bqp2qh.py - takes a bqp-json file and prints a qubist hamiltonian
+This code includes,
+* bqp-schema.json - a JSON-Schema for encoding B-QP optimization problems
+* dwig.py - a tool for generating B-QP problems in the bqp-json format
+* bqp2qh.py - a tool for converting a bqp-json file into a qubist hamiltonian
 
 ### Simple Tests
 
-`./dwpg.py -cd 1 ran`
-`./dwpg.py -cd 1 ran | ./bqp2qh.py`
+`./dwig.py -cd 1 ran`
+`./dwig.py -cd 1 ran | ./bqp2qh.py`
