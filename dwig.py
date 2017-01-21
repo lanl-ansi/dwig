@@ -32,7 +32,16 @@ def main(args):
     elif args.generator == 'flc':
         qpu_config = generator.generate_flc(qpu)
     elif args.generator == 'wscn':
-        qpu_config = generator.generate_wscn(qpu)
+        if qpu.chimera_degree < 6:
+            print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is %d.' % qpu.chimera_degree)
+            quit()
+
+        effective_chimera_degree = 6*int(math.floor(qpu.chimera_degree/6))
+        if effective_chimera_degree != qpu.chimera_degree:
+            print_err('the weak-strong cluster network will occupy a space of chimera degree %d.' % qpu.effective_chimera_degree)
+        qpu = qpu.chimera_degree_filter(effective_chimera_degree)
+
+        qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
     else:
         assert(False) # CLI failed
 
@@ -74,7 +83,6 @@ def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=N
         coupler_range = tuple(solver.properties['j_range'])
 
     else:
-        chimera_degree = DEFAULT_CHIMERA_DEGREE
         if chimera_degree == None:
             chimera_degree = DEFAULT_CHIMERA_DEGREE
 
@@ -157,7 +165,7 @@ def build_cli_parser():
     parser_ran.set_defaults(generator='ran')
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
-    
+
     parser_clq = subparsers.add_parser('clq', help='generates a max clique problem')
     parser_clq.set_defaults(generator='clq')
 
@@ -166,6 +174,8 @@ def build_cli_parser():
 
     parser_wscn = subparsers.add_parser('wscn', help='generates a weak-strong cluster network problem')
     parser_wscn.set_defaults(generator='wscn')
+    parser_wscn.add_argument('-wf', '--weak-field', help='strength of the weak field', type=float, default=0.44)
+    parser_wscn.add_argument('-sf', '--strong-field', help='strength of the weak field', type=float, default=-1)
 
     return parser
 

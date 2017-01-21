@@ -138,14 +138,26 @@ class QPUConfiguration(object):
 
 
 class ChimeraQPU(object):
-    def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range):
+    def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range, chimera_degree_view = None):
+        if chimera_degree_view == None:
+            self.chimera_degree_view = chimera_degree
+        else:
+            self.chimera_degree_view = chimera_degree_view
+
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
 
         site_lookup = { cn.index : cn for cn in self.sites }
         self.couplers = set([(site_lookup[i],site_lookup[j]) for i,j in couplers])
-        self.chimera_degree = chimera_degree
+        self.chimera_degree = int(chimera_degree)
         self.site_range = site_range
         self.coupler_range = coupler_range
+
+        self.chimera_cell_sites = {}
+        for site in self.sites:
+            if not site.chimera_cell in self.chimera_cell_sites:
+                self.chimera_cell_sites[site.chimera_cell] = set([])
+            self.chimera_cell_sites[site.chimera_cell].add(site)
+        #print(self.chimera_cell_sites)
 
         for i,j in couplers:
             assert(i in sites)
@@ -155,13 +167,19 @@ class ChimeraQPU(object):
             assert(i != j)
 
 
-    def chimera_degree_filter(self, chimera_degree):
-        assert(chimera_degree >= 1)
+    def chimera_degree_filter(self, chimera_degree_view):
+        assert(chimera_degree_view >= 1)
 
-        filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree)])
+        filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree_view)])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, chimera_degree, self.site_range, self.coupler_range)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view)
+
+    def chimera_cell(self, chimera_row, chimera_column):
+        assert(chimera_row > 0 and chimera_row <= self.chimera_degree_view)
+        assert(chimera_column > 0 and chimera_column <= self.chimera_degree_view)
+
+        return (chimera_row-1)*(self.chimera_degree) + (chimera_column-1)
 
     def __str__(self):
         return 'sites: '+\

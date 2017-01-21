@@ -7,14 +7,18 @@ from common import validate_bqp_data
 
 # converts a bqp json file to a qubist hamiltonian
 def main(args):
-    data = json.load(sys.stdin)
+    try:
+        data = json.load(sys.stdin)
+    except:
+        print_err('unable to parse stdin as a json document')
+        quit()
     validate_bqp_data(data)
 
     if data['variable_domain'] == 'boolean':
         print_err('unable to generate qubist hamiltonian from stdin, only spin domains are supported at this time')
         quit()
 
-    sites = len(data['variable_idxs'])
+    sites = max(data['variable_idxs'])+1
     lines = len(data['linear_terms']) + len(data['quadratic_terms'])
 
     print('%d %d' % (sites, lines))
