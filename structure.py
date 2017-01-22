@@ -1,5 +1,7 @@
 import copy, math
 
+from collections import namedtuple
+
 from common import print_err
 from common import validate_bqp_data
 
@@ -137,6 +139,8 @@ class QPUConfiguration(object):
             '\ncouplings: '+' '.join(['('+str(i)+', '+str(j)+'):'+str(value) for (i,j), value in self.couplings.items()])
 
 
+ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
+
 class ChimeraQPU(object):
     def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range, chimera_degree_view = None):
         if chimera_degree_view == None:
@@ -173,9 +177,13 @@ class ChimeraQPU(object):
         filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree_view)])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view)
 
-    def chimera_cell(self, chimera_row, chimera_column):
+
+    def chimera_cell(self, chimera_coordinate):
+        return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)
+
+    def chimera_cell_coordinates(self, chimera_row, chimera_column):
         assert(chimera_row > 0 and chimera_row <= self.chimera_degree_view)
         assert(chimera_column > 0 and chimera_column <= self.chimera_degree_view)
 

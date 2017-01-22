@@ -23,7 +23,6 @@ def main(args):
 
     if args.chimera_degree != None:
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
-        #print_err(qpu)
 
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.steps, args.field)
@@ -32,13 +31,13 @@ def main(args):
     elif args.generator == 'flc':
         qpu_config = generator.generate_flc(qpu)
     elif args.generator == 'wscn':
-        if qpu.chimera_degree < 6:
-            print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is %d.' % qpu.chimera_degree)
+        if qpu.chimera_degree_view < 6:
+            print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is %d.' % qpu.chimera_degree_view)
             quit()
 
-        effective_chimera_degree = 6*int(math.floor(qpu.chimera_degree/6))
-        if effective_chimera_degree != qpu.chimera_degree:
-            print_err('the weak-strong cluster network will occupy a space of chimera degree %d.' % qpu.effective_chimera_degree)
+        effective_chimera_degree = 3*int(math.floor(qpu.chimera_degree_view/3))
+        if effective_chimera_degree != qpu.chimera_degree_view:
+            print_err('the weak-strong cluster network will occupy a space of chimera degree %d.' % effective_chimera_degree)
         qpu = qpu.chimera_degree_filter(effective_chimera_degree)
 
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
