@@ -1,4 +1,4 @@
-rm data/*.qh
+#rm data/*.qh
 rm data/*.json
 
 #../dwig.py -cd 1 -rs 0 ran > data/ran1_i_0.qh

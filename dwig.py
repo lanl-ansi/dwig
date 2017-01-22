@@ -16,6 +16,7 @@ DEFAULT_CONFIG_FILE = '_config'
 
 def main(args):
     if not args.seed is None:
+        print_err('setting random seed to: %d' % args.seed)
         random.seed(args.seed)
 
     qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
