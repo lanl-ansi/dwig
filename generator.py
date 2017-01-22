@@ -35,7 +35,18 @@ def generate_flc(qpu):
 
 
 def generate_wscn(qpu, weak_field, strong_field):
-    # stub for weak-strong cluster network case generation
+    '''This function builds a weak-strong cluster network as described by,
+    https://arxiv.org/abs/1512.02206.  The function assumes that the chimera
+    degree of the QPU is a square multiple of 3 that is greater than 5.  As 
+    this a necessary condition for building a weak-strong cluster network.
+
+    The function begins by placing a core set of weak-strong cluster 
+    blocks, which can be replicated at regular intervals of three chimera 
+    cells in the x and y axis.  Second, it adds in the remaining weak-strong 
+    clusters which cannot be captured by the repeated sub-structure.  With all 
+    of the weak-strong clusters in place, it finished by linking the strong 
+    clusters together.
+    '''
     assert(qpu.chimera_degree_view >= 6)
     assert(qpu.chimera_degree_view % 3 == 0)
 
@@ -73,6 +84,13 @@ def generate_wscn(qpu, weak_field, strong_field):
 WeakStrongCluster = namedtuple('WeakStrongCluster', ['weak', 'strong'])
 
 def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
+    '''This function adds the parts of the of weak-strong cluster network which
+    are not covered by the weak-strong cluster blocks. This function must 
+    consider the complete weak-strong cluster network because the semantics 
+    vary based on the overlap of the weak-strong cluster blocks.  There are 
+    three primary cases: (1) corners of the cluster network; (2) along the 
+    boarder of the cluster network; and (3) on the interior of cluster network.
+    '''
     fields = {} 
     couplings = {}
 
@@ -99,22 +117,22 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
         if sc.row == min_row_col and sc.col == min_row_col:
             wc_1 = ChimeraCoordinate(sc.row-1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col-1)
-            wc = _choose_cluster(qpu, sc, wc_1, wc_2)
+            wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
             ws_cluters.append(WeakStrongCluster(wc, sc))
         elif sc.row == min_row_col and sc.col == max_row_col:
             wc_1 = ChimeraCoordinate(sc.row-1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col+1)
-            wc = _choose_cluster(qpu, sc, wc_1, wc_2)
+            wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
             ws_cluters.append(WeakStrongCluster(wc, sc))
         elif sc.row == max_row_col and sc.col == min_row_col:
             wc_1 = ChimeraCoordinate(sc.row+1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col-1)
-            wc = _choose_cluster(qpu, sc, wc_1, wc_2)
+            wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
             ws_cluters.append(WeakStrongCluster(wc, sc))
         elif sc.row == max_row_col and sc.col == max_row_col:
             wc_1 = ChimeraCoordinate(sc.row+1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col-1)
-            wc = _choose_cluster(qpu, sc, wc_1, wc_2)
+            wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
             ws_cluters.append(WeakStrongCluster(wc, sc))
         # Row Cases
         elif sc.row == min_row_col and (sc.col != min_row_col or sc.col != max_row_col):
@@ -123,7 +141,7 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
         elif sc.row == max_row_col and (sc.col != min_row_col or sc.col != max_row_col):
             wc = ChimeraCoordinate(sc.row+1, sc.col)
             ws_cluters.append(WeakStrongCluster(wc, sc))
-        # Col Cases
+        # Column Cases
         elif (sc.row != min_row_col or sc.row != max_row_col) and sc.col == min_row_col:
             wc = ChimeraCoordinate(sc.row, sc.col-1)
             ws_cluters.append(WeakStrongCluster(wc, sc))
@@ -145,26 +163,29 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
         sc_fields, sc_couplings = _build_sc(qpu, strong_field, sc)
         _update_fc(fields, couplings, sc_fields, sc_couplings)
 
-    #quit()
     return fields, couplings, strong_cultsers
 
 
-def _choose_cluster(qpu, strong_cluster, weak_cluster_1, weak_cluster_2):
+def _select_weak_cluster(qpu, strong_cluster, weak_cluster_1, weak_cluster_2):
+    '''There are multiple weak cluster options for the corners of a 
+    weak-strong cluster network.  This function is used to select between them.
+    '''
     #TODO this could be extended to support some more interesting tie breaking criteria
     return weak_cluster_1
 
 
 def _build_wscb(qpu, weak_field, strong_field, c_row_offset, c_col_offset):
+    '''Given chimera coordinate offsets, builds the repeatable part of and a 
+    4x4 weak-string cluster block.  Block corners are left to another method.
+    '''
     fields = {} 
     couplings = {}
 
     cro = c_row_offset
     cco = c_col_offset
     wscs = [
-        #(qpu.chimera_cell(cro+1, cco+0), qpu.chimera_cell(cro+1, cco+1)),
         WeakStrongCluster(ChimeraCoordinate(cro+0, cco+2), ChimeraCoordinate(cro+1, cco+2)),
         WeakStrongCluster(ChimeraCoordinate(cro+2, cco+3), ChimeraCoordinate(cro+1, cco+3)),
-        #(qpu.chimera_cell(cro+0, cco+4), qpu.chimera_cell(cro+1, cco+4)),
 
         WeakStrongCluster(ChimeraCoordinate(cro+2, cco+2), ChimeraCoordinate(cro+2, cco+1)),
         WeakStrongCluster(ChimeraCoordinate(cro+2, cco+5), ChimeraCoordinate(cro+2, cco+4)),
@@ -172,10 +193,8 @@ def _build_wscb(qpu, weak_field, strong_field, c_row_offset, c_col_offset):
         WeakStrongCluster(ChimeraCoordinate(cro+3, cco+0), ChimeraCoordinate(cro+3, cco+1)),
         WeakStrongCluster(ChimeraCoordinate(cro+3, cco+3), ChimeraCoordinate(cro+3, cco+4)),
 
-        #(qpu.chimera_cell(cro+4, cco+0), qpu.chimera_cell(cro+4, cco+1)),
         WeakStrongCluster(ChimeraCoordinate(cro+3, cco+2), ChimeraCoordinate(cro+4, cco+2)),
         WeakStrongCluster(ChimeraCoordinate(cro+5, cco+3), ChimeraCoordinate(cro+4, cco+3)),
-        #(qpu.chimera_cell(cro+5, cco+4), qpu.chimera_cell(cro+4, cco+4)),
     ]
 
     strong_cultsers = []
@@ -190,6 +209,9 @@ def _build_wscb(qpu, weak_field, strong_field, c_row_offset, c_col_offset):
 
 
 def _build_scl(qpu, strong_cultsers):
+    '''Given a collection of ChimeraCordinates representing strong clusters, 
+    this links these these cells together using random coupler settings
+    '''
     fields = {} 
     couplings = {}
 
@@ -214,6 +236,9 @@ def _build_scl(qpu, strong_cultsers):
 
 
 def _build_wsc(qpu, weak_field, strong_field, weak_strong_cluster):
+    '''Given a WeakStrongCluster, configures the field and couplers of 
+    both the weak and strong Chimera cells
+    '''
     fields = {} 
     couplings = {}
 
@@ -236,6 +261,9 @@ def _build_wsc(qpu, weak_field, strong_field, weak_strong_cluster):
 
 
 def _build_sc(qpu, strong_field, strong_cluster):
+    '''Given a ChimeraCordinate, configures the field and couplers of a 
+    stand alone strong cluster Chimera cell
+    '''
     fields = {} 
     couplings = {}
 
@@ -254,6 +282,10 @@ def _build_sc(qpu, strong_field, strong_cluster):
 
 
 def _update_fc(fields, couplings, new_fields, new_couplings, strict = True):
+    '''Updates the given fields and couplings with given new data.
+    By default the function checks that merging will not cause any data loss,
+    this can be turned off by setting strict to False. 
+    '''
     for k,v in new_fields.items():
         if strict:
             assert(not k in fields)
