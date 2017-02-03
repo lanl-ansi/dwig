@@ -3,7 +3,7 @@ import copy, math
 from collections import namedtuple
 
 from common import print_err
-from common import validate_bqp_data
+
 
 def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
     assert(site_lb + site_ub == 0.0)
@@ -129,7 +129,6 @@ class QPUConfiguration(object):
             'quadratic_terms':quadratic_terms_data
         }
 
-        validate_bqp_data(data_dict)
         return data_dict
 
 

@@ -9,6 +9,8 @@ from structure import ChimeraQPU
 
 import generator
 from common import print_err
+from common import validate_bqp_data
+
 
 DEFAULT_CHIMERA_DEGREE = 12
 DEFAULT_CONFIG_FILE = '_config'
@@ -51,11 +53,13 @@ def main(args):
     if args.output_format == 'ising':
         data = qpu_config.ising_dict()
         data['metadata'] = build_metadata(args)
+        validate_bqp_data(data)
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
     elif args.output_format == 'binary':
         data = qpu_config.bqp_dict()
         data['metadata'] = build_metadata(args)
+        validate_bqp_data(data)
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
     else:
@@ -69,6 +73,7 @@ def build_metadata(args):
     if not args.solver_name is None:
         metadata['solver_name'] = args.solver_name
     
+    metadata['generator'] = args.generator
     metadata['generated'] = str(datetime.datetime.utcnow())
     return metadata
 
