@@ -7,7 +7,7 @@ data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 
 #print(data_dir)
 
-class TestRanGeneration:
+class TestWSCNGeneration:
     def setup_class(self):
         self.parser = dwig.build_cli_parser()
 
@@ -22,21 +22,18 @@ class TestRanGeneration:
         json_output = json.loads(resout)
         assert(ground_truth == json_output)
 
-    #../dwig.py -cd 1 -rs 0 -form ising ran > data/ran1_i_1.json
+
+    #../dwig.py -cd 6 -rs 0 wscn > data/wscn_i_1.json
     def test_ran1_i_1(self, capfd):
-        self._json_comp(capfd, 'ran1_i_1.json', ['-cd', '1', '-rs', '0', 'ran'])
+        self._json_comp(capfd, 'wscn_i_1.json', ['-cd', '6', '-rs', '0', 'wscn'])
 
-    #../dwig.py -cd 1 -rs 0 -form binary ran > data/ran1_b_1.json
+    #../dwig.py -cd 9 -rs 0 wscn > data/wscn_i_2.json
     def test_ran1_b_1(self, capfd):
-        self._json_comp(capfd, 'ran1_b_1.json', ['-cd', '1', '-rs', '0', '-form', 'binary', 'ran'])
+        self._json_comp(capfd, 'wscn_i_2.json', ['-cd', '9', '-rs', '0', 'wscn'])
 
-    #../dwig.py -cd 1 -rs 0 -form ising ran -f > data/ran1_i_2.json
+    #../dwig.py -cd 12 -rs 0 wscn > data/wscn_i_3.json
     def test_ran1_i_2(self, capfd):
-        self._json_comp(capfd, 'ran1_i_2.json', ['-cd', '1', '-rs', '0', 'ran', '-f'])
-
-    #../dwig.py -cd 1 -rs 0 -form ising ran -s 4 > data/ran4_i_0.json
-    def test_ran4_i_0(self, capfd):
-        self._json_comp(capfd, 'ran4_i_0.json', ['-cd', '1', '-rs', '0', 'ran', '-s', '4'])
+        self._json_comp(capfd, 'wscn_i_3.json', ['-cd', '12', '-rs', '0', 'wscn'])
 
 
 
