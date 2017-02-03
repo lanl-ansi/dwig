@@ -170,6 +170,11 @@ class ChimeraQPU(object):
         for i,j in couplers:
             assert(i != j)
 
+    #def sites_sorted(self):
+    #    return sorted(qpu.sites, key=lambda x: x.index)
+
+    #def couplers_sorted(self):
+    #    return sorted(qpu.sites, key=lambda x: x.index)
 
     def chimera_degree_filter(self, chimera_degree_view):
         assert(chimera_degree_view >= 1)
@@ -207,3 +212,6 @@ class ChimeraSite(object):
 
     def __str__(self):
         return str(self.index)
+
+    def __lt__(self, other):
+        return self.index < other.index
