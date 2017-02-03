@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "binary quadratic program schema",
   "type": "object",
-  "required":["variable_idxs", "variable_domain", "offset", "linear_terms", "quadratic_terms"],
+  "required":["variable_idxs", "variable_domain", "offset", "linear_terms", "quadratic_terms", "metadata"],
   "properties": {
     "metadata": {
       "type": "object",
