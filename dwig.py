@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-import sys, os, json, argparse, random, math
+import sys, os, json, argparse, random, math, datetime
 
 from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
@@ -50,14 +50,27 @@ def main(args):
     #print(args.output_format)
     if args.output_format == 'ising':
         data = qpu_config.ising_dict()
+        data['metadata'] = build_metadata(args)
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
     elif args.output_format == 'binary':
         data = qpu_config.bqp_dict()
+        data['metadata'] = build_metadata(args)
         data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
         print(data_string)
     else:
         assert(False) # CLI failed
+
+
+def build_metadata(args):
+    metadata = {}
+    if not args.dw_url is None:
+        metadata['dw_url'] = args.dw_url
+    if not args.solver_name is None:
+        metadata['solver_name'] = args.solver_name
+    
+    metadata['generated'] = str(datetime.datetime.utcnow())
+    return metadata
 
 
 def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):

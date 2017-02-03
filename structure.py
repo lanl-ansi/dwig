@@ -213,5 +213,6 @@ class ChimeraSite(object):
     def __str__(self):
         return str(self.index)
 
+    # required so sorting works properly and problem generation is consistent
     def __lt__(self, other):
         return self.index < other.index

@@ -16,4 +16,11 @@ def json_comp(parser, capfd, ground_truth_file, cli_args):
     resout, reserr = capfd.readouterr()
 
     json_output = json.loads(resout)
+
+    remove_generated(ground_truth)
+    remove_generated(json_output)
     assert(ground_truth == json_output)
+
+def remove_generated(data):
+    if 'metadata' in data and 'generated' in data['metadata']:
+        del data['metadata']['generated']

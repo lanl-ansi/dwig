@@ -4,6 +4,20 @@
   "type": "object",
   "required":["variable_idxs", "variable_domain", "offset", "linear_terms", "quadratic_terms"],
   "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "dw_url":{
+          "type":"string"
+        },
+        "solver_name":{
+          "type":"string"
+        },
+        "generated":{
+          "type":"string"
+        }
+      }
+    },
     "variable_idxs": {
       "type": "array",
       "items": {
