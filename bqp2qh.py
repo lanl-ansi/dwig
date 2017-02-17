@@ -15,7 +15,7 @@ def main(args):
     validate_bqp_data(data)
 
     if data['variable_domain'] == 'boolean':
-        print_err('unable to generate qubist hamiltonian from stdin, only spin domains are supported at this time')
+        print_err('unable to generate qubist hamiltonian from stdin, only spin domains are supported')
         quit()
 
     sites = max(data['variable_idxs'])+1

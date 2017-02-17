@@ -10,7 +10,7 @@ from structure import ChimeraQPU
 import generator
 from common import print_err
 from common import validate_bqp_data
-
+from common import json_dumps_kwargs
 
 DEFAULT_CONFIG_FILE = '_config'
 
@@ -54,13 +54,13 @@ def main(args):
         data = qpu_config.ising_dict()
         data['metadata'] = build_metadata(args)
         validate_bqp_data(data)
-        data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
+        data_string = json.dumps(data, **json_dumps_kwargs)
         print(data_string)
     elif args.output_format == 'binary':
         data = qpu_config.bqp_dict()
         data['metadata'] = build_metadata(args)
         validate_bqp_data(data)
-        data_string = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '))
+        data_string = json.dumps(data, **json_dumps_kwargs)
         print(data_string)
     else:
         assert(False) # CLI failed
