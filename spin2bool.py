@@ -14,17 +14,20 @@ def main(args):
         print_err('unable to parse stdin as a json document')
         quit()
 
-    validate_bqp_data(data)
+    output_data = transform(data)
 
+    validate_bqp_data(output_data)
+    output_string = json.dumps(output_data, **json_dumps_kwargs)
+    print(output_string)
+
+
+def transform(data):
+    validate_bqp_data(data)
     if data['variable_domain'] == 'spin':
         output_data = spin_to_bool(data)
     else:
         output_data = bool_to_spin(data)
-
-    validate_bqp_data(output_data)
-
-    output_string = json.dumps(output_data, **json_dumps_kwargs)
-    print(output_string)
+    return output_data
 
 
 def spin_to_bool(ising_data):
@@ -40,7 +43,7 @@ def spin_to_bool(ising_data):
         assert(coeff != 0.0)
 
         coefficients[(v_idx, v_idx)] = 2*coeff
-        offset += -linear_term['coeff']
+        offset += -coeff
 
     for quadratic_term in ising_data['quadratic_terms']:
         v1_idx = quadratic_term['idx_1']
@@ -59,9 +62,6 @@ def spin_to_bool(ising_data):
         coefficients[(v1_idx, v1_idx)] = coefficients[(v1_idx, v1_idx)] - 2*coeff
         coefficients[(v2_idx, v2_idx)] = coefficients[(v2_idx, v2_idx)] - 2*coeff
         offset += coeff
-
-    for k in sorted(coefficients.keys()):
-        print(k, coefficients[k])
 
     linear_terms = []
     quadratic_terms = []
@@ -83,7 +83,55 @@ def spin_to_bool(ising_data):
 
 
 def bool_to_spin(bool_data):
-    assert(False) #not yet implemented
+    offset = 0
+    coefficients = {}
+
+    for v_idx in bool_data['variable_idxs']:
+        coefficients[(v_idx, v_idx)] = 0
+
+    for linear_term in bool_data['linear_terms']:
+        v_idx = linear_term['idx']
+        coeff = linear_term['coeff']
+        assert(coeff != 0.0)
+
+        coefficients[(v_idx, v_idx)] = coeff/2
+        offset += linear_term['coeff']/2
+
+    for quadratic_term in bool_data['quadratic_terms']:
+        v1_idx = quadratic_term['idx_1']
+        v2_idx = quadratic_term['idx_2']
+        assert(v1_idx != v2_idx)
+        if v1_idx > v2_idx:
+            v1_idx = quadratic_term['idx_2']
+            v2_idx = quadratic_term['idx_1']
+        coeff = quadratic_term['coeff']
+        assert(coeff != 0)
+
+        if not (v1_idx, v2_idx) in coefficients:
+            coefficients[(v1_idx, v2_idx)] = 0
+
+        coefficients[(v1_idx, v2_idx)] = coefficients[(v1_idx, v2_idx)] + coeff/4
+        coefficients[(v1_idx, v1_idx)] = coefficients[(v1_idx, v1_idx)] + coeff/4
+        coefficients[(v2_idx, v2_idx)] = coefficients[(v2_idx, v2_idx)] + coeff/4
+        offset += coeff/4
+
+    linear_terms = []
+    quadratic_terms = []
+
+    for (i,j) in sorted(coefficients.keys()):
+        v = coefficients[(i,j)]
+        if v != 0.0:
+            if i == j:
+                linear_terms.append({'idx':i, 'coeff':v})
+            else:
+                quadratic_terms.append({'idx_1':i, 'idx_2':j, 'coeff':v})
+
+    ising_data = copy.deepcopy(bool_data)
+    ising_data['variable_domain'] = 'spin'
+    ising_data['linear_terms'] = linear_terms
+    ising_data['quadratic_terms'] = quadratic_terms
+
+    return ising_data
 
 
 def build_cli_parser():
