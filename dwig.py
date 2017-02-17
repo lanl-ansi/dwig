@@ -49,21 +49,11 @@ def main(args):
 
     #print_err(qpu_config)
 
-    #print(args.output_format)
-    if args.output_format == 'ising':
-        data = qpu_config.ising_dict()
-        data['metadata'] = build_metadata(args)
-        validate_bqp_data(data)
-        data_string = json.dumps(data, **json_dumps_kwargs)
-        print(data_string)
-    elif args.output_format == 'binary':
-        data = qpu_config.bqp_dict()
-        data['metadata'] = build_metadata(args)
-        validate_bqp_data(data)
-        data_string = json.dumps(data, **json_dumps_kwargs)
-        print(data_string)
-    else:
-        assert(False) # CLI failed
+    data = qpu_config.build_dict()
+    data['metadata'] = build_metadata(args)
+    validate_bqp_data(data)
+    data_string = json.dumps(data, **json_dumps_kwargs)
+    print(data_string)
 
 
 def build_metadata(args):
@@ -174,8 +164,6 @@ def build_cli_parser():
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
-
-    parser.add_argument('-form', '--output-format', choices=['ising', 'binary'], default='ising')
 
 
     subparsers = parser.add_subparsers()

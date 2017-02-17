@@ -66,65 +66,25 @@ class QPUConfiguration(object):
             lines.append('%d %d %f' % (i.index, j.index, v))
         return '\n'.join(lines)
 
-    def ising_dict(self):
-        return self._build_dict(True, self.couplings, self.fields, 0.0)
-
-    def bqp_dict(self):
-        offset = 0
-        coefficients = {}
-
-        for site in self.active_sites():
-            coefficients[(site, site)] = 0
-
-        for k,v in self.fields.items():
-            assert(v != 0)
-            coefficients[(k, k)] = 2*v
-            offset += -v
-
-        for (i,j),v in self.couplings.items():
-            assert(v != 0)
-
-            assert(i.index < j.index)
-            if not (i,j) in coefficients:
-                coefficients[(i,j)] = 0
-
-            coefficients[(i,j)] = coefficients[(i,j)] + 4*v
-            coefficients[(i,i)] = coefficients[(i,i)] - 2*v
-            coefficients[(j,j)] = coefficients[(j,j)] - 2*v
-            offset += v
-
-        linear_terms = {}
-        quadratic_terms = {}
-
-        for (i,j),v in coefficients.items():
-            if v != 0.0:
-                if i == j:
-                    linear_terms[i] = v
-                else:
-                    quadratic_terms[(i,j)] = v
-
-        return self._build_dict(False, quadratic_terms, linear_terms, offset)
-
-
-    def _build_dict(self, ising, quadratic_terms, linear_terms, offset):
+    def build_dict(self):
         sorted_sites = sorted(self.active_sites(), key=lambda x: x.index)
 
         quadratic_terms_data = []
-        for (i,j) in sorted(quadratic_terms, key=lambda x:(x[0].index, x[1].index)):
-            v = quadratic_terms[(i,j)]
+        for (i,j) in sorted(self.couplings.keys(), key=lambda x:(x[0].index, x[1].index)):
+            v = self.couplings[(i,j)]
             assert(v != 0)
             quadratic_terms_data.append({'idx_1':i.index, 'idx_2':j.index, 'coeff':v})
 
         linear_terms_data = []
-        for k in sorted(linear_terms, key=lambda x: x.index):
-            v = linear_terms[k]
+        for k in sorted(self.fields.keys(), key=lambda x: x.index):
+            v = self.fields[k]
             assert(v != 0)
             linear_terms_data.append({'idx':k.index, 'coeff':v})
 
         data_dict = {
-            'variable_domain': 'spin' if ising else 'boolean',
+            'variable_domain': 'spin',
             'variable_idxs':[site.index for site in sorted_sites],
-            'offset': offset,
+            'offset': 0.0,
             'linear_terms':linear_terms_data,
             'quadratic_terms':quadratic_terms_data
         }

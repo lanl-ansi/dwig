@@ -14,10 +14,6 @@ class TestRanGeneration:
     def test_ran1_i_1(self, capfd):
         json_comp(self.parser, capfd, 'ran1_i_1.json', ['-cd', '1', '-rs', '0', 'ran'])
 
-    #../dwig.py -cd 1 -rs 0 -form binary ran > data/ran1_b_1.json
-    def test_ran1_b_1(self, capfd):
-        json_comp(self.parser, capfd, 'ran1_b_1.json', ['-cd', '1', '-rs', '0', '-form', 'binary', 'ran'])
-
     #../dwig.py -cd 1 -rs 0 -form ising ran -f > data/ran1_i_2.json
     def test_ran1_i_2(self, capfd):
         json_comp(self.parser, capfd, 'ran1_i_2.json', ['-cd', '1', '-rs', '0', 'ran', '-f'])
