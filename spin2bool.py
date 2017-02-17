@@ -21,7 +21,7 @@ def main(args):
     else:
         output_data = bool_to_spin(data)
 
-    validate_bqp_data(data)
+    validate_bqp_data(output_data)
 
     output_string = json.dumps(output_data, **json_dumps_kwargs)
     print(output_string)
@@ -60,15 +60,19 @@ def spin_to_bool(ising_data):
         coefficients[(v2_idx, v2_idx)] = coefficients[(v2_idx, v2_idx)] - 2*coeff
         offset += coeff
 
+    for k in sorted(coefficients.keys()):
+        print(k, coefficients[k])
+
     linear_terms = []
     quadratic_terms = []
 
-    for (i,j), v in coefficients.items():
+    for (i,j) in sorted(coefficients.keys()):
+        v = coefficients[(i,j)]
         if v != 0.0:
             if i == j:
                 linear_terms.append({'idx':i, 'coeff':v})
             else:
-                quadratic_terms.append({'idx_1':i, 'idx_2':i, 'coeff':v})
+                quadratic_terms.append({'idx_1':i, 'idx_2':j, 'coeff':v})
 
     bool_data = copy.deepcopy(ising_data)
     bool_data['variable_domain'] = 'boolean'
