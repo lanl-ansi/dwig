@@ -12,7 +12,6 @@ from common import print_err
 from common import validate_bqp_data
 
 
-DEFAULT_CHIMERA_DEGREE = 12
 DEFAULT_CONFIG_FILE = '_config'
 
 
@@ -21,10 +20,11 @@ def main(args):
         print_err('setting random seed to: %d' % args.seed)
         random.seed(args.seed)
 
-    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.chimera_degree)
+    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.hardware_chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
+        print_err('filtering QPU to chimera of degree %d' % args.chimera_degree)
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
 
     if args.generator == 'ran':
@@ -78,7 +78,7 @@ def build_metadata(args):
     return metadata
 
 
-def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=None):
+def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
 
     if not url is None and not token is None and not solver_name is None:
         print_err('QPU connection details found, accessing "%s" at "%s"' % (solver_name, url))
@@ -92,25 +92,24 @@ def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=N
         couplers = solver.properties['couplers']
 
         couplers = set([tuple(coupler) for coupler in couplers])
+
         sites = solver.properties['qubits']
 
-        chimera_degree = int(math.ceil(math.sqrt(len(sites)/8.0)))
-        print_err('inferred square chimera of degree %d on "%s"' % (chimera_degree, solver_name))
+        solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/8.0)))
+        if hardware_chimera_degree != solver_chimera_degree:
+            print_err('Warning: the hardware chimera degree was specified as %d, while the solver %s has a degree of %d' % (hardware_chimera_degree, solver_name, solver_chimera_degree))
 
         site_range = tuple(solver.properties['h_range'])
         coupler_range = tuple(solver.properties['j_range'])
 
     else:
-        if chimera_degree == None:
-            chimera_degree = DEFAULT_CHIMERA_DEGREE
-
-        print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % chimera_degree)
+        print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % hardware_chimera_degree)
 
         site_range = (-2.0, 2.0)
         coupler_range = (-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
-        arcs = get_chimera_adjacency(chimera_degree, chimera_degree, 4)
+        arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, 4)
 
         # turn arcs into couplers
         couplers = []
@@ -122,13 +121,14 @@ def get_qpu(url=None, token=None, proxy=None, solver_name=None, chimera_degree=N
                 couplers.append((j,i))
         couplers = set(couplers)
 
+
         sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
 
     # sanity check on couplers
     for i,j in couplers:
         assert(i < j)
 
-    return ChimeraQPU(sites, couplers, chimera_degree, site_range, coupler_range)
+    return ChimeraQPU(sites, couplers, hardware_chimera_degree, site_range, coupler_range)
 
 
 # loads a configuration file and sets up undefined CLI arguments
@@ -172,7 +172,8 @@ def build_cli_parser():
     parser.add_argument('-solver', '--solver-name', help='d-wave solver to use', type=int)
 
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
-    parser.add_argument('-cd', '--chimera-degree', help='the degree of the square chimera graph', type=int)
+    parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
+    parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
 
     parser.add_argument('-form', '--output-format', choices=['ising', 'binary'], default='ising')
 
