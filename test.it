@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python -m py.test --cov dwig.py --cov common.py --cov generator.py --cov structure.py --cov bqp2qh.py --cov-report=html $@
+python -m py.test --cov dwig.py --cov common.py --cov generator.py --cov structure.py --cov bqp2qh.py --cov spin2bool.py --cov-report=html $@

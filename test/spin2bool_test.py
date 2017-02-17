@@ -26,7 +26,7 @@ def test_spin2bool(data_file):
     data_2 = spin2bool.transform(data_1)
 
     # These tests are required to get around numerical precision issues in floating point arithmetic
-    assert(abs(data_0['offset'] - data_2['offset']) < eq_tol)6
+    assert(abs(data_0['offset'] - data_2['offset']) < eq_tol)
 
     for i in range(len(data_0['linear_terms'])):
         assert(abs(data_0['linear_terms'][i]['coeff'] - data_2['linear_terms'][i]['coeff']) < eq_tol)
