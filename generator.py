@@ -9,8 +9,9 @@ from structure import ChimeraCoordinate
 
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
 
-# specification provided in https://arxiv.org/abs/1508.05087
-def generate_ran(qpu, steps = 1, feild = False):
+def generate_ran(qpu, steps=1, feild=False):
+    '''This function builds random coupleings as described by, https://arxiv.org/abs/1508.05087
+    '''
     assert(isinstance(steps, int))
     assert(steps >= 1)
 
@@ -29,10 +30,134 @@ def generate_clq(qpu):
     return QPUConfiguration(qpu, {}, {})
 
 
-def generate_fl(qpu):
-    # stub for frustrated loop case generation
-    return QPUConfiguration(qpu, {}, {})
+def generate_fl(qpu, steps=2, alpha=0.2, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+    '''This function builds a frustrated loop problems as described by,
+    https://arxiv.org/abs/1502.02098.  Because random walks are used for 
+    finding cycles in the graph and constraints are applied to these cycles,
+    termination of this function for all possible parameter settings is not 
+    guaranteed.  Various limits are used to ensure the problem generator will 
+    terminate.
+    '''
+    num_cycles = int(alpha*len(qpu.sites))
 
+    incident = {}
+    cycle_count = {}
+    for site in qpu.sites:
+        incident[site] = []
+    for coupler in qpu.couplers:
+        incident[coupler[0]].append(coupler)
+        incident[coupler[1]].append(coupler)
+        cycle_count[coupler] = 0
+
+    site_list = list(qpu.sites)
+
+    reject_count = 0
+    cycles = []
+    while len(cycles) < num_cycles:
+        if reject_count >= cycle_reject_limit:
+            print_err('Error: hit cycle rejection limit of {}.\ntry relaxing the cycle constraints'.format(cycle_reject_limit))
+            quit()
+
+        cycle = _build_cycle(site_list, incident, cycle_sample_limit)
+
+        if cycle == None:
+            print_err('Error: unable to find a vaild random walk cycle in {} samples.\ntry increasing the number of steps or decreasing alpha'.format(cycle_sample_limit))
+            quit()
+
+        #
+        # print_err('')
+        # for coupler in cycle:
+        #     print_err('{}, {}'.format(coupler[0].index, coupler[1].index))
+
+        if len(cycle) < min_cycle_length:
+            reject_count += 1
+            continue
+        reject_count = 0
+
+        for coupler in cycle:
+            cycle_count[coupler] = cycle_count[coupler] + 1
+            if cycle_count[coupler] >= steps:
+                incident[coupler[0]].remove(coupler)
+                incident[coupler[1]].remove(coupler)
+
+        cycles.append(cycle)
+
+    #for k,v in cycle_count.items():
+    #    if v > 0:
+    #        print_err(k, v)
+
+    couplings = {}
+    for cycle in cycles:
+        for coupler in cycle:
+            val = 0.0
+            if coupler in couplings:
+                val = couplings[coupler]
+            couplings[coupler] = val - 1.0
+
+        # make one edge in cycle different
+        rand_coupler = random.choice(cycle)
+        couplings[rand_coupler] = val + 1.0
+
+    return QPUConfiguration(qpu, {}, couplings)
+
+
+def _build_cycle(site_list, incident, fail_limit):
+    simple_cycle = None
+
+    for tries in range(fail_limit):
+        cycle = []
+        touched_sites = set([])
+        touched_edges = set([])
+        current_site = random.choice(site_list)
+
+        cycle_found = False
+        while not cycle_found:
+            touched_sites.add(current_site)
+
+            if sum([not edge in touched_edges for edge in incident[current_site]]) <= 1:
+                break
+
+            while True:
+                edge = random.choice(incident[current_site])
+                if edge not in touched_edges:
+                    touched_edges.add(edge)
+                    break
+
+            cycle.append(edge)
+
+            if edge[0] == current_site:
+                next_site = edge[1]
+            else:
+                assert(edge[1] == current_site)
+                next_site = edge[0]
+
+            if next_site in touched_sites:
+                cycle_found = True
+            else:
+                current_site = next_site
+
+        if cycle_found:
+            # print_err('')
+            # for edge in cycle:
+            #     print_err(edge[0].index, edge[1].index)
+
+            # Trim off tail edges
+            simple_cycle = []
+            touched_sites = set([])
+            for edge in reversed(cycle):
+                simple_cycle.append(edge)
+                if edge[0] in touched_sites and edge[1] in touched_sites:
+                    break
+                else:
+                    touched_sites.add(edge[0])
+                    touched_sites.add(edge[1])
+
+            # print_err('')
+            # for edge in simple_cycle:
+            #     print_err(edge[0].index, edge[1].index)
+            break
+
+    return simple_cycle
 
 def generate_wscn(qpu, weak_field, strong_field):
     '''This function builds a weak-strong cluster network as described by,

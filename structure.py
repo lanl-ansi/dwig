@@ -37,9 +37,12 @@ class QPUConfiguration(object):
     def __init__(self, qpu, fields={}, couplings={}):
         scaled_fields, scaled_couplings = rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
 
+        filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
+        filtered_couplings = {k:v for k,v in scaled_couplings.items() if v != 0.0}
+
         self.qpu = qpu
-        self.fields = scaled_fields
-        self.couplings = scaled_couplings
+        self.fields = filtered_fields
+        self.couplings = filtered_couplings
 
         for k, v in self.fields.items():
             assert(qpu.site_range[0] <= v and qpu.site_range[1] >= v)

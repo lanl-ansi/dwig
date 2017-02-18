@@ -15,5 +15,6 @@ This code includes,
 ./dwig.py -cd 1 ran
 ./dwig.py -cd 1 ran | ./bqp2qh.py
 ./dwig.py -cd 1 ran | ./spin2bool.py
+./dwig.py -cd 2 fl | ./bqp2qh.py
 ./dwig.py -cd 6 wscn | ./bqp2qh.py
 ```
