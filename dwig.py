@@ -31,8 +31,8 @@ def main(args):
         qpu_config = generator.generate_ran(qpu, args.steps, args.field)
     elif args.generator == 'clq':
         qpu_config = generator.generate_clq(qpu)
-    elif args.generator == 'flc':
-        qpu_config = generator.generate_flc(qpu)
+    elif args.generator == 'fl':
+        qpu_config = generator.generate_fl(qpu)
     elif args.generator == 'wscn':
         if qpu.chimera_degree_view < 6:
             print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is %d.' % qpu.chimera_degree_view)
@@ -176,8 +176,8 @@ def build_cli_parser():
     parser_clq = subparsers.add_parser('clq', help='generates a max clique problem')
     parser_clq.set_defaults(generator='clq')
 
-    parser_flc = subparsers.add_parser('flc', help='generates a frustrated loop problem')
-    parser_flc.set_defaults(generator='flc')
+    parser_fl = subparsers.add_parser('fl', help='generates a frustrated loop problem')
+    parser_fl.set_defaults(generator='fl')
 
     parser_wscn = subparsers.add_parser('wscn', help='generates a weak-strong cluster network problem')
     parser_wscn.set_defaults(generator='wscn')

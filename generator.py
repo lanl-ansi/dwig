@@ -29,7 +29,7 @@ def generate_clq(qpu):
     return QPUConfiguration(qpu, {}, {})
 
 
-def generate_flc(qpu):
+def generate_fl(qpu):
     # stub for frustrated loop case generation
     return QPUConfiguration(qpu, {}, {})
 
