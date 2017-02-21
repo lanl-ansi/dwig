@@ -30,7 +30,7 @@ def generate_clq(qpu):
     return QPUConfiguration(qpu, {}, {})
 
 
-def generate_fl(qpu, steps=2, alpha=0.2, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098.  Because random walks are used for 
     finding cycles in the graph and constraints are applied to these cycles,
@@ -72,6 +72,20 @@ def generate_fl(qpu, steps=2, alpha=0.2, min_cycle_length=7, cycle_reject_limit=
         if len(cycle) < min_cycle_length:
             reject_count += 1
             continue
+
+        if multicell:
+            chimera_cell = cycle[0][0].chimera_cell
+
+            second_cell = False
+            for coupler in cycle:
+                if coupler[0].chimera_cell != chimera_cell or coupler[1].chimera_cell != chimera_cell:
+                    second_cell = True
+                    break
+
+            if not second_cell:
+                reject_count += 1
+                continue
+
         reject_count = 0
 
         for coupler in cycle:
