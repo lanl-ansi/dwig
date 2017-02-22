@@ -10,7 +10,10 @@
         "dw_url":{
           "type":"string"
         },
-        "sw_solver_name":{
+        "dw_solver_name":{
+          "type":"string"
+        },
+        "dw_chip_id":{
           "type":"string"
         },
         "generated":{

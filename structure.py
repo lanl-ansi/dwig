@@ -152,11 +152,13 @@ class QPUConfiguration(object):
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
 
 class ChimeraQPU(object):
-    def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range, chimera_degree_view = None):
+    def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None):
         if chimera_degree_view == None:
             self.chimera_degree_view = chimera_degree
         else:
             self.chimera_degree_view = chimera_degree_view
+
+        self.chip_id = chip_id
 
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
 
@@ -192,7 +194,7 @@ class ChimeraQPU(object):
         filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree_view)])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
 
 
     def chimera_cell(self, chimera_coordinate):

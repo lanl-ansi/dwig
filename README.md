@@ -44,7 +44,7 @@ Bash stream redirection can be used to save the standard output to a file, for e
 ```
 ./dwig.py ran > ran1.json
 ```
-The `ran1.json` file is a json document in the bqp-json format.  A detailed description of this format can be found in the `B-QP.md` file.
+The `ran1.json` file is a json document in the bqp-json format.  A detailed description of this format can be found in the `BQP-JSON.md` file.
 
 A helpful feature of D-WIG is to reduce the size of the QPU that you are working with.  The _chimera degree_ argument `-cd n` can be used to reduce D-WIG's view of the full QPU to a smaller n-by-n QPU.  For example try,
 ```

@@ -50,25 +50,28 @@ def main(args):
     #print_err(qpu_config)
 
     data = qpu_config.build_dict()
-    data['metadata'] = build_metadata(args)
+    data['metadata'] = build_metadata(args, qpu)
     validate_bqp_data(data)
     data_string = json.dumps(data, **json_dumps_kwargs)
     print(data_string)
 
 
-def build_metadata(args):
+def build_metadata(args, qpu):
     metadata = {}
     if not args.dw_url is None:
         metadata['dw_url'] = args.dw_url
     if not args.solver_name is None:
         metadata['dw_solver_name'] = args.solver_name
-    
+    if not qpu.chip_id is None:
+        metadata['dw_chip_id'] = qpu.chip_id
+
     metadata['generator'] = args.generator
     metadata['generated'] = str(datetime.datetime.utcnow())
     return metadata
 
 
 def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
+    chip_id = None
 
     if not url is None and not token is None and not solver_name is None:
         print_err('QPU connection details found, accessing "%s" at "%s"' % (solver_name, url))
@@ -91,6 +94,7 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
 
         site_range = tuple(solver.properties['h_range'])
         coupler_range = tuple(solver.properties['j_range'])
+        chip_id = solver.properties['chip_id']
 
     else:
         print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % hardware_chimera_degree)
@@ -118,7 +122,7 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
     for i,j in couplers:
         assert(i < j)
 
-    return ChimeraQPU(sites, couplers, hardware_chimera_degree, site_range, coupler_range)
+    return ChimeraQPU(sites, couplers, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id)
 
 
 # loads a configuration file and sets up undefined CLI arguments
