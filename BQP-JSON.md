@@ -66,6 +66,7 @@ A linear term object has the form,
 Where,
 * _idx_ - is the variable index value, it must appear in the "variable_idxs" list
 * _coeff_ - this is a floating point value defining the coefficient if the given variable
+
 Each variable should not be referenced more than once in the "linear_terms" list.
 
 
@@ -81,6 +82,7 @@ Where,
 * _idx_1_ - is the first variable index value, it must appear in the "variable_idxs" list
 * _idx_2_ - is the second variable index value, it must appear in the "variable_idxs" list
 * _coeff_ - this is a floating point value defining the coefficient of the product of the given variables
+
 By convention idx_1 should be strictly less than idx_2.  Each variable pair should not be referenced more than once in the "quadratic_terms" list.
 
 
@@ -100,6 +102,7 @@ Where,
 * _assignment_ - a list of assignment values for each variable defined in "variable_idxs"
 * _description_ - a textual description of what this solution is
 * _evaluation_ - the evaluation of this solution in the given B-QP, to provided a correctness check
+
 Each variable should not be referenced exactly once in the "assignment" list.
 
 
@@ -113,6 +116,7 @@ An assignment object has the form,
 Where,
 * _idx_ - is the variable index value, it must appear in the "variable_idxs" list
 * _value_ - this is the value given to that variable
+
 If the "variable_domain" is "spin" the values should be either -1 or 1.
 If the "variable_domain" is "boolean" the values should be either 0 or 1.
 
@@ -135,6 +139,7 @@ Where,
 * _dw_url_ - the url of the d-wave qpu used to generate the problem
 * _dw_solver_name_ - the name of the d-wave solver used to generate the problem
 * _dw_chip_id_ - the chip identifier of the d-wave qpu used to generate the problem
+
 All of the metadata parameters are optional and arability user defined parameters are permitted. 
 
 
