@@ -118,7 +118,38 @@ The json schema validation library `jsonschema` is designed for python 3 while t
 
 The D-WIG development team would like to thank Denny Dahl for suggesting the D-WIG name.
 
+Special thanks to these works, which provided inspiration for the D-WIG toolset.
 
-## Citations
+For the RAN-k formulation,
+```
+@article{king2015benchmarking,
+  title={Benchmarking a quantum annealing processor with the time-to-target metric},
+  author={King, James and Yarkoni, Sheir and Nevisi, Mayssam M and Hilton, Jeremy P and McGeoch, Catherine C},
+  journal={arXiv preprint arXiv:1508.05087},
+  year={2015}
+}
+```
 
-The D-WIG development team would like to thank Denny Dahl for suggesting the D-WIG name.
+For the FL-k formulation,
+```
+@article{king2015performance,
+  title={Performance of a quantum annealer on range-limited constraint satisfaction problems},
+  author={King, Andrew D and Lanting, Trevor and Harris, Richard},
+  journal={arXiv preprint arXiv:1502.02098},
+  year={2015}
+}
+```
+
+For the weak-strong cluster network formulation,
+```
+@article{denchev2016computational,
+  title={What is the Computational Value of Finite-Range Tunneling?},
+  author={Denchev, Vasil S and Boixo, Sergio and Isakov, Sergei V and Ding, Nan and Babbush, Ryan and Smelyanskiy, Vadim and Martinis, John and Neven, Hartmut},
+  journal={Physical Review X},
+  volume={6},
+  number={3},
+  pages={031015},
+  year={2016},
+  publisher={APS}
+}
+```
