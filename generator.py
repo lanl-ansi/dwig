@@ -45,12 +45,12 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
     cycle_count = {}
     for site in qpu.sites:
         incident[site] = []
-    for coupler in qpu.couplers:
+    for coupler in sorted(qpu.couplers):
         incident[coupler[0]].append(coupler)
         incident[coupler[1]].append(coupler)
         cycle_count[coupler] = 0
 
-    site_list = list(qpu.sites)
+    site_list = sorted(list(qpu.sites))
 
     reject_count = 0
     cycles = []
