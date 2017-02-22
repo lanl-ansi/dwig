@@ -87,7 +87,7 @@ Alternatively, a `_config` file can be placed in the D-WIG directory of the foll
 {
     "dw_url":"<d-wave endpoint url>",
     "dw_token":"<sapi token>",
-    "solver_name":"<solver name>"
+    "dw_solver_name":"<solver name>"
 }
 ```
 The configuration file is a json document that can be use to set default values for all command line parameters.

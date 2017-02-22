@@ -20,7 +20,7 @@ def main(args):
         print_err('setting random seed to: %d' % args.seed)
         random.seed(args.seed)
 
-    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.solver_name, args.hardware_chimera_degree)
+    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.dw_solver_name, args.hardware_chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
@@ -60,8 +60,8 @@ def build_metadata(args, qpu):
     metadata = {}
     if not args.dw_url is None:
         metadata['dw_url'] = args.dw_url
-    if not args.solver_name is None:
-        metadata['dw_solver_name'] = args.solver_name
+    if not args.dw_solver_name is None:
+        metadata['dw_solver_name'] = args.dw_solver_name
     if not qpu.chip_id is None:
         metadata['dw_chip_id'] = qpu.chip_id
 
@@ -163,7 +163,7 @@ def build_cli_parser():
     parser.add_argument('-url', '--dw-url', help='url of the d-wave machine')
     parser.add_argument('-token', '--dw-token', help='token for accessing the d-wave machine')
     parser.add_argument('-proxy', '--dw-proxy', help='proxy for accessing the d-wave machine')
-    parser.add_argument('-solver', '--solver-name', help='d-wave solver to use', type=int)
+    parser.add_argument('-solver', '--dw-solver-name', help='d-wave solver to use', type=int)
 
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
@@ -172,7 +172,7 @@ def build_cli_parser():
 
     subparsers = parser.add_subparsers()
 
-    parser_ran = subparsers.add_parser('ran', help='generates a RAN-n problem')
+    parser_ran = subparsers.add_parser('ran', help='generates a random problem')
     parser_ran.set_defaults(generator='ran')
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
