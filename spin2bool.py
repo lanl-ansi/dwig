@@ -31,7 +31,7 @@ def transform(data):
 
 
 def spin_to_bool(ising_data):
-    offset = 0.0
+    offset = ising_data['offset']
     coefficients = {}
 
     for v_idx in ising_data['variable_idxs']:
@@ -76,14 +76,21 @@ def spin_to_bool(ising_data):
 
     bool_data = copy.deepcopy(ising_data)
     bool_data['variable_domain'] = 'boolean'
+    bool_data['offset'] = offset
     bool_data['linear_terms'] = linear_terms
     bool_data['quadratic_terms'] = quadratic_terms
+
+    if 'solutions' in bool_data:
+        for solution in bool_data['solutions']:
+            for assign in solution['assignment']:
+                if assign['value'] == -1:
+                    assign['value'] = 0
 
     return bool_data
 
 
 def bool_to_spin(bool_data):
-    offset = 0.0
+    offset = bool_data['offset']
     coefficients = {}
 
     for v_idx in bool_data['variable_idxs']:
@@ -128,8 +135,15 @@ def bool_to_spin(bool_data):
 
     ising_data = copy.deepcopy(bool_data)
     ising_data['variable_domain'] = 'spin'
+    ising_data['offset'] = offset
     ising_data['linear_terms'] = linear_terms
     ising_data['quadratic_terms'] = quadratic_terms
+
+    if 'solutions' in ising_data:
+        for solution in ising_data['solutions']:
+            for assign in solution['assignment']:
+                if assign['value'] == 0:
+                    assign['value'] = -1
 
     return ising_data
 

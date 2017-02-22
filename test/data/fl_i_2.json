@@ -1,7 +1,7 @@
 {
   "linear_terms": [],
   "metadata": {
-    "generated": "2017-02-22 00:36:34.568927",
+    "generated": "2017-02-22 00:52:08.102833",
     "generator": "fl"
   },
   "offset": 0.0,
@@ -302,127 +302,127 @@
       "assignment": [
         {
           "idx": 0,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 2,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 3,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 4,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 5,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 6,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 7,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 8,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 9,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 10,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 11,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 12,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 13,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 14,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 15,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 96,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 97,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 98,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 99,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 100,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 101,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 102,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 103,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 104,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 105,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 106,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 107,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 108,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 109,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 110,
-          "value": 1
+          "value": -1
         },
         {
           "idx": 111,
-          "value": 1
+          "value": -1
         }
       ],
       "description": "planted ground state, most likely non-unique",

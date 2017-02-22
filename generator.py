@@ -114,7 +114,9 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
         couplings[rand_coupler] = val + 1.0
 
     config = QPUConfiguration(qpu, {}, couplings)
-    spins = { site:1 for site in config.active_sites()}
+
+    # include ground state with -1 values, so the variable domain is clearly 'spin'
+    spins = { site:-1 for site in config.active_sites()}
 
     return QPUAssignment(config, spins, 'planted ground state, most likely non-unique')
 

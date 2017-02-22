@@ -17,13 +17,16 @@ eq_tol = 1e-9
 
 @pytest.mark.parametrize('data_file', data_files)
 def test_spin2bool(data_file):
-    print(data_file)
+    #print(data_file)
 
     with open(data_file) as file:
         data_0 = json.load(file)
 
     data_1 = spin2bool.transform(data_0)
     data_2 = spin2bool.transform(data_1)
+
+    #print(json.dumps(data_2))
+    #print('')
 
     # These tests are required to get around numerical precision issues in floating point arithmetic
     assert(abs(data_0['offset'] - data_2['offset']) < eq_tol)
@@ -38,4 +41,4 @@ def test_spin2bool(data_file):
         for data in [data_0, data_2]:
             del data[key]
 
-    assert(data == data_2)
+    assert(data_0 == data_2)
