@@ -10,10 +10,13 @@
         "dw_url":{
           "type":"string"
         },
-        "solver_name":{
+        "sw_solver_name":{
           "type":"string"
         },
         "generated":{
+          "type":"string"
+        },
+        "generator":{
           "type":"string"
         }
       }

@@ -61,7 +61,7 @@ def build_metadata(args):
     if not args.dw_url is None:
         metadata['dw_url'] = args.dw_url
     if not args.solver_name is None:
-        metadata['solver_name'] = args.solver_name
+        metadata['dw_solver_name'] = args.solver_name
     
     metadata['generator'] = args.generator
     metadata['generated'] = str(datetime.datetime.utcnow())
