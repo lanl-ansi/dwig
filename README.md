@@ -8,6 +8,13 @@ This code includes,
 * spin2bool.py - a tool for converting a bqp-json from ising variables to boolean variables and back
 * bqp2qh.py - a tool for converting a bqp-json file into a qubist hamiltonian
 
+### Installation
+
+```
+python ~/bin/sapi-python-client-2.4.1-osx/install.py
+pip install -r requirements.txt
+```
+
 
 ### Simple Tests
 
@@ -18,3 +25,6 @@ This code includes,
 ./dwig.py -cd 2 fl | ./bqp2qh.py
 ./dwig.py -cd 6 wscn | ./bqp2qh.py
 ```
+
+### Known Issues
+

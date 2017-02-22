@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python -m py.test --ignore=venv/ --cov dwig.py --cov common.py --cov generator.py --cov structure.py --cov bqp2qh.py --cov spin2bool.py --cov-report=html $@
+python -m py.test --ignore=venv --cov=dwig --cov=common --cov=generator --cov=structure --cov=bqp2qh --cov=spin2bool --cov-report=html $@
