@@ -1,18 +1,18 @@
 # D-Wave Instance Generator (D-WIG)
-================
 
-The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A significant advantage of generating problems on a specific QPU is that the a problem does not require embedding onto the hardware graph.  The D-WIG problem generator assumes that the QPU has a chimera topology.
+The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 
 The D-WIG toolset includes,
-* bqp-schema.json - a JSON-Schema for encoding Binary Quadratic Programs (B-QP) problems
-* dwig.py - a command line tool for generating B-QP problems in the bqp-json format
-* spin2bool.py - a command line tool for converting a bqp-json data files between the spin and boolean variable spaces
-* bqp2qh.py - a command line tool for converting a bqp-json data files into a qubist compatible Hamiltonians
+* `bqp-schema.json` - a JSON-Schema for encoding Binary Quadratic Programs (B-QP)
+* `dwig.py` - a command line tool for generating B-QP problems in the bqp-json format
+* `spin2bool.py` - a command line tool for converting a bqp-json data files between the spin and boolean variable spaces
+* `bqp2qh.py` - a command line tool for converting a bqp-json data files into a qubist compatible Hamiltonians
 
 The remainder of this documentation assumes that,
+
 1. You have access to a D-Wave QPU and the SAPI binaries
 2. You are familiar with the D-Wave Qubist interface
-3. You are using a bash-like terminal
+3. You are using a bash terminal
 
 
 ## Installation
@@ -36,9 +36,7 @@ The installation can be tested by running,
 
 ### Basic Usage
 
-The primary entry point of the D-WIG toolset is `dwig.py` this script is used to generate a variety of B-QP problems, which have been studied in the literature.
-
-For example, the following command will generate a RAN1 problem for a full yield QPU of chimera degree 12 and send it to standard output,
+The primary entry point of the D-WIG toolset is `dwig.py` this script is used to generate a variety of B-QP problems, which have been studied in the literature.  For example, the following command will generate a RAN1 problem for a full yield QPU of chimera degree 12 and send it to standard output,
 ```
 ./dwig.py ran
 ```
@@ -46,13 +44,13 @@ Bash stream redirection can be used to save the standard output to a file, for e
 ```
 ./dwig.py ran > ran1.json
 ```
-The `ran1.json` file is a json document in the bqp-json format.  A detailed description of this format can be found in the `BQP.md` file.
+The `ran1.json` file is a json document in the bqp-json format.  A detailed description of this format can be found in the `B-QP.md` file.
 
-A helpful feature of D-WIG is to reduce the size of the QPU that you are working with.  The _chimera degree_ argument `-cd n` can be used to reduce D-WIG's view of the full QPU to a smaller the first n-by-n unit cells.  For example try,
+A helpful feature of D-WIG is to reduce the size of the QPU that you are working with.  The _chimera degree_ argument `-cd n` can be used to reduce D-WIG's view of the full QPU to a smaller n-by-n QPU.  For example try,
 ```
 ./dwig.py -cd 2 ran
 ```
-A detailed list of all command line options can be reviewed via,
+A detailed list of all command line options can be viewed via,
 ```
 ./dwig.py --help
 ```
@@ -62,11 +60,15 @@ A detailed list of all command line options can be reviewed via,
 
 The D-Wig toolset currently supports three types of problem generation,
 
-1. ran - the QPU fields are couplers are set uniformly at random
+1. ran - the fields are couplers are set uniformly at random
 2. fl - frustrated loops
 3. wscn - weak-strong cluster networks
 
-See the doc strings inside of `generator.py` for further details on each of these problem types.
+A detailed list of command line options for each problem type can be viewed via,
+```
+./dwig.py <problem type> --help
+```
+See the doc strings inside of `generator.py` for additional documentation on each of these problem types.
 
 
 ### Connecting to a QPU
@@ -93,11 +95,11 @@ The configuration file is a json document that can be use to set default values 
 
 ### Viewing a B-QP
 
-The Qubist Solver Visualization tool is very helpful in understanding complex B-QP datasets.  The `bqp2qh.py` script can be used to convert a B-QP problem into the Qubist Hamiltonian format so that it can be viewed in the Solver Visualization tool.  For example, the following command will generate a 2-by-2 RAN1 problem in the qubist format and then print it to standard output,
+The Qubist Solver Visualization tool is helpful in understanding complex B-QP datasets.  To that end, the `bqp2qh.py` script converts a B-QP problem into the Qubist Hamiltonian format so that it can be viewed in the Solver Visualization tool.  For example, the following command will generate a 2-by-2 RAN1 problem in the qubist format and then print it to standard output,
 ```
 ./dwig.py -cd 2 ran | ./bqp2qh.py
 ```
-To view this problem paste the output data into the Data tab of the Qubist Solver Visualization tool.
+To view this problem paste the terminal output into the Data tab of the Qubist Solver Visualization tool.
 
 
 ### Spin vs Boolean Variables
