@@ -116,9 +116,9 @@ The json schema validation library `jsonschema` is designed for python 3 while t
 
 ## Acknowledgments
 
-The D-WIG development team would like to thank Denny Dahl for suggesting the D-WIG name.
+This code has been developed as part of the Advanced Network Science Initiative at Los Alamos National Laboratory. The primary developer is Carleton Coffrin.
 
-Special thanks to these works, which provided inspiration for the D-WIG toolset.
+The D-WIG development team would like to thank Denny Dahl for suggesting the D-WIG name.  Special thanks are given to these works, which provided significant inspiration for the D-WIG toolset.
 
 For the RAN-k formulation,
 ```
