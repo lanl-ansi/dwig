@@ -79,20 +79,20 @@
           "description" : {
             "type": "string"
           },
-          "objective_val" : {
+          "evaluation" : {
             "type": "number"
           },
           "assignment": {
             "type": "array",
             "items": {
               "type": "object",
-              "required":["idx", "val"],
+              "required":["idx", "value"],
               "properties": {
                 "idx" : {
                   "type": "integer"
                 },
-                "val":{
-                  "type": "number"
+                "value":{
+                  "type": "integer"
                 }
               }
             }

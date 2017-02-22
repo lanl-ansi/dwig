@@ -33,6 +33,54 @@ def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
     return fields, couplings
 
 
+class QPUAssignment(object):
+    def __init__(self, qpu_config, spins={}, description=None):
+        self.qpu_config = qpu_config
+        self.spins = spins
+        self.description = description
+
+        for k, v in self.spins.items():
+            assert(k in self.qpu_config.qpu.sites)
+            assert(v == -1 or v == 1)
+
+        active_sites = self.qpu_config.active_sites()
+        assert(len(self.spins) == len(active_sites))
+        for site in active_sites:
+            assert(site in spins.keys())
+
+    def eval(self):
+        energy = sum([field*self.spins[site] for site, field in self.qpu_config.fields.items()])
+        #print(energy)
+        for coupler, coupling in self.qpu_config.couplings.items():
+            energy += coupling*self.spins[coupler[0]]*self.spins[coupler[1]]
+            #print(coupling*self.spins[coupler[0]]*self.spins[coupler[1]])
+        return energy
+
+    def build_dict(self):
+        sorted_sites = sorted(self.spins.keys(), key=lambda x: x.index)
+
+        assignment = [{'idx':site.index, 'value':self.spins[site]} for site in sorted_sites]
+
+        solution = {
+            'idx':0,
+            'assignment':assignment,
+            'evaluation':self.eval()
+        }
+
+        if self.description != None:
+            solution['description'] = self.description
+
+        data_dict = self.qpu_config.build_dict()
+        data_dict['solutions'] = [solution]
+
+        return data_dict
+
+
+    def __str__(self):
+        return 'spins: '+\
+            ' '.join([str(site)+':'+str(value) for site, value in self.spins.items()])
+
+
 class QPUConfiguration(object):
     def __init__(self, qpu, fields={}, couplings={}):
         scaled_fields, scaled_couplings = rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
@@ -58,16 +106,16 @@ class QPUConfiguration(object):
         active |= set([key[1] for key in self.couplings.keys()])
         return active
 
-    def qubist_hamiltonian(self):
-        lines = []
-        lines.append('%d %d' % (max([site.index for site in self.qpu.sites]), len(self.fields) + len(self.couplings)))
-        for i in sorted(self.fields):
-            v = self.fields[i]
-            lines.append('%d %d %f' % (i.index, i.index, v))
-        for (i ,j) in sorted(self.couplings):
-            v = self.couplings[(i,j)]
-            lines.append('%d %d %f' % (i.index, j.index, v))
-        return '\n'.join(lines)
+    # def qubist_hamiltonian(self):
+    #     lines = []
+    #     lines.append('%d %d' % (max([site.index for site in self.qpu.sites]), len(self.fields) + len(self.couplings)))
+    #     for i in sorted(self.fields):
+    #         v = self.fields[i]
+    #         lines.append('%d %d %f' % (i.index, i.index, v))
+    #     for (i ,j) in sorted(self.couplings):
+    #         v = self.couplings[(i,j)]
+    #         lines.append('%d %d %f' % (i.index, j.index, v))
+    #     return '\n'.join(lines)
 
     def build_dict(self):
         sorted_sites = sorted(self.active_sites(), key=lambda x: x.index)

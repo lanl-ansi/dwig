@@ -4,6 +4,7 @@ from collections import namedtuple
 
 from common import print_err
 
+from structure import QPUAssignment
 from structure import QPUConfiguration
 from structure import ChimeraCoordinate
 
@@ -112,7 +113,10 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
         rand_coupler = random.choice(cycle)
         couplings[rand_coupler] = val + 1.0
 
-    return QPUConfiguration(qpu, {}, couplings)
+    config = QPUConfiguration(qpu, {}, couplings)
+    spins = { site:1 for site in config.active_sites()}
+
+    return QPUAssignment(config, spins, 'planted ground state, most likely non-unique')
 
 
 def _build_cycle(site_list, incident, fail_limit):

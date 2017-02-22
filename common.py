@@ -14,11 +14,11 @@ json_dumps_kwargs = {
 }
 
 # this is slow in python 2
-#from jsonschema import validate, ValidationError
+from jsonschema import validate, ValidationError
 
 def validate_bqp_data(data):
     # skip due to slow loading in python 2
-    return True
+    #return True
 
     try:
         validate(data, qbp_schema)
