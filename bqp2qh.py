@@ -21,15 +21,15 @@ def main(args):
     sites = max(data['variable_idxs'])+1
     lines = len(data['linear_terms']) + len(data['quadratic_terms'])
 
-    print('%d %d' % (sites, lines))
+    print('{} {}'.format(sites, lines))
     for lt in data['linear_terms']:
-        print('%d %d %f' % (lt['idx'], lt['idx'], lt['coeff']))
+        print('{} {} {}'.format(lt['idx'], lt['idx'], lt['coeff']))
     for qt in data['quadratic_terms']:
-        print('%d %d %f' % (qt['idx_1'], qt['idx_2'], qt['coeff']))
+        print('{} {} {}'.format(qt['idx_1'], qt['idx_2'], qt['coeff']))
 
 
 def build_cli_parser():
-    parser = argparse.ArgumentParser(description='a command line tool for converting a B-QP json files to a qubist hamiltonians.  The default input is stdin and the default output is stdout.')
+    parser = argparse.ArgumentParser(description='a command line tool for converting a bap-json files to a qubist hamiltonians.  The default input is stdin and the default output is stdout.')
     return parser
 
 if __name__ == '__main__':
