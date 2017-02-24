@@ -3,10 +3,10 @@
 The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 
 The D-WIG toolset includes,
-* `bqp-schema.json` - a JSON-Schema for encoding Binary Quadratic Programs (B-QP)
-* `dwig.py` - a command line tool for generating B-QP problems in the bqp-json format
+* `bqp-schema.json` - a JSON-Schema for encoding Binary Quadratic Programs (B-QP), i.e. bqp-json
+* `dwig.py` - a command line tool for generating B-QP instances in the bqp-json format
 * `spin2bool.py` - a command line tool for converting a bqp-json data files between the spin and boolean variable spaces
-* `bqp2qh.py` - a command line tool for converting a bqp-json data files into a qubist compatible Hamiltonians
+* `bqp2qh.py` - a command line tool for converting bqp-json data files into a qubist compatible Hamiltonians
 
 The remainder of this documentation assumes that,
 
@@ -60,9 +60,9 @@ A detailed list of all command line options can be viewed via,
 
 The D-Wig toolset currently supports three types of problem generation,
 
-1. ran - the fields are couplers are set uniformly at random
-2. fl - frustrated loops
-3. wscn - weak-strong cluster networks
+1. __ran__ - the fields are couplers are set uniformly at random
+2. __fl__ - frustrated loops
+3. __wscn__ - weak-strong cluster networks
 
 A detailed list of command line options for each problem type can be viewed via,
 ```
