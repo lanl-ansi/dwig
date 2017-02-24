@@ -26,11 +26,6 @@ def generate_ran(qpu, steps=1, feild=False):
     return QPUConfiguration(qpu, fields, couplings)
 
 
-def generate_clq(qpu):
-    # stub for max clique case generation
-    return QPUConfiguration(qpu, {}, {})
-
-
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098.  Because random walks are used for 
@@ -178,6 +173,7 @@ def _build_cycle(site_list, incident, fail_limit):
             break
 
     return simple_cycle
+
 
 def generate_wscn(qpu, weak_field, strong_field):
     '''This function builds a weak-strong cluster network as described by,
