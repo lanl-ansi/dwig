@@ -17,14 +17,14 @@ DEFAULT_CONFIG_FILE = '_config'
 
 def main(args):
     if not args.seed is None:
-        print_err('setting random seed to: %d' % args.seed)
+        print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
     qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.dw_solver_name, args.hardware_chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
-        print_err('filtering QPU to chimera of degree %d' % args.chimera_degree)
+        print_err('filtering QPU to chimera of degree {}'.format(args.chimera_degree))
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
 
     if args.generator == 'ran':
@@ -33,12 +33,12 @@ def main(args):
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
         if qpu.chimera_degree_view < 6:
-            print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is %d.' % qpu.chimera_degree_view)
+            print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is {}.'.format(qpu.chimera_degree_view))
             quit()
 
         effective_chimera_degree = 3*int(math.floor(qpu.chimera_degree_view/3))
         if effective_chimera_degree != qpu.chimera_degree_view:
-            print_err('the weak-strong cluster network will occupy a space of chimera degree %d.' % effective_chimera_degree)
+            print_err('the weak-strong cluster network will occupy a space of chimera degree {}.'.format(effective_chimera_degree))
         qpu = qpu.chimera_degree_filter(effective_chimera_degree)
 
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
@@ -72,7 +72,7 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
     chip_id = None
 
     if not url is None and not token is None and not solver_name is None:
-        print_err('QPU connection details found, accessing "%s" at "%s"' % (solver_name, url))
+        print_err('QPU connection details found, accessing "{}" at "{}"'.format(solver_name, url))
         if proxy is None: 
             remote_connection = RemoteConnection(url, token)
         else:
@@ -88,14 +88,14 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
 
         solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/8.0)))
         if hardware_chimera_degree != solver_chimera_degree:
-            print_err('Warning: the hardware chimera degree was specified as %d, while the solver %s has a degree of %d' % (hardware_chimera_degree, solver_name, solver_chimera_degree))
+            print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
 
         site_range = tuple(solver.properties['h_range'])
         coupler_range = tuple(solver.properties['j_range'])
         chip_id = solver.properties['chip_id']
 
     else:
-        print_err('QPU connection details not found, assuming full yield square chimera of degree %d' % hardware_chimera_degree)
+        print_err('QPU connection details not found, assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
 
         site_range = (-2.0, 2.0)
         coupler_range = (-1.0, 1.0)
@@ -133,21 +133,21 @@ def load_config(args):
                 config_data = json.load(config_file)
                 for key, value in config_data.items():
                     if isinstance(value, dict) or isinstance(value, list):
-                        print('invalid value for configuration key "%s", only single values are allowed' % config_file_path)
+                        print('invalid value for configuration key "{}", only single values are allowed'.format(config_file_path))
                         quit()
                     if not hasattr(args, key) or getattr(args, key) == None:
                         if isinstance(value, unicode):
                             value = value.encode('ascii','ignore')
                         setattr(args, key, value)
                     else:
-                        print('skipping the configuration key "%s", it already has a value of %s' % (key, str(getattr(args, key))))
+                        print('skipping the configuration key "{}", it already has a value of {}'.format(key, str(getattr(args, key))))
                     #print(key, value)
             except ValueError:
-                print('the config file does not appear to be a valid json document: %s' % config_file_path)
+                print('the config file does not appear to be a valid json document: {}'.format(config_file_path))
                 quit()
     else:
         if config_file_path != DEFAULT_CONFIG_FILE:
-            print('unable to open conifguration file: %s' % config_file_path)
+            print('unable to open conifguration file: {}'.format(config_file_path))
             quit()
 
     return args

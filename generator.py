@@ -60,7 +60,6 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
             print_err('Error: unable to find a vaild random walk cycle in {} samples.\ntry increasing the number of steps or decreasing alpha'.format(cycle_sample_limit))
             quit()
 
-        #
         # print_err('')
         # for coupler in cycle:
         #     print_err('{}, {}'.format(coupler[0].index, coupler[1].index))

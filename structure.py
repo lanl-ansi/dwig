@@ -26,7 +26,7 @@ def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
                 scaling_factor = min(scaling_factor, coupler_ub/float(coupling))
 
     if scaling_factor < 1.0:
-        print_err('info: rescaling field to [%f,%f] and couplings to [%f,%f] with scaling factor %f' % (site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
+        print_err('info: rescaling field to [{},{}] and couplings to [{},{}] with scaling factor {}'.format(site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
         fields = {k:v*scaling_factor for k,v in fields.items()}
         couplings = {k:v*scaling_factor for k,v in couplings.items()}
 
@@ -106,17 +106,6 @@ class QPUConfiguration(object):
         active |= set([key[1] for key in self.couplings.keys()])
         return active
 
-    # def qubist_hamiltonian(self):
-    #     lines = []
-    #     lines.append('%d %d' % (max([site.index for site in self.qpu.sites]), len(self.fields) + len(self.couplings)))
-    #     for i in sorted(self.fields):
-    #         v = self.fields[i]
-    #         lines.append('%d %d %f' % (i.index, i.index, v))
-    #     for (i ,j) in sorted(self.couplings):
-    #         v = self.couplings[(i,j)]
-    #         lines.append('%d %d %f' % (i.index, j.index, v))
-    #     return '\n'.join(lines)
-
     def build_dict(self):
         sorted_sites = sorted(self.active_sites(), key=lambda x: x.index)
 
@@ -182,12 +171,6 @@ class ChimeraQPU(object):
         for i,j in couplers:
             assert(i != j)
 
-    #def sites_sorted(self):
-    #    return sorted(qpu.sites, key=lambda x: x.index)
-
-    #def couplers_sorted(self):
-    #    return sorted(qpu.sites, key=lambda x: x.index)
-
     def chimera_degree_filter(self, chimera_degree_view):
         assert(chimera_degree_view >= 1)
 
@@ -195,7 +178,6 @@ class ChimeraQPU(object):
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
-
 
     def chimera_cell(self, chimera_coordinate):
         return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)
