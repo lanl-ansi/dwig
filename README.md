@@ -7,6 +7,7 @@ The D-WIG toolset includes,
 * `dwig.py` - a command line tool for generating B-QP instances in the bqp-json format
 * `spin2bool.py` - a command line tool for converting a bqp-json data files between the spin and boolean variable spaces
 * `bqp2qh.py` - a command line tool for converting bqp-json data files into a qubist compatible Hamiltonians
+* `bqp2qubo.py` - a command line tool for converting bqp-json data into a qubo data
 
 The remainder of this documentation assumes that,
 
@@ -107,6 +108,13 @@ To view this problem paste the terminal output into the Data tab of the Qubist S
 The B-QP format supports problems with spin variables (i.e. {-1,1}) and boolean variables (i.e. {0,1}).  However, the D-WIG toolset generates problems only using spin variables.  The `spin2bool.py` tool can be used to make the transformation after the problem is generated.  For example, the following  command will generate 2-by-2 RAN1 problem and convert it to a boolean variable space,
 ```
 ./dwig.py -cd 1 ran | ./spin2bool.py
+```
+
+### The QUBO Format
+
+The QUBO format is supported by a variety of the tools provided by D-Wave, such as __qbsolv__, __aqc__, and __toq__.  The `bqp2qubo.py` tool can be combined with the `spin2bool.py` tool to convert D-WIG cases into the qubo format.  For example, the following  command will generate 2-by-2 RAN1 problem and convert it to the QUBO format,
+```
+./dwig.py -cd 1 ran | ./spin2bool.py | ./bqp2qubo.py
 ```
 
 ## Known Issues

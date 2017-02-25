@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys, json, argparse
 
 from common import print_err
 from common import validate_bqp_data
 
-# converts a bqp json file to a qubist hamiltonian
+# converts a bqp-json file to a qubist hamiltonian
 def main(args):
     try:
         data = json.load(sys.stdin)
@@ -29,8 +29,9 @@ def main(args):
 
 
 def build_cli_parser():
-    parser = argparse.ArgumentParser(description='a command line tool for converting a bap-json files to a qubist hamiltonians.  The default input is stdin and the default output is stdout.')
+    parser = argparse.ArgumentParser(description='a command line tool for converting a bqp-json files to a qubist hamiltonians.  The default input is stdin and the default output is stdout.')
     return parser
+
 
 if __name__ == '__main__':
     parser = build_cli_parser()
