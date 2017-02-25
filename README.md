@@ -114,7 +114,7 @@ The B-QP format supports problems with spin variables (i.e. {-1,1}) and boolean 
 
 The QUBO format is supported by a variety of the tools provided by D-Wave, such as __qbsolv__, __aqc__, and __toq__.  The `bqp2qubo.py` tool can be combined with the `spin2bool.py` tool to convert D-WIG cases into the qubo format.  For example, the following  command will generate 2-by-2 RAN1 problem and convert it to the QUBO format,
 ```
-./dwig.py -cd 1 ran | ./spin2bool.py | bqp2qubo.py
+./dwig.py -cd 1 ran | ./spin2bool.py | ./bqp2qubo.py
 ```
 
 ## Known Issues
