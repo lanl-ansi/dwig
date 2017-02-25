@@ -18,6 +18,9 @@ def main(args, data_stream):
         print_err('Error: unable to generate qubo data file from stdin, only boolean domains are supported by qubo')
         quit()
 
+    if 'description' in data:
+        print('c {}'.format(data['description']))
+
     for k in sorted(data['metadata']):
          print('c {} : {}'.format(k, data['metadata'][k]))
 

@@ -1,4 +1,5 @@
 {
+  "description": "This is a randomly generated B-QP built by D-WIG using the ran algorithm.  A random number seed of 0 was used.",
   "linear_terms": [
     {
       "coeff": 1.0,
@@ -34,7 +35,7 @@
     }
   ],
   "metadata": {
-    "generated": "2017-02-25 17:03:38.394718",
+    "generated": "2017-02-25 17:24:21.667421",
     "generator": "ran"
   },
   "offset": 0.0,

@@ -1,4 +1,5 @@
-c generated : 2017-02-25 17:03:55.019013
+c This is a randomly generated B-QP built by D-WIG using the fl algorithm.  A random number seed of 0 was used.
+c generated : 2017-02-25 17:24:35.552573
 c generator : fl
 p qubo 0 112 30 58
 c linear terms
