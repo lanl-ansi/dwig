@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 import sys, json, argparse
 
@@ -6,9 +6,9 @@ from common import print_err
 from common import validate_bqp_data
 
 # converts a bqp-json file to a qubo data file
-def main(args):
+def main(args, data_stream):
     try:
-        data = json.load(sys.stdin)
+        data = json.load(data_stream)
     except:
         print_err('unable to parse stdin as a json document')
         quit()
@@ -18,8 +18,8 @@ def main(args):
         print_err('Error: unable to generate qubo data file from stdin, only boolean domains are supported by qubo')
         quit()
 
-    for k,v in data['metadata'].items():
-         print('c {} : {}'.format(k,v))
+    for k in sorted(data['metadata']):
+         print('c {} : {}'.format(k, data['metadata'][k]))
 
     max_index = max(data['variable_idxs'])+1
     num_diagonals = len(data['linear_terms'])
@@ -43,4 +43,4 @@ def build_cli_parser():
 
 if __name__ == '__main__':
     parser = build_cli_parser()
-    main(parser.parse_args())
+    main(parser.parse_args(), sys.stdin)
