@@ -3,23 +3,15 @@ import sys, os, pytest, json
 sys.path.append('.')
 import spin2bool
 
-from common_test import json_comp
-
-data_files = []
-
-for wd, directory, files in os.walk(os.path.dirname(os.path.realpath(__file__))+'/data'):
-    for file in files:
-        if file.endswith('.json'):
-            data_files.append(wd+'/'+file)
-del wd, directory, files
+from common_test import bqp_files
 
 eq_tol = 1e-9
 
-@pytest.mark.parametrize('data_file', data_files)
-def test_spin2bool(data_file):
-    #print(data_file)
+@pytest.mark.parametrize('bqp_file', bqp_files)
+def test_spin2bool(bqp_file):
+    #print(bqp_file)
 
-    with open(data_file) as file:
+    with open(bqp_file) as file:
         data_0 = json.load(file)
 
     data_1 = spin2bool.transform(data_0)

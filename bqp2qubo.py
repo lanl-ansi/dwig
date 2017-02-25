@@ -6,9 +6,9 @@ from common import print_err
 from common import validate_bqp_data
 
 # converts a bqp-json file to a qubo data file
-def main(args):
+def main(args, data_stream):
     try:
-        data = json.load(sys.stdin)
+        data = json.load(data_stream)
     except:
         print_err('unable to parse stdin as a json document')
         quit()
@@ -43,4 +43,4 @@ def build_cli_parser():
 
 if __name__ == '__main__':
     parser = build_cli_parser()
-    main(parser.parse_args())
+    main(parser.parse_args(), sys.stdin)
