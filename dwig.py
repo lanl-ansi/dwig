@@ -29,6 +29,8 @@ def main(args):
 
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.steps, args.field)
+    elif args.generator == 'clq':
+        qpu_config = generator.generate_clq(qpu)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
@@ -174,6 +176,9 @@ def build_cli_parser():
     parser_ran.set_defaults(generator='ran')
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+
+    parser_clq = subparsers.add_parser('clq', help='generates a max clique problem')
+    parser_clq.set_defaults(generator='clq')
 
     parser_fl = subparsers.add_parser('fl', help='generates a frustrated loop problem')
     parser_fl.set_defaults(generator='fl')
