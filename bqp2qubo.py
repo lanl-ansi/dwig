@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 import sys, json, argparse
 
@@ -18,8 +18,8 @@ def main(args, data_stream):
         print_err('Error: unable to generate qubo data file from stdin, only boolean domains are supported by qubo')
         quit()
 
-    for k,v in data['metadata'].items():
-         print('c {} : {}'.format(k,v))
+    for k in sorted(data['metadata']):
+         print('c {} : {}'.format(k, data['metadata'][k]))
 
     max_index = max(data['variable_idxs'])+1
     num_diagonals = len(data['linear_terms'])

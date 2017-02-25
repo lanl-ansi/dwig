@@ -1,5 +1,5 @@
-c generator : ran
 c generated : 2017-02-22 21:36:28.302705
+c generator : ran
 p qubo 0 8 4 16
 c linear terms
 2 2 -4.0

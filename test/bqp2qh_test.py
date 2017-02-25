@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import sys, os, pytest, json
 
 sys.path.append('.')
