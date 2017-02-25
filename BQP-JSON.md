@@ -41,6 +41,7 @@ The root of a bqp-json document is as follows,
   "offset": <float>,
   "linear_terms": [...],
   "quadratic_terms": [...],
+  ("description": <string>,)
   ("solutions": [...])
 }
 ```
@@ -51,7 +52,8 @@ Each of the top level items is as follows,
 * _offset_ - an offset for the evaluation of the linear and quadratic terms
 * _linear_terms_ - a list of coefficients for individual variables (a.k.a. fields)
 * _quadratic_terms_ - a list of coefficients for products variables (a.k.a. couplings)
-* _solutions_ - a list of solution objects 
+* _description_ - an optional textual description of the bqp data 
+* _solutions_ - an optional list of solution objects 
 
 
 ### Linear and Quadratic Terms
@@ -93,7 +95,7 @@ A solution object has the form,
 {
   "idx": <integer>,
   "assignment": [...],
-  "description": <string>,
+  ("description": <string>,)
   ("evaluation": <float>)
 }
 ```

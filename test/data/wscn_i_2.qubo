@@ -1,4 +1,5 @@
-c generated : 2017-02-25 17:04:09.418411
+c This is a randomly generated B-QP built by D-WIG using the wscn algorithm.  A random number seed of 0 was used.
+c generated : 2017-02-25 17:24:50.472039
 c generator : wscn
 p qubo 0 832 520 1312
 c linear terms

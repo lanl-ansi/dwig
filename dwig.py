@@ -48,7 +48,13 @@ def main(args):
     #print_err(qpu_config)
 
     data = qpu_config.build_dict()
+
+    data['description'] = 'This is a randomly generated B-QP built by D-WIG using the {} algorithm.'.format(args.generator)
+    if not args.seed is None:
+        data['description'] = data['description'] + '  A random number seed of {} was used.'.format(args.seed)
+
     data['metadata'] = build_metadata(args, qpu)
+
     validate_bqp_data(data)
     data_string = json.dumps(data, **json_dumps_kwargs)
     print(data_string)
