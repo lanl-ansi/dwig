@@ -17,4 +17,5 @@ rm data/*.qubo
 for file in $(find data -name *.json); do
     cat $file | ../bqp2qh.py > ${file//.json/.qh}
     cat $file | ../spin2bool.py | ../bqp2qubo.py > ${file//.json/.qubo}
+    cat $file | ../bqp2mzn.py > ${file//.json/.mzn}
 done
