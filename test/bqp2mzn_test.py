@@ -8,7 +8,7 @@ import bqp2mzn
 from common_test import bqp_files
 
 @pytest.mark.parametrize('bqp_file', bqp_files)
-def test_bqp2qh(bqp_file, capsys):
+def test_bqp2mzn(bqp_file, capsys):
 
     with open(bqp_file.replace('.json', '.mzn'), 'r') as file:
         base = file.read()

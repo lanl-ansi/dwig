@@ -8,6 +8,7 @@ The D-WIG toolset includes,
 * `spin2bool.py` - a command line tool for converting a bqp-json data files between the spin and boolean variable spaces
 * `bqp2qh.py` - a command line tool for converting bqp-json data files into a qubist compatible Hamiltonians
 * `bqp2qubo.py` - a command line tool for converting bqp-json data into a qubo data
+* `bqp2mzn.py` - a command line tool for converting bqp-json data into a minizinc model
 
 The remainder of this documentation assumes that,
 
