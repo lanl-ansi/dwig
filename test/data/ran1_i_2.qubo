@@ -1,5 +1,5 @@
 c This is a randomly generated B-QP built by D-WIG using the ran algorithm.  A random number seed of 0 was used.
-c generated : 2017-03-01 21:20:26.914772
+c generated : 2017-03-01 23:23:52.514036
 c generator : ran
 p qubo 0 8 8 16
 c linear terms
