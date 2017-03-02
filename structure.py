@@ -226,6 +226,7 @@ class ChimeraCoupler(object):
     def __init__(self, tail, head):
         self.tail = tail
         self.head = head
+        self.hash = hash((self.tail, self.head))
 
     def __str__(self):
         return '({},{})'.format(self.tail, self.head)
@@ -245,8 +246,8 @@ class ChimeraCoupler(object):
     def __eq__(self, other):
         return self.tail == other.tail and self.head == other.head
 
-    #def __hash__(self):
-    #    return hash(self.tail, self.head)
+    def __hash__(self):
+        return self.hash
 
     def __iter__(self):
         return iter([self.tail, self.head])
@@ -258,6 +259,7 @@ class ChimeraSite(object):
         self.chimera_cell = int(math.floor(index / unit_cell_size))
         self.chimera_row = int(math.floor(self.chimera_cell / chimera_degree))
         self.chimera_column = int(self.chimera_cell % chimera_degree)
+        self.hash = hash(index)
 
     def is_chimera_degree(self, chimera_degree):
         return self.chimera_row+1 <= chimera_degree and self.chimera_column+1 <= chimera_degree
@@ -272,5 +274,10 @@ class ChimeraSite(object):
     def __gt__(self, other):
         return self.index > other.index
 
+    def __hash__(self):
+        return self.hash
+
     def __eq__(self, other):
         return self.index == other.index
+
+
