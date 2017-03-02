@@ -111,6 +111,7 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
         arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, 4)
 
         # turn arcs into couplers
+        # this step is nessisary to be consistent with the solver.properties['couplers'] data
         couplers = []
         for i,j in arcs:
             assert(i != j)
@@ -123,7 +124,7 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
 
         sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
 
-    # sanity check on couplers
+    # sanity check on coupler consistency across both branches
     for i,j in couplers:
         assert(i < j)
 
