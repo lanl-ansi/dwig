@@ -6,6 +6,7 @@ from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
 from structure import ChimeraQPU
+from structure import Range
 
 import generator
 from common import print_err
@@ -96,15 +97,15 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
         if hardware_chimera_degree != solver_chimera_degree:
             print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
 
-        site_range = tuple(solver.properties['h_range'])
-        coupler_range = tuple(solver.properties['j_range'])
+        site_range = Range(*solver.properties['h_range'])
+        coupler_range = Range(*solver.properties['j_range'])
         chip_id = solver.properties['chip_id']
 
     else:
         print_err('QPU connection details not found, assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
 
-        site_range = (-2.0, 2.0)
-        coupler_range = (-1.0, 1.0)
+        site_range = Range(-2.0, 2.0)
+        coupler_range = Range(-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
         arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, 4)

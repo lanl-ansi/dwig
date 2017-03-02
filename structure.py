@@ -54,7 +54,7 @@ class QPUAssignment(object):
 
 class QPUConfiguration(object):
     def __init__(self, qpu, fields={}, couplings={}):
-        scaled_fields, scaled_couplings = _rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
+        scaled_fields, scaled_couplings = _rescale(fields, couplings, qpu.site_range, qpu.coupler_range)
 
         filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
         filtered_couplings = {k:v for k,v in scaled_couplings.items() if v != 0.0}
@@ -64,11 +64,11 @@ class QPUConfiguration(object):
         self.couplings = filtered_couplings
 
         for k, v in self.fields.items():
-            assert(qpu.site_range[0] <= v and qpu.site_range[1] >= v)
+            assert(qpu.site_range.lb <= v and qpu.site_range.ub >= v)
             assert(k in qpu.sites)
 
         for k, v in self.couplings.items():
-            assert(qpu.coupler_range[0] <= v and qpu.coupler_range[1] >= v)
+            assert(qpu.coupler_range.lb <= v and qpu.coupler_range.ub >= v)
             assert(k in qpu.couplers)
 
     def active_sites(self):
@@ -108,28 +108,28 @@ class QPUConfiguration(object):
             '\ncouplings: '+' '.join(['('+str(i)+', '+str(j)+'):'+str(value) for (i,j), value in self.couplings.items()])
 
 
-def _rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
-    assert(site_lb + site_ub == 0.0)
-    assert(coupler_lb + coupler_ub == 0.0)
+def _rescale(fields, couplings, site_range, coupler_range):
+    assert(site_range.lb + site_range.ub == 0.0)
+    assert(coupler_range.lb + coupler_range.ub == 0.0)
 
     scaling_factor = 1.0
 
     for field in fields.values():
         if field != 0:
-            if field < site_lb:
-                scaling_factor = min(scaling_factor, site_lb/float(field))
-            if field > site_ub:
-                scaling_factor = min(scaling_factor, site_ub/float(field))
+            if field < site_range.lb:
+                scaling_factor = min(scaling_factor, site_range.lb/float(field))
+            if field > site_range.ub:
+                scaling_factor = min(scaling_factor, site_range.ub/float(field))
 
     for coupling in couplings.values():
         if coupling != 0:
-            if coupling < coupler_lb:
-                scaling_factor = min(scaling_factor, coupler_lb/float(coupling))
-            if coupling > coupler_ub:
-                scaling_factor = min(scaling_factor, coupler_ub/float(coupling))
+            if coupling < coupler_range.lb:
+                scaling_factor = min(scaling_factor, coupler_range.lb/float(coupling))
+            if coupling > coupler_range.ub:
+                scaling_factor = min(scaling_factor, coupler_range.ub/float(coupling))
 
     if scaling_factor < 1.0:
-        print_err('info: rescaling field to [{},{}] and couplings to [{},{}] with scaling factor {}'.format(site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
+        print_err('info: rescaling field to {} and couplings to {} with scaling factor {}'.format(site_range, coupler_range, scaling_factor))
         fields = {k:v*scaling_factor for k,v in fields.items()}
         couplings = {k:v*scaling_factor for k,v in couplings.items()}
 
@@ -137,6 +137,7 @@ def _rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
 
 
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
+Range = namedtuple('Range', ['lb', 'ub'])
 
 
 class ChimeraQPU(object):
