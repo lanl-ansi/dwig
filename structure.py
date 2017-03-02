@@ -5,34 +5,6 @@ from collections import namedtuple
 from common import print_err
 
 
-def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
-    assert(site_lb + site_ub == 0.0)
-    assert(coupler_lb + coupler_ub == 0.0)
-
-    scaling_factor = 1.0
-
-    for field in fields.values():
-        if field != 0:
-            if field < site_lb:
-                scaling_factor = min(scaling_factor, site_lb/float(field))
-            if field > site_ub:
-                scaling_factor = min(scaling_factor, site_ub/float(field))
-
-    for coupling in couplings.values():
-        if coupling != 0:
-            if coupling < coupler_lb:
-                scaling_factor = min(scaling_factor, coupler_lb/float(coupling))
-            if coupling > coupler_ub:
-                scaling_factor = min(scaling_factor, coupler_ub/float(coupling))
-
-    if scaling_factor < 1.0:
-        print_err('info: rescaling field to [{},{}] and couplings to [{},{}] with scaling factor {}'.format(site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
-        fields = {k:v*scaling_factor for k,v in fields.items()}
-        couplings = {k:v*scaling_factor for k,v in couplings.items()}
-
-    return fields, couplings
-
-
 class QPUAssignment(object):
     def __init__(self, qpu_config, spins={}, description=None):
         self.qpu_config = qpu_config
@@ -83,7 +55,7 @@ class QPUAssignment(object):
 
 class QPUConfiguration(object):
     def __init__(self, qpu, fields={}, couplings={}):
-        scaled_fields, scaled_couplings = rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
+        scaled_fields, scaled_couplings = _rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
 
         filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
         filtered_couplings = {k:v for k,v in scaled_couplings.items() if v != 0.0}
@@ -137,6 +109,33 @@ class QPUConfiguration(object):
             ' '.join([str(site)+':'+str(value) for site, value in self.fields.items()]) +\
             '\ncouplings: '+' '.join(['('+str(i)+', '+str(j)+'):'+str(value) for (i,j), value in self.couplings.items()])
 
+def _rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
+    assert(site_lb + site_ub == 0.0)
+    assert(coupler_lb + coupler_ub == 0.0)
+
+    scaling_factor = 1.0
+
+    for field in fields.values():
+        if field != 0:
+            if field < site_lb:
+                scaling_factor = min(scaling_factor, site_lb/float(field))
+            if field > site_ub:
+                scaling_factor = min(scaling_factor, site_ub/float(field))
+
+    for coupling in couplings.values():
+        if coupling != 0:
+            if coupling < coupler_lb:
+                scaling_factor = min(scaling_factor, coupler_lb/float(coupling))
+            if coupling > coupler_ub:
+                scaling_factor = min(scaling_factor, coupler_ub/float(coupling))
+
+    if scaling_factor < 1.0:
+        print_err('info: rescaling field to [{},{}] and couplings to [{},{}] with scaling factor {}'.format(site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
+        fields = {k:v*scaling_factor for k,v in fields.items()}
+        couplings = {k:v*scaling_factor for k,v in couplings.items()}
+
+    return fields, couplings
+
 
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
 
@@ -152,7 +151,7 @@ class ChimeraQPU(object):
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
 
         site_lookup = { cn.index : cn for cn in self.sites }
-        self.couplers = set([(site_lookup[i],site_lookup[j]) for i,j in couplers])
+        self.couplers = set([ChimeraCoupler(site_lookup[i],site_lookup[j]) for i,j in couplers])
         self.chimera_degree = int(chimera_degree)
         self.site_range = site_range
         self.coupler_range = coupler_range
@@ -194,6 +193,25 @@ class ChimeraQPU(object):
             ' '.join(['('+str(i)+', '+str(j)+')' for i,j in self.couplers])
 
 
+# TODO need to make this useable for pattern matching.
+class ChimeraCoupler(object):
+    def __init__(self, tail, head):
+        self.tail = tail
+        self.head = head
+        
+    def __str__(self):
+        return '({},{})'.format(self.tail, self.head)
+
+    # required so sorting works properly and problem generation is consistent
+    def __lt__(self, other):
+        if self.head < other.head:
+            return True
+        elif self.head > other.head:
+            return False
+        else:
+            return self.tail < other.tail
+
+
 class ChimeraSite(object):
     def __init__(self, index, chimera_degree, unit_cell_size = 8):
         self.index = index
@@ -210,3 +228,6 @@ class ChimeraSite(object):
     # required so sorting works properly and problem generation is consistent
     def __lt__(self, other):
         return self.index < other.index
+
+    def __gt__(self, other):
+        return self.index > other.index
