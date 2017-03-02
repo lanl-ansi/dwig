@@ -128,7 +128,7 @@ def _build_cycle(site_list, incident, fail_limit):
         while not cycle_found:
             touched_sites.add(current_site)
 
-            if sum([not edge in touched_edges for edge in incident[current_site]]) <= 1:
+            if sum([edge not in touched_edges for edge in incident[current_site]]) <= 1:
                 break
 
             while True:
@@ -370,7 +370,7 @@ def _build_scl(qpu, strong_cultsers):
             for coupler in qpu.couplers:
                 i,j = coupler
                 if (i in sites_1 and j in sites_2) or (j in sites_1 and j in sites_2):
-                    assert(not coupler in couplings)
+                    assert(coupler not in couplings)
                     couplings[coupler] = coupling
 
     return fields, couplings
@@ -431,11 +431,11 @@ def _update_fc(fields, couplings, new_fields, new_couplings, strict = True):
     '''
     for k,v in new_fields.items():
         if strict:
-            assert(not k in fields)
+            assert(k not in fields)
         fields[k] = v
 
     for k,v in new_couplings.items():
         if strict:
-            assert(not k in couplings)
+            assert(k not in couplings)
         couplings[k] = v
 

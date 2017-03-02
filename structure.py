@@ -187,7 +187,7 @@ class ChimeraQPU(object):
 
         self.chimera_cell_sites = {}
         for site in self.sites:
-            if not site.chimera_cell in self.chimera_cell_sites:
+            if site.chimera_cell not in self.chimera_cell_sites:
                 self.chimera_cell_sites[site.chimera_cell] = set([])
             self.chimera_cell_sites[site.chimera_cell].add(site)
         #print(self.chimera_cell_sites)
