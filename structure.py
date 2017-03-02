@@ -24,8 +24,8 @@ class QPUAssignment(object):
         energy = sum([field*self.spins[site] for site, field in self.qpu_config.fields.items()])
         #print(energy)
         for coupler, coupling in self.qpu_config.couplings.items():
-            energy += coupling*self.spins[coupler[0]]*self.spins[coupler[1]]
-            #print(coupling*self.spins[coupler[0]]*self.spins[coupler[1]])
+            energy += coupling*self.spins[coupler.tail]*self.spins[coupler.head]
+            #print(coupling*self.spins[coupler.tail]*self.spins[coupler.head])
         return energy
 
     def build_dict(self):
@@ -73,16 +73,17 @@ class QPUConfiguration(object):
 
     def active_sites(self):
         active = set(self.fields.keys())
-        active |= set([key[0] for key in self.couplings.keys()])
-        active |= set([key[1] for key in self.couplings.keys()])
+        active |= set([key.tail for key in self.couplings.keys()])
+        active |= set([key.head for key in self.couplings.keys()])
         return active
 
     def build_dict(self):
-        sorted_sites = sorted(self.active_sites(), key=lambda x: x.index)
+        sorted_sites = sorted(self.active_sites())
 
         quadratic_terms_data = []
-        for (i,j) in sorted(self.couplings.keys(), key=lambda x:(x[0].index, x[1].index)):
-            v = self.couplings[(i,j)]
+        for coupler in sorted(self.couplings.keys()):
+            i,j = coupler
+            v = self.couplings[coupler]
             assert(v != 0)
             quadratic_terms_data.append({'idx_1':i.index, 'idx_2':j.index, 'coeff':v})
 
@@ -220,23 +221,34 @@ class ChimeraQPU(object):
             ' '.join(['('+str(i)+', '+str(j)+')' for i,j in self.couplers])
 
 
-# TODO need to make this useable for pattern matching.
 class ChimeraCoupler(object):
     def __init__(self, tail, head):
         self.tail = tail
         self.head = head
-        
+
     def __str__(self):
+        return '({},{})'.format(self.tail, self.head)
+
+    def __repr__(self):
         return '({},{})'.format(self.tail, self.head)
 
     # required so sorting works properly and problem generation is consistent
     def __lt__(self, other):
-        if self.head < other.head:
+        if self.tail < other.tail:
             return True
-        elif self.head > other.head:
+        elif self.tail > other.tail:
             return False
         else:
-            return self.tail < other.tail
+            return self.head < other.head
+
+    def __eq__(self, other):
+        return self.tail == other.tail and self.head == other.head
+
+    #def __hash__(self):
+    #    return hash(self.tail, self.head)
+
+    def __iter__(self):
+        return iter([self.tail, self.head])
 
 
 class ChimeraSite(object):
@@ -258,3 +270,6 @@ class ChimeraSite(object):
 
     def __gt__(self, other):
         return self.index > other.index
+
+    def __eq__(self, other):
+        return self.index == other.index

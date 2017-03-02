@@ -41,8 +41,8 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
     for site in qpu.sites:
         incident[site] = []
     for coupler in sorted(qpu.couplers):
-        incident[coupler[0]].append(coupler)
-        incident[coupler[1]].append(coupler)
+        incident[coupler.tail].append(coupler)
+        incident[coupler.head].append(coupler)
         cycle_count[coupler] = 0
 
     site_list = sorted(list(qpu.sites))
@@ -62,18 +62,18 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
 
         # print_err('')
         # for coupler in cycle:
-        #     print_err('{}, {}'.format(coupler[0].index, coupler[1].index))
+        #     print_err('{}, {}'.format(coupler.tail.index, coupler.head.index))
 
         if len(cycle) < min_cycle_length:
             reject_count += 1
             continue
 
         if multicell:
-            chimera_cell = cycle[0][0].chimera_cell
+            chimera_cell = cycle[0].tail.chimera_cell
 
             second_cell = False
             for coupler in cycle:
-                if coupler[0].chimera_cell != chimera_cell or coupler[1].chimera_cell != chimera_cell:
+                if coupler.tail.chimera_cell != chimera_cell or coupler.head.chimera_cell != chimera_cell:
                     second_cell = True
                     break
 
@@ -86,8 +86,8 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
         for coupler in cycle:
             cycle_count[coupler] = cycle_count[coupler] + 1
             if cycle_count[coupler] >= steps:
-                incident[coupler[0]].remove(coupler)
-                incident[coupler[1]].remove(coupler)
+                incident[coupler.tail].remove(coupler)
+                incident[coupler.head].remove(coupler)
 
         cycles.append(cycle)
 
@@ -139,11 +139,11 @@ def _build_cycle(site_list, incident, fail_limit):
 
             cycle.append(edge)
 
-            if edge[0] == current_site:
-                next_site = edge[1]
+            if edge.tail == current_site:
+                next_site = edge.head
             else:
-                assert(edge[1] == current_site)
-                next_site = edge[0]
+                assert(edge.head == current_site)
+                next_site = edge.tail
 
             if next_site in touched_sites:
                 cycle_found = True
@@ -153,22 +153,22 @@ def _build_cycle(site_list, incident, fail_limit):
         if cycle_found:
             # print_err('')
             # for edge in cycle:
-            #     print_err(edge[0].index, edge[1].index)
+            #     print_err(edge.tail.index, edge.head.index)
 
             # Trim off tail edges
             simple_cycle = []
             touched_sites = set([])
             for edge in reversed(cycle):
                 simple_cycle.append(edge)
-                if edge[0] in touched_sites and edge[1] in touched_sites:
+                if edge.tail in touched_sites and edge.head in touched_sites:
                     break
                 else:
-                    touched_sites.add(edge[0])
-                    touched_sites.add(edge[1])
+                    touched_sites.add(edge.tail)
+                    touched_sites.add(edge.head)
 
             # print_err('')
             # for edge in simple_cycle:
-            #     print_err(edge[0].index, edge[1].index)
+            #     print_err(edge.tail.index, edge.head.index)
             break
 
     return simple_cycle
@@ -367,10 +367,11 @@ def _build_scl(qpu, strong_cultsers):
             sites_1 = qpu.chimera_cell_sites[sc_1]
             sites_2 = qpu.chimera_cell_sites[sc_2]
 
-            for (i,j) in qpu.couplers:
+            for coupler in qpu.couplers:
+                i,j = coupler
                 if (i in sites_1 and j in sites_2) or (j in sites_1 and j in sites_2):
-                    assert(not (i,j) in couplings)
-                    couplings[(i,j)] = coupling
+                    assert(not coupler in couplings)
+                    couplings[coupler] = coupling
 
     return fields, couplings
 
@@ -393,9 +394,10 @@ def _build_wsc(qpu, weak_field, strong_field, weak_strong_cluster):
     for site in strong_sites:
         fields[site] = strong_field
 
-    for (i,j) in qpu.couplers:
+    for coupler in qpu.couplers:
+        i,j = coupler
         if (i in weak_sites or i in strong_sites) and (j in weak_sites or j in strong_sites):
-            couplings[(i,j)] = -1
+            couplings[coupler] = -1
 
     return fields, couplings
 
@@ -414,9 +416,10 @@ def _build_sc(qpu, strong_field, strong_cluster):
     for site in sites:
         fields[site] = strong_field
 
-    for (i,j) in qpu.couplers:
+    for coupler in qpu.couplers:
+        i,j = coupler
         if (i in sites) and (j in sites):
-            couplings[(i,j)] = -1
+            couplings[coupler] = -1
 
     return fields, couplings
 
