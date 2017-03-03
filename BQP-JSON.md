@@ -93,15 +93,15 @@ Each id pair should be referenced no more than once in the "quadratic_terms" lis
 A solution object has the form,
 ```
 {
-  "idx": <integer>,
+  "id": <integer>,
   "assignment": [...],
   ("description": <string>,)
   ("evaluation": <float>)
 }
 ```
 Where,
-* _idx_ - is an identifier of the solution
-* _assignment_ - a list of assignment values for each variable defined in "variable_idxs"
+* _id_ - is an identifier of the solution
+* _assignment_ - a list of assignment values for each variable defined in "variable_ids"
 * _description_ - a textual description of what this solution is
 * _evaluation_ - the evaluation of this solution in the given B-QP, to provided a correctness check
 
@@ -111,12 +111,12 @@ Each variable should be referenced exactly once in the "assignment" list.
 An assignment object has the form,
 ```
 {
-  "idx": <integer>,
+  "id": <integer>,
   "value": <float>
 }
 ```
 Where,
-* _idx_ - is the variable identifier value, it must appear in the "variable_idxs" list
+* _id_ - is the variable identifier value, it must appear in the "variable_ids" list
 * _value_ - this is the value given to that variable
 
 If the "variable_domain" is "spin" the values should be either -1 or 1.
