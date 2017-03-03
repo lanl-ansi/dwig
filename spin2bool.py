@@ -34,11 +34,11 @@ def spin_to_bool(ising_data):
     offset = ising_data['offset']
     coefficients = {}
 
-    for v_idx in ising_data['variable_idxs']:
+    for v_idx in ising_data['variable_ids']:
         coefficients[(v_idx, v_idx)] = 0.0
 
     for linear_term in ising_data['linear_terms']:
-        v_idx = linear_term['idx']
+        v_idx = linear_term['id']
         coeff = linear_term['coeff']
         assert(coeff != 0.0)
 
@@ -46,21 +46,21 @@ def spin_to_bool(ising_data):
         offset += -coeff
 
     for quadratic_term in ising_data['quadratic_terms']:
-        v1_idx = quadratic_term['idx_1']
-        v2_idx = quadratic_term['idx_2']
-        assert(v1_idx != v2_idx)
-        if v1_idx > v2_idx:
-            v1_idx = quadratic_term['idx_2']
-            v2_idx = quadratic_term['idx_1']
+        id1 = quadratic_term['id_tail']
+        id2 = quadratic_term['id_head']
+        assert(id1 != id2)
+        # if v1_idx > v2_idx:
+        #     v1_idx = quadratic_term['idx_2']
+        #     v2_idx = quadratic_term['idx_1']
         coeff = quadratic_term['coeff']
         assert(coeff != 0.0)
 
-        if not (v1_idx, v2_idx) in coefficients:
-            coefficients[(v1_idx, v2_idx)] = 0.0
+        if not (id1, id2) in coefficients:
+            coefficients[(id1, id2)] = 0.0
 
-        coefficients[(v1_idx, v2_idx)] = coefficients[(v1_idx, v2_idx)] + 4.0*coeff
-        coefficients[(v1_idx, v1_idx)] = coefficients[(v1_idx, v1_idx)] - 2.0*coeff
-        coefficients[(v2_idx, v2_idx)] = coefficients[(v2_idx, v2_idx)] - 2.0*coeff
+        coefficients[(id1, id2)] = coefficients[(id1, id2)] + 4.0*coeff
+        coefficients[(id1, id1)] = coefficients[(id1, id1)] - 2.0*coeff
+        coefficients[(id2, id2)] = coefficients[(id2, id2)] - 2.0*coeff
         offset += coeff
 
     linear_terms = []
@@ -70,9 +70,9 @@ def spin_to_bool(ising_data):
         v = coefficients[(i,j)]
         if v != 0.0:
             if i == j:
-                linear_terms.append({'idx':i, 'coeff':v})
+                linear_terms.append({'id':i, 'coeff':v})
             else:
-                quadratic_terms.append({'idx_1':i, 'idx_2':j, 'coeff':v})
+                quadratic_terms.append({'id_tail':i, 'id_head':j, 'coeff':v})
 
     bool_data = copy.deepcopy(ising_data)
     bool_data['variable_domain'] = 'boolean'
@@ -93,11 +93,11 @@ def bool_to_spin(bool_data):
     offset = bool_data['offset']
     coefficients = {}
 
-    for v_idx in bool_data['variable_idxs']:
+    for v_idx in bool_data['variable_ids']:
         coefficients[(v_idx, v_idx)] = 0.0
 
     for linear_term in bool_data['linear_terms']:
-        v_idx = linear_term['idx']
+        v_idx = linear_term['id']
         coeff = linear_term['coeff']
         assert(coeff != 0.0)
 
@@ -105,21 +105,21 @@ def bool_to_spin(bool_data):
         offset += linear_term['coeff']/2.0
 
     for quadratic_term in bool_data['quadratic_terms']:
-        v1_idx = quadratic_term['idx_1']
-        v2_idx = quadratic_term['idx_2']
-        assert(v1_idx != v2_idx)
-        if v1_idx > v2_idx:
-            v1_idx = quadratic_term['idx_2']
-            v2_idx = quadratic_term['idx_1']
+        id1 = quadratic_term['id_tail']
+        id2 = quadratic_term['id_head']
+        assert(id1 != id2)
+        # if id1 > id2:
+        #     id1 = quadratic_term['idx_2']
+        #     id2 = quadratic_term['idx_1']
         coeff = quadratic_term['coeff']
         assert(coeff != 0.0)
 
-        if not (v1_idx, v2_idx) in coefficients:
-            coefficients[(v1_idx, v2_idx)] = 0.0
+        if not (id1, id2) in coefficients:
+            coefficients[(id1, id2)] = 0.0
 
-        coefficients[(v1_idx, v2_idx)] = coefficients[(v1_idx, v2_idx)] + coeff/4.0
-        coefficients[(v1_idx, v1_idx)] = coefficients[(v1_idx, v1_idx)] + coeff/4.0
-        coefficients[(v2_idx, v2_idx)] = coefficients[(v2_idx, v2_idx)] + coeff/4.0
+        coefficients[(id1, id2)] = coefficients[(id1, id2)] + coeff/4.0
+        coefficients[(id1, id1)] = coefficients[(id1, id1)] + coeff/4.0
+        coefficients[(id2, id2)] = coefficients[(id2, id2)] + coeff/4.0
         offset += coeff/4.0
 
     linear_terms = []
@@ -129,9 +129,9 @@ def bool_to_spin(bool_data):
         v = coefficients[(i,j)]
         if v != 0.0:
             if i == j:
-                linear_terms.append({'idx':i, 'coeff':v})
+                linear_terms.append({'id':i, 'coeff':v})
             else:
-                quadratic_terms.append({'idx_1':i, 'idx_2':j, 'coeff':v})
+                quadratic_terms.append({'id_tail':i, 'id_head':j, 'coeff':v})
 
     ising_data = copy.deepcopy(bool_data)
     ising_data['variable_domain'] = 'spin'

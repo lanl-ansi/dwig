@@ -36,7 +36,7 @@ def main(args, data_stream):
 
     print('')
     mzn_var = {}
-    for var_idx in data['variable_idxs']:
+    for var_idx in data['variable_ids']:
         mzn_var[var_idx] = 'x{}'.format(var_idx)
         print('var Domain: {};'.format(mzn_var[var_idx]))
 
@@ -44,9 +44,9 @@ def main(args, data_stream):
 
     objective_terms = []
     for lt in data['linear_terms']:
-        objective_terms.append('{}*{}'.format(lt['coeff'], mzn_var[lt['idx']]))
+        objective_terms.append('{}*{}'.format(lt['coeff'], mzn_var[lt['id']]))
     for qt in data['quadratic_terms']:
-        objective_terms.append('{}*{}*{}'.format(qt['coeff'], mzn_var[qt['idx_1']], mzn_var[qt['idx_2']]))
+        objective_terms.append('{}*{}*{}'.format(qt['coeff'], mzn_var[qt['id_tail']], mzn_var[qt['id_head']]))
 
     # objective_terms = []
     # for lt in data['linear_terms']:
@@ -63,7 +63,7 @@ def main(args, data_stream):
 
     print('')
     var_list = []
-    for var_idx in data['variable_idxs']:
+    for var_idx in data['variable_ids']:
         var_list.append(mzn_var[var_idx])
     print('output [show(objective), " - ", show([{}])];'.format(', '.join(var_list)))
 

@@ -18,14 +18,14 @@ def main(args, data_stream):
         print_err('Error: unable to generate qubist hamiltonian from stdin, only spin domains are supported by qubist')
         quit()
 
-    sites = max(data['variable_idxs'])+1
+    sites = max(data['variable_ids'])+1
     lines = len(data['linear_terms']) + len(data['quadratic_terms'])
 
     print('{} {}'.format(sites, lines))
     for lt in data['linear_terms']:
-        print('{} {} {}'.format(lt['idx'], lt['idx'], lt['coeff']))
+        print('{} {} {}'.format(lt['id'], lt['id'], lt['coeff']))
     for qt in data['quadratic_terms']:
-        print('{} {} {}'.format(qt['idx_1'], qt['idx_2'], qt['coeff']))
+        print('{} {} {}'.format(qt['id_tail'], qt['id_head'], qt['coeff']))
 
 
 def build_cli_parser():
