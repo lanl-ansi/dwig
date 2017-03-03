@@ -1,4 +1,4 @@
-# BQP-JSON beta
+# BQP-JSON
 
 This document describes __bqp-json__, a json-based encoding for Binary Quadratic Programs (B-QP).  The formal specification is provided in the json-schema document, `bqp-schema.json`.  The goal of bqp-json is to provide a simple language-agnostic data standard for encoding B-QPs, to assist in research and development of B-QP solution methods.
 
