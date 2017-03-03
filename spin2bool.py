@@ -34,33 +34,33 @@ def spin_to_bool(ising_data):
     offset = ising_data['offset']
     coefficients = {}
 
-    for v_idx in ising_data['variable_ids']:
-        coefficients[(v_idx, v_idx)] = 0.0
+    for v_id in ising_data['variable_ids']:
+        coefficients[(v_id, v_id)] = 0.0
 
     for linear_term in ising_data['linear_terms']:
-        v_idx = linear_term['id']
+        v_id = linear_term['id']
         coeff = linear_term['coeff']
         assert(coeff != 0.0)
 
-        coefficients[(v_idx, v_idx)] = 2.0*coeff
+        coefficients[(v_id, v_id)] = 2.0*coeff
         offset += -coeff
 
     for quadratic_term in ising_data['quadratic_terms']:
-        id1 = quadratic_term['id_tail']
-        id2 = quadratic_term['id_head']
-        assert(id1 != id2)
-        # if v1_idx > v2_idx:
-        #     v1_idx = quadratic_term['idx_2']
-        #     v2_idx = quadratic_term['idx_1']
+        v_id1 = quadratic_term['id_tail']
+        v_id2 = quadratic_term['id_head']
+        assert(v_id1 != v_id2)
+        # if v_id1 > v_id2:
+        #     v_id1 = quadratic_term['id_head']
+        #     v_id2 = quadratic_term['id_tail']
         coeff = quadratic_term['coeff']
         assert(coeff != 0.0)
 
-        if not (id1, id2) in coefficients:
-            coefficients[(id1, id2)] = 0.0
+        if not (v_id1, v_id2) in coefficients:
+            coefficients[(v_id1, v_id2)] = 0.0
 
-        coefficients[(id1, id2)] = coefficients[(id1, id2)] + 4.0*coeff
-        coefficients[(id1, id1)] = coefficients[(id1, id1)] - 2.0*coeff
-        coefficients[(id2, id2)] = coefficients[(id2, id2)] - 2.0*coeff
+        coefficients[(v_id1, v_id2)] = coefficients[(v_id1, v_id2)] + 4.0*coeff
+        coefficients[(v_id1, v_id1)] = coefficients[(v_id1, v_id1)] - 2.0*coeff
+        coefficients[(v_id2, v_id2)] = coefficients[(v_id2, v_id2)] - 2.0*coeff
         offset += coeff
 
     linear_terms = []
@@ -93,33 +93,33 @@ def bool_to_spin(bool_data):
     offset = bool_data['offset']
     coefficients = {}
 
-    for v_idx in bool_data['variable_ids']:
-        coefficients[(v_idx, v_idx)] = 0.0
+    for v_id in bool_data['variable_ids']:
+        coefficients[(v_id, v_id)] = 0.0
 
     for linear_term in bool_data['linear_terms']:
-        v_idx = linear_term['id']
+        v_id = linear_term['id']
         coeff = linear_term['coeff']
         assert(coeff != 0.0)
 
-        coefficients[(v_idx, v_idx)] = coeff/2.0
+        coefficients[(v_id, v_id)] = coeff/2.0
         offset += linear_term['coeff']/2.0
 
     for quadratic_term in bool_data['quadratic_terms']:
-        id1 = quadratic_term['id_tail']
-        id2 = quadratic_term['id_head']
-        assert(id1 != id2)
-        # if id1 > id2:
-        #     id1 = quadratic_term['idx_2']
-        #     id2 = quadratic_term['idx_1']
+        v_id1 = quadratic_term['id_tail']
+        v_id2 = quadratic_term['id_head']
+        assert(v_id1 != v_id2)
+        # if v_id1 > v_id2:
+        #     v_id1 = quadratic_term['id_head']
+        #     v_id2 = quadratic_term['id_tail']
         coeff = quadratic_term['coeff']
         assert(coeff != 0.0)
 
-        if not (id1, id2) in coefficients:
-            coefficients[(id1, id2)] = 0.0
+        if not (v_id1, v_id2) in coefficients:
+            coefficients[(v_id1, v_id2)] = 0.0
 
-        coefficients[(id1, id2)] = coefficients[(id1, id2)] + coeff/4.0
-        coefficients[(id1, id1)] = coefficients[(id1, id1)] + coeff/4.0
-        coefficients[(id2, id2)] = coefficients[(id2, id2)] + coeff/4.0
+        coefficients[(v_id1, v_id2)] = coefficients[(v_id1, v_id2)] + coeff/4.0
+        coefficients[(v_id1, v_id1)] = coefficients[(v_id1, v_id1)] + coeff/4.0
+        coefficients[(v_id2, v_id2)] = coefficients[(v_id2, v_id2)] + coeff/4.0
         offset += coeff/4.0
 
     linear_terms = []
