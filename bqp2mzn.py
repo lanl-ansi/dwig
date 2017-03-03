@@ -14,6 +14,13 @@ def main(args, data_stream):
         quit()
     validate_bqp_data(data)
 
+    if 'description' in data:
+        print('% {}'.format(data['description']))
+
+    for k in sorted(data['metadata']):
+         print('% {} : {}'.format(k, data['metadata'][k]))
+
+    print('')
     if data['variable_domain'] == 'boolean':
         print('set of int: Domain = {0,1};')
     elif data['variable_domain'] == 'spin':
