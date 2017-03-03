@@ -35,7 +35,9 @@
     }
   ],
   "metadata": {
-    "generated": "2017-03-02 20:19:21.980730",
+    "chimera_cell_size": 8,
+    "chimera_degree": 12,
+    "generated": "2017-03-03 02:57:41.658228",
     "generator": "ran"
   },
   "offset": 0.0,

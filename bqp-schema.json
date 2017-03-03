@@ -16,6 +16,12 @@
         "dw_chip_id":{
           "type":"string"
         },
+        "chimera_cell_size":{
+          "type":"integer"
+        },
+        "chimera_degree":{
+          "type":"integer"
+        },
         "generated":{
           "type":"string"
         },

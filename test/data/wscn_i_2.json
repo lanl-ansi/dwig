@@ -2083,7 +2083,9 @@
     }
   ],
   "metadata": {
-    "generated": "2017-03-02 20:19:23.686108",
+    "chimera_cell_size": 8,
+    "chimera_degree": 12,
+    "generated": "2017-03-03 02:57:43.434538",
     "generator": "wscn"
   },
   "offset": 0.0,
