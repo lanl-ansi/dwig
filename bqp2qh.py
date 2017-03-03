@@ -18,14 +18,26 @@ def main(args, data_stream):
         print_err('Error: unable to generate qubist hamiltonian from stdin, only spin domains are supported by qubist')
         quit()
 
+    quadratic_terms = {}
+    for qt in data['quadratic_terms']:
+        i,j = qt['id_tail'], qt['id_head']
+        if i > j:
+            i,j = qt['id_head'], qt['id_tail']
+        pair = (i,j)
+        if pair not in quadratic_terms:
+            quadratic_terms[pair] = 0.0
+        else:
+            print_err('Warning: merging multiple values quadratic terms between {},{}'.format(i,j))
+        quadratic_terms[pair] = quadratic_terms[pair] + qt['coeff']
+
     sites = max(data['variable_ids'])+1
     lines = len(data['linear_terms']) + len(data['quadratic_terms'])
 
     print('{} {}'.format(sites, lines))
     for lt in data['linear_terms']:
         print('{} {} {}'.format(lt['id'], lt['id'], lt['coeff']))
-    for qt in data['quadratic_terms']:
-        print('{} {} {}'.format(qt['id_tail'], qt['id_head'], qt['coeff']))
+    for (i,j),v in quadratic_terms.items():
+        print('{} {} {}'.format(i, j, v))
 
 
 def build_cli_parser():
