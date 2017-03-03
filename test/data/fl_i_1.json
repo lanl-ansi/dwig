@@ -4,352 +4,352 @@
   "metadata": {
     "chimera_cell_size": 8,
     "chimera_degree": 12,
-    "generated": "2017-03-03 04:43:19.018029",
+    "generated": "2017-03-03 22:24:34.778860",
     "generator": "fl"
   },
   "offset": 0.0,
   "quadratic_terms": [
     {
       "coeff": -0.5,
-      "idx_1": 0,
-      "idx_2": 7
+      "id_head": 7,
+      "id_tail": 0
     },
     {
       "coeff": -0.5,
-      "idx_1": 0,
-      "idx_2": 96
+      "id_head": 96,
+      "id_tail": 0
     },
     {
       "coeff": 0.5,
-      "idx_1": 1,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 1
     },
     {
       "coeff": -0.5,
-      "idx_1": 1,
-      "idx_2": 97
+      "id_head": 97,
+      "id_tail": 1
     },
     {
       "coeff": -0.5,
-      "idx_1": 2,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 2
     },
     {
       "coeff": -0.5,
-      "idx_1": 2,
-      "idx_2": 5
+      "id_head": 5,
+      "id_tail": 2
     },
     {
       "coeff": -0.5,
-      "idx_1": 2,
-      "idx_2": 7
+      "id_head": 7,
+      "id_tail": 2
     },
     {
       "coeff": -0.5,
-      "idx_1": 2,
-      "idx_2": 98
+      "id_head": 98,
+      "id_tail": 2
     },
     {
       "coeff": -0.5,
-      "idx_1": 3,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 3
     },
     {
       "coeff": -0.5,
-      "idx_1": 3,
-      "idx_2": 5
+      "id_head": 5,
+      "id_tail": 3
     },
     {
       "coeff": -0.5,
-      "idx_1": 4,
-      "idx_2": 12
+      "id_head": 12,
+      "id_tail": 4
     },
     {
       "coeff": 0.5,
-      "idx_1": 8,
-      "idx_2": 12
+      "id_head": 12,
+      "id_tail": 8
     },
     {
       "coeff": -1.0,
-      "idx_1": 8,
-      "idx_2": 15
+      "id_head": 15,
+      "id_tail": 8
     },
     {
       "coeff": -0.5,
-      "idx_1": 8,
-      "idx_2": 104
+      "id_head": 104,
+      "id_tail": 8
     },
     {
       "coeff": -0.5,
-      "idx_1": 9,
-      "idx_2": 13
+      "id_head": 13,
+      "id_tail": 9
     },
     {
       "coeff": -0.5,
-      "idx_1": 9,
-      "idx_2": 14
+      "id_head": 14,
+      "id_tail": 9
     },
     {
       "coeff": -1.0,
-      "idx_1": 9,
-      "idx_2": 15
+      "id_head": 15,
+      "id_tail": 9
     },
     {
       "coeff": -1.0,
-      "idx_1": 9,
-      "idx_2": 105
+      "id_head": 105,
+      "id_tail": 9
     },
     {
       "coeff": -0.5,
-      "idx_1": 10,
-      "idx_2": 12
+      "id_head": 12,
+      "id_tail": 10
     },
     {
       "coeff": -0.5,
-      "idx_1": 10,
-      "idx_2": 13
+      "id_head": 13,
+      "id_tail": 10
     },
     {
       "coeff": -1.0,
-      "idx_1": 10,
-      "idx_2": 106
+      "id_head": 106,
+      "id_tail": 10
     },
     {
       "coeff": -0.5,
-      "idx_1": 11,
-      "idx_2": 12
+      "id_head": 12,
+      "id_tail": 11
     },
     {
       "coeff": -0.5,
-      "idx_1": 11,
-      "idx_2": 14
+      "id_head": 14,
+      "id_tail": 11
     },
     {
       "coeff": -1.0,
-      "idx_1": 11,
-      "idx_2": 107
+      "id_head": 107,
+      "id_tail": 11
     },
     {
       "coeff": -0.5,
-      "idx_1": 96,
-      "idx_2": 103
+      "id_head": 103,
+      "id_tail": 96
     },
     {
       "coeff": -0.5,
-      "idx_1": 97,
-      "idx_2": 100
+      "id_head": 100,
+      "id_tail": 97
     },
     {
       "coeff": -1.0,
-      "idx_1": 98,
-      "idx_2": 102
+      "id_head": 102,
+      "id_tail": 98
     },
     {
       "coeff": -0.5,
-      "idx_1": 98,
-      "idx_2": 103
+      "id_head": 103,
+      "id_tail": 98
     },
     {
       "coeff": -0.5,
-      "idx_1": 99,
-      "idx_2": 100
+      "id_head": 100,
+      "id_tail": 99
     },
     {
       "coeff": -0.5,
-      "idx_1": 99,
-      "idx_2": 101
+      "id_head": 101,
+      "id_tail": 99
     },
     {
       "coeff": -1.0,
-      "idx_1": 100,
-      "idx_2": 108
+      "id_head": 108,
+      "id_tail": 100
     },
     {
       "coeff": -0.5,
-      "idx_1": 101,
-      "idx_2": 109
+      "id_head": 109,
+      "id_tail": 101
     },
     {
       "coeff": -1.0,
-      "idx_1": 102,
-      "idx_2": 110
+      "id_head": 110,
+      "id_tail": 102
     },
     {
       "coeff": -0.5,
-      "idx_1": 104,
-      "idx_2": 109
+      "id_head": 109,
+      "id_tail": 104
     },
     {
       "coeff": -1.0,
-      "idx_1": 104,
-      "idx_2": 110
+      "id_head": 110,
+      "id_tail": 104
     },
     {
       "coeff": -1.0,
-      "idx_1": 105,
-      "idx_2": 108
+      "id_head": 108,
+      "id_tail": 105
     },
     {
       "coeff": -0.5,
-      "idx_1": 106,
-      "idx_2": 109
+      "id_head": 109,
+      "id_tail": 106
     },
     {
       "coeff": 0.5,
-      "idx_1": 106,
-      "idx_2": 111
+      "id_head": 111,
+      "id_tail": 106
     },
     {
       "coeff": -1.0,
-      "idx_1": 107,
-      "idx_2": 108
+      "id_head": 108,
+      "id_tail": 107
     },
     {
       "coeff": -0.5,
-      "idx_1": 107,
-      "idx_2": 109
+      "id_head": 109,
+      "id_tail": 107
     },
     {
       "coeff": -0.5,
-      "idx_1": 107,
-      "idx_2": 111
+      "id_head": 111,
+      "id_tail": 107
     }
   ],
   "solutions": [
     {
       "assignment": [
         {
-          "idx": 0,
+          "id": 0,
           "value": -1
         },
         {
-          "idx": 1,
+          "id": 1,
           "value": -1
         },
         {
-          "idx": 2,
+          "id": 2,
           "value": -1
         },
         {
-          "idx": 3,
+          "id": 3,
           "value": -1
         },
         {
-          "idx": 4,
+          "id": 4,
           "value": -1
         },
         {
-          "idx": 5,
+          "id": 5,
           "value": -1
         },
         {
-          "idx": 7,
+          "id": 7,
           "value": -1
         },
         {
-          "idx": 8,
+          "id": 8,
           "value": -1
         },
         {
-          "idx": 9,
+          "id": 9,
           "value": -1
         },
         {
-          "idx": 10,
+          "id": 10,
           "value": -1
         },
         {
-          "idx": 11,
+          "id": 11,
           "value": -1
         },
         {
-          "idx": 12,
+          "id": 12,
           "value": -1
         },
         {
-          "idx": 13,
+          "id": 13,
           "value": -1
         },
         {
-          "idx": 14,
+          "id": 14,
           "value": -1
         },
         {
-          "idx": 15,
+          "id": 15,
           "value": -1
         },
         {
-          "idx": 96,
+          "id": 96,
           "value": -1
         },
         {
-          "idx": 97,
+          "id": 97,
           "value": -1
         },
         {
-          "idx": 98,
+          "id": 98,
           "value": -1
         },
         {
-          "idx": 99,
+          "id": 99,
           "value": -1
         },
         {
-          "idx": 100,
+          "id": 100,
           "value": -1
         },
         {
-          "idx": 101,
+          "id": 101,
           "value": -1
         },
         {
-          "idx": 102,
+          "id": 102,
           "value": -1
         },
         {
-          "idx": 103,
+          "id": 103,
           "value": -1
         },
         {
-          "idx": 104,
+          "id": 104,
           "value": -1
         },
         {
-          "idx": 105,
+          "id": 105,
           "value": -1
         },
         {
-          "idx": 106,
+          "id": 106,
           "value": -1
         },
         {
-          "idx": 107,
+          "id": 107,
           "value": -1
         },
         {
-          "idx": 108,
+          "id": 108,
           "value": -1
         },
         {
-          "idx": 109,
+          "id": 109,
           "value": -1
         },
         {
-          "idx": 110,
+          "id": 110,
           "value": -1
         },
         {
-          "idx": 111,
+          "id": 111,
           "value": -1
         }
       ],
       "description": "planted ground state, most likely non-unique",
       "evaluation": -23.0,
-      "idx": 0
+      "id": 0
     }
   ],
   "variable_domain": "spin",
-  "variable_idxs": [
+  "variable_ids": [
     0,
     1,
     2,

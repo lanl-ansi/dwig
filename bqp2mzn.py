@@ -31,28 +31,28 @@ def main(args, data_stream):
 
     print('float: offset = {};'.format(data['offset']))
     # this does not work becuose minizinc requires "array index set must be contiguous range"
-    #var_idxs_str = [str(idx) for idx in data['variable_idxs']]
-    #print('set of int: Vars = {{{}}};'.format(','.join(var_idxs_str)))
+    #var_ids_str = [str(var_id) for var_id in data['variable_id']]
+    #print('set of int: Vars = {{{}}};'.format(','.join(var_ids_str)))
 
     print('')
     mzn_var = {}
-    for var_idx in data['variable_idxs']:
-        mzn_var[var_idx] = 'x{}'.format(var_idx)
-        print('var Domain: {};'.format(mzn_var[var_idx]))
+    for var_id in data['variable_ids']:
+        mzn_var[var_id] = 'x{}'.format(var_id)
+        print('var Domain: {};'.format(mzn_var[var_id]))
 
     #print('array[Vars] of var Domain: x;')
 
     objective_terms = []
     for lt in data['linear_terms']:
-        objective_terms.append('{}*{}'.format(lt['coeff'], mzn_var[lt['idx']]))
+        objective_terms.append('{}*{}'.format(lt['coeff'], mzn_var[lt['id']]))
     for qt in data['quadratic_terms']:
-        objective_terms.append('{}*{}*{}'.format(qt['coeff'], mzn_var[qt['idx_1']], mzn_var[qt['idx_2']]))
+        objective_terms.append('{}*{}*{}'.format(qt['coeff'], mzn_var[qt['id_tail']], mzn_var[qt['id_head']]))
 
     # objective_terms = []
     # for lt in data['linear_terms']:
-    #     objective_terms.append('{}*x[{}]'.format(lt['coeff'],lt['idx']))
+    #     objective_terms.append('{}*x[{}]'.format(lt['coeff'],lt['id']))
     # for qt in data['quadratic_terms']:
-    #     objective_terms.append('{}*x[{}]*x[{}]'.format(qt['coeff'], qt['idx_1'], qt['idx_2']))
+    #     objective_terms.append('{}*x[{}]*x[{}]'.format(qt['coeff'], qt['id_tail'], qt['id_head']))
 
     print('')
     objective_expr = ' + '.join(objective_terms)
@@ -63,8 +63,8 @@ def main(args, data_stream):
 
     print('')
     var_list = []
-    for var_idx in data['variable_idxs']:
-        var_list.append(mzn_var[var_idx])
+    for var_id in data['variable_ids']:
+        var_list.append(mzn_var[var_id])
     print('output [show(objective), " - ", show([{}])];'.format(', '.join(var_list)))
 
     # print('')

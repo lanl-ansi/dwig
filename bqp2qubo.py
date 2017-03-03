@@ -24,7 +24,7 @@ def main(args, data_stream):
     for k in sorted(data['metadata']):
          print('c {} : {}'.format(k, data['metadata'][k]))
 
-    max_index = max(data['variable_idxs'])+1
+    max_index = max(data['variable_ids'])+1
     num_diagonals = len(data['linear_terms'])
     num_elements = len(data['quadratic_terms'])
 
@@ -32,11 +32,11 @@ def main(args, data_stream):
 
     print('c linear terms')
     for term in data['linear_terms']:
-        print('{} {} {}'.format(term['idx'], term['idx'], term['coeff']))
+        print('{} {} {}'.format(term['id'], term['id'], term['coeff']))
 
     print('c quadratic terms')
     for term in data['quadratic_terms']:
-        print('{} {} {}'.format(term['idx_1'], term['idx_2'], term['coeff']))
+        print('{} {} {}'.format(term['id_tail'], term['id_head'], term['coeff']))
 
 
 def build_cli_parser():
