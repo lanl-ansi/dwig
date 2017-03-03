@@ -31,10 +31,10 @@ class QPUAssignment(object):
     def build_dict(self):
         sorted_sites = sorted(self.spins.keys(), key=lambda x: x.index)
 
-        assignment = [{'idx':site.index, 'value':self.spins[site]} for site in sorted_sites]
+        assignment = [{'id':site.index, 'value':self.spins[site]} for site in sorted_sites]
 
         solution = {
-            'idx':0,
+            'id':0,
             'assignment':assignment,
             'evaluation':self.eval()
         }
@@ -84,17 +84,17 @@ class QPUConfiguration(object):
         for (i,j) in sorted(self.couplings.keys(), key=lambda x:(x[0].index, x[1].index)):
             v = self.couplings[(i,j)]
             assert(v != 0)
-            quadratic_terms_data.append({'idx_1':i.index, 'idx_2':j.index, 'coeff':v})
+            quadratic_terms_data.append({'id_tail':i.index, 'id_head':j.index, 'coeff':v})
 
         linear_terms_data = []
         for k in sorted(self.fields.keys(), key=lambda x: x.index):
             v = self.fields[k]
             assert(v != 0)
-            linear_terms_data.append({'idx':k.index, 'coeff':v})
+            linear_terms_data.append({'id':k.index, 'coeff':v})
 
         data_dict = {
             'variable_domain': 'spin',
-            'variable_idxs':[site.index for site in sorted_sites],
+            'variable_ids':[site.index for site in sorted_sites],
             'offset': 0.0,
             'linear_terms':linear_terms_data,
             'quadratic_terms':quadratic_terms_data

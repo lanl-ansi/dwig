@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "binary quadratic program schema",
   "type": "object",
-  "required":["variable_idxs", "variable_domain", "offset", "linear_terms", "quadratic_terms", "metadata"],
+  "required":["variable_ids", "variable_domain", "offset", "linear_terms", "quadratic_terms", "metadata"],
   "properties": {
     "metadata": {
       "type": "object",
@@ -30,7 +30,7 @@
         }
       }
     },
-    "variable_idxs": {
+    "variable_ids": {
       "type": "array",
       "items": {
         "type": "integer"
@@ -47,9 +47,9 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required":["idx", "coeff"],
+        "required":["id", "coeff"],
         "properties": {
-          "idx" : {
+          "id" : {
             "type": "integer"
           },
           "coeff":{
@@ -62,12 +62,12 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required":["idx_1", "idx_2", "coeff"],
+        "required":["id_head", "id_tail", "coeff"],
         "properties": {
-          "idx_1" : {
+          "id_head" : {
             "type": "integer"
           },
-          "idx_2" : {
+          "id_tail" : {
             "type": "integer"
           },
           "coeff":{
@@ -83,9 +83,9 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required":["idx", "assignment"],
+        "required":["id", "assignment"],
         "properties": {
-          "idx" : {
+          "id" : {
             "type": "integer"
           },
           "description" : {
@@ -98,9 +98,9 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required":["idx", "value"],
+              "required":["id", "value"],
               "properties": {
-                "idx" : {
+                "id" : {
                   "type": "integer"
                 },
                 "value":{
