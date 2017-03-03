@@ -1,4 +1,4 @@
-# D-Wave Instance Generator (D-WIG)
+# D-Wave Instance Generator (D-WIG) beta
 
 The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 

@@ -1,4 +1,4 @@
-# BQP-JSON
+# BQP-JSON beta
 
 This document describes __bqp-json__, a json-based encoding for Binary Quadratic Programs (B-QP).  The formal specification is provided in the json-schema document, `bqp-schema.json`.  The goal of bqp-json is to provide a simple language-agnostic data standard for encoding B-QPs, to assist in research and development of B-QP solution methods.
 
@@ -69,7 +69,7 @@ Where,
 * _idx_ - is the variable index value, it must appear in the "variable_idxs" list
 * _coeff_ - this is a floating point value defining the coefficient if the given variable
 
-Each variable should not be referenced more than once in the "linear_terms" list.
+Each variable should be referenced no more than once in the "linear_terms" list.
 
 
 A quadratic term object has the form,
@@ -85,7 +85,7 @@ Where,
 * _idx_2_ - is the second variable index value, it must appear in the "variable_idxs" list
 * _coeff_ - this is a floating point value defining the coefficient of the product of the given variables
 
-By convention idx_1 should be strictly less than idx_2.  Each variable pair should not be referenced more than once in the "quadratic_terms" list.
+By convention idx_1 should be strictly less than idx_2.  Each variable pair should be referenced no more than once in the "quadratic_terms" list.
 
 
 ### Solutions
@@ -105,7 +105,7 @@ Where,
 * _description_ - a textual description of what this solution is
 * _evaluation_ - the evaluation of this solution in the given B-QP, to provided a correctness check
 
-Each variable should not be referenced exactly once in the "assignment" list.
+Each variable should be referenced exactly once in the "assignment" list.
 
 
 An assignment object has the form,
