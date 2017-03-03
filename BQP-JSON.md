@@ -127,20 +127,25 @@ If the "variable_domain" is "boolean" the values should be either 0 or 1.
 A solution object has the form,
 ```
 {
-  ("generated": <string>),
-  ("generator": <string>),
-  ("dw_url": <string>),
-  ("dw_solver_name": <string>),
-  ("dw_chip_id": <string>),
+  ("generated": <string>,)
+  ("generator": <string>,)
+  ("dw_url": <string>,)
+  ("dw_solver_name": <string>,)
+  ("dw_chip_id": <string>,)
+  ("chimera_cell_size":  <integer>,)
+  ("chimera_degree":  <integer>,)
   ...
 }
 ```
+
 Where,
 * _generated_ - the utc time and date that the problem was generated
 * _generator_ - the algorithm used to generate the problem
 * _dw_url_ - the url of the d-wave qpu used to generate the problem
 * _dw_solver_name_ - the name of the d-wave solver used to generate the problem
 * _dw_chip_id_ - the chip identifier of the d-wave qpu used to generate the problem
+* _chimera_cell_size_ - the number of variables in each chimera unit cell
+* _chimera_degree_ - the size of a square laytout of chimera unit cells
 
 All of the metadata parameters are optional and arability user defined parameters are permitted. 
 
