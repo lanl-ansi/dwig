@@ -20,15 +20,15 @@ def main(args, data_stream):
 
     quadratic_terms = {}
     for qt in data['quadratic_terms']:
-        i,j = qt['id_tail'], qt['id_head']
+        i,j = qt['id_tail'],qt['id_head']
         if i > j:
-            i,j = qt['id_head'], qt['id_tail']
+            i,j = qt['id_head'],qt['id_tail']
         pair = (i,j)
         if pair not in quadratic_terms:
-            quadratic_terms[pair] = 0.0
+            quadratic_terms[pair] = qt['coeff']
         else:
             print_err('Warning: merging multiple values quadratic terms between {},{}'.format(i,j))
-        quadratic_terms[pair] = quadratic_terms[pair] + qt['coeff']
+            quadratic_terms[pair] = quadratic_terms[pair] + qt['coeff']
 
     sites = max(data['variable_ids'])+1
     lines = len(data['linear_terms']) + len(data['quadratic_terms'])
@@ -36,7 +36,8 @@ def main(args, data_stream):
     print('{} {}'.format(sites, lines))
     for lt in data['linear_terms']:
         print('{} {} {}'.format(lt['id'], lt['id'], lt['coeff']))
-    for (i,j),v in quadratic_terms.items():
+    for (i,j) in sorted(quadratic_terms.keys()):
+        v = quadratic_terms[(i,j)]
         print('{} {} {}'.format(i, j, v))
 
 
