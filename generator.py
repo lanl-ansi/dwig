@@ -28,20 +28,14 @@ def generate_ran(qpu, steps=1, feild=False):
 
 
 def generate_clq(qpu):
-    edges = [(value[0], value[1]) for value in sorted(qpu.couplers)]
-    vertices = Set([])
-
-    for edge in edges:
-        vertices.update(list(edge))
-
     couplings = {coupler : 0.5 for coupler in sorted(qpu.couplers)}
-    fields = {site : 0.5 for site in vertices}
+    fields = {site : 0.5 for site in sorted(qpu.sites)}
 
-    for edge in edges:
-        fields[edge[0]] += 0.5
-        fields[edge[1]] += 0.5
+    for i,j in qpu.couplers:
+        fields[i] += 0.5
+        fields[j] += 0.5
 
-    obj_constant = 0.5*(len(edges) + len(vertices))
+    obj_constant = 0.5*(len(qpu.couplers) + len(qpu.sites))
 
     return QPUConfiguration(qpu, fields, couplings, obj_constant)
 
