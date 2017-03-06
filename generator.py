@@ -30,20 +30,20 @@ def generate_ran(qpu, steps=1, feild=False):
 def generate_clq(qpu):
     edges = [(value[0], value[1]) for value in sorted(qpu.couplers)]
     vertices = Set([])
-    
+
     for edge in edges:
         vertices.update(list(edge))
-    
+
     couplings = {coupler : 0.5 for coupler in sorted(qpu.couplers)}
     fields = {site : 0.5 for site in vertices}
-    
+
     for edge in edges:
         fields[edge[0]] += 0.5
         fields[edge[1]] += 0.5
-    
+
     obj_constant = 0.5*(len(edges) + len(vertices))
-    # stub for max clique case generation
-    return QPUConfiguration(qpu, fields, couplings)
+
+    return QPUConfiguration(qpu, fields, couplings, obj_constant)
 
 
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
