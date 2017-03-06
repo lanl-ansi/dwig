@@ -1,0 +1,32 @@
+c This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the clq algorithm  A random number seed of 0 was used.
+c chimera_cell_size : 8
+c chimera_degree : 12
+c generated : 2017-03-06 22:09:44.766675
+c generator : clq
+p qubo 0 8 8 16
+c linear terms
+0 0 0.8
+1 1 0.8
+2 2 0.8
+3 3 0.8
+4 4 0.8
+5 5 0.8
+6 6 0.8
+7 7 0.8
+c quadratic terms
+0 4 1.6
+0 5 1.6
+0 6 1.6
+0 7 1.6
+1 4 1.6
+1 5 1.6
+1 6 1.6
+1 7 1.6
+2 4 1.6
+2 5 1.6
+2 6 1.6
+2 7 1.6
+3 4 1.6
+3 5 1.6
+3 6 1.6
+3 7 1.6

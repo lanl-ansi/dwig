@@ -1,7 +1,7 @@
 % This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm  A random number seed of 0 was used.
 % chimera_cell_size : 8
 % chimera_degree : 12
-% generated : 2017-03-03 22:24:20.410069
+% generated : 2017-03-06 22:08:58.781525
 % generator : ran
 
 set of int: Domain = {-1,1};
