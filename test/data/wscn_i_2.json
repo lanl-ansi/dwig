@@ -2085,8 +2085,8 @@
   "metadata": {
     "chimera_cell_size": 8,
     "chimera_degree": 12,
-    "generated": "2017-03-03 22:24:55.067622",
-    "generator": "wscn"
+    "dwig_generator": "wscn",
+    "generated": "2017-03-06 23:31:09.268659"
   },
   "offset": 0.0,
   "quadratic_terms": [

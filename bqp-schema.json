@@ -25,7 +25,7 @@
         "generated":{
           "type":"string"
         },
-        "generator":{
+        "dwig_generator":{
           "type":"string"
         }
       }

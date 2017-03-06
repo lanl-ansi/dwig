@@ -73,8 +73,8 @@ def build_metadata(args, qpu):
     metadata['chimera_cell_size'] = qpu.cell_size
     metadata['chimera_degree'] = qpu.chimera_degree
     
+    metadata['dwig_generator'] = args.generator
 
-    metadata['generator'] = args.generator
     metadata['generated'] = str(datetime.datetime.utcnow())
     return metadata
 
