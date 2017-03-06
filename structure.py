@@ -53,7 +53,7 @@ class QPUAssignment(object):
 
 
 class QPUConfiguration(object):
-    def __init__(self, qpu, fields={}, couplings={}):
+    def __init__(self, qpu, fields={}, couplings={}, offset=0.0):
         scaled_fields, scaled_couplings = _rescale(fields, couplings, qpu.site_range, qpu.coupler_range)
 
         filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
@@ -62,6 +62,7 @@ class QPUConfiguration(object):
         self.qpu = qpu
         self.fields = filtered_fields
         self.couplings = filtered_couplings
+        self.offset = offset
 
         for k, v in self.fields.items():
             assert(qpu.site_range.lb <= v and qpu.site_range.ub >= v)
@@ -95,7 +96,7 @@ class QPUConfiguration(object):
         data_dict = {
             'variable_domain': 'spin',
             'variable_ids':[site.index for site in sorted_sites],
-            'offset': 0.0,
+            'offset': self.offset,
             'linear_terms':linear_terms_data,
             'quadratic_terms':quadratic_terms_data
         }
