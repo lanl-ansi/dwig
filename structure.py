@@ -5,34 +5,6 @@ from collections import namedtuple
 from common import print_err
 
 
-def rescale(fields, couplings, site_lb, site_ub, coupler_lb, coupler_ub):
-    assert(site_lb + site_ub == 0.0)
-    assert(coupler_lb + coupler_ub == 0.0)
-
-    scaling_factor = 1.0
-
-    for field in fields.values():
-        if field != 0:
-            if field < site_lb:
-                scaling_factor = min(scaling_factor, site_lb/float(field))
-            if field > site_ub:
-                scaling_factor = min(scaling_factor, site_ub/float(field))
-
-    for coupling in couplings.values():
-        if coupling != 0:
-            if coupling < coupler_lb:
-                scaling_factor = min(scaling_factor, coupler_lb/float(coupling))
-            if coupling > coupler_ub:
-                scaling_factor = min(scaling_factor, coupler_ub/float(coupling))
-
-    if scaling_factor < 1.0:
-        print_err('info: rescaling field to [{},{}] and couplings to [{},{}] with scaling factor {}'.format(site_lb, site_ub, coupler_lb, coupler_ub, scaling_factor))
-        fields = {k:v*scaling_factor for k,v in fields.items()}
-        couplings = {k:v*scaling_factor for k,v in couplings.items()}
-
-    return fields, couplings
-
-
 class QPUAssignment(object):
     def __init__(self, qpu_config, spins={}, description=None):
         self.qpu_config = qpu_config
@@ -59,10 +31,10 @@ class QPUAssignment(object):
     def build_dict(self):
         sorted_sites = sorted(self.spins.keys(), key=lambda x: x.index)
 
-        assignment = [{'idx':site.index, 'value':self.spins[site]} for site in sorted_sites]
+        assignment = [{'id':site.index, 'value':self.spins[site]} for site in sorted_sites]
 
         solution = {
-            'idx':0,
+            'id':0,
             'assignment':assignment,
             'evaluation':self.eval()
         }
@@ -75,15 +47,14 @@ class QPUAssignment(object):
 
         return data_dict
 
-
     def __str__(self):
         return 'spins: '+\
             ' '.join([str(site)+':'+str(value) for site, value in self.spins.items()])
 
 
 class QPUConfiguration(object):
-    def __init__(self, qpu, fields={}, couplings={}):
-        scaled_fields, scaled_couplings = rescale(fields, couplings, *(qpu.site_range+qpu.coupler_range))
+    def __init__(self, qpu, fields={}, couplings={}, offset=0.0):
+        scaled_fields, scaled_couplings = _rescale(fields, couplings, qpu.site_range, qpu.coupler_range)
 
         filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
         filtered_couplings = {k:v for k,v in scaled_couplings.items() if v != 0.0}
@@ -91,13 +62,14 @@ class QPUConfiguration(object):
         self.qpu = qpu
         self.fields = filtered_fields
         self.couplings = filtered_couplings
+        self.offset = offset
 
         for k, v in self.fields.items():
-            assert(qpu.site_range[0] <= v and qpu.site_range[1] >= v)
+            assert(qpu.site_range.lb <= v and qpu.site_range.ub >= v)
             assert(k in qpu.sites)
 
         for k, v in self.couplings.items():
-            assert(qpu.coupler_range[0] <= v and qpu.coupler_range[1] >= v)
+            assert(qpu.coupler_range.lb <= v and qpu.coupler_range.ub >= v)
             assert(k in qpu.couplers)
 
     def active_sites(self):
@@ -113,24 +85,23 @@ class QPUConfiguration(object):
         for (i,j) in sorted(self.couplings.keys(), key=lambda x:(x[0].index, x[1].index)):
             v = self.couplings[(i,j)]
             assert(v != 0)
-            quadratic_terms_data.append({'idx_1':i.index, 'idx_2':j.index, 'coeff':v})
+            quadratic_terms_data.append({'id_tail':i.index, 'id_head':j.index, 'coeff':v})
 
         linear_terms_data = []
         for k in sorted(self.fields.keys(), key=lambda x: x.index):
             v = self.fields[k]
             assert(v != 0)
-            linear_terms_data.append({'idx':k.index, 'coeff':v})
+            linear_terms_data.append({'id':k.index, 'coeff':v})
 
         data_dict = {
             'variable_domain': 'spin',
-            'variable_idxs':[site.index for site in sorted_sites],
-            'offset': 0.0,
+            'variable_ids':[site.index for site in sorted_sites],
+            'offset': self.offset,
             'linear_terms':linear_terms_data,
             'quadratic_terms':quadratic_terms_data
         }
 
         return data_dict
-
 
     def __str__(self):
         return 'fields: '+\
@@ -138,15 +109,46 @@ class QPUConfiguration(object):
             '\ncouplings: '+' '.join(['('+str(i)+', '+str(j)+'):'+str(value) for (i,j), value in self.couplings.items()])
 
 
+def _rescale(fields, couplings, site_range, coupler_range):
+    assert(site_range.lb + site_range.ub == 0.0)
+    assert(coupler_range.lb + coupler_range.ub == 0.0)
+
+    scaling_factor = 1.0
+
+    for field in fields.values():
+        if field != 0:
+            if field < site_range.lb:
+                scaling_factor = min(scaling_factor, site_range.lb/float(field))
+            if field > site_range.ub:
+                scaling_factor = min(scaling_factor, site_range.ub/float(field))
+
+    for coupling in couplings.values():
+        if coupling != 0:
+            if coupling < coupler_range.lb:
+                scaling_factor = min(scaling_factor, coupler_range.lb/float(coupling))
+            if coupling > coupler_range.ub:
+                scaling_factor = min(scaling_factor, coupler_range.ub/float(coupling))
+
+    if scaling_factor < 1.0:
+        print_err('info: rescaling field to {} and couplings to {} with scaling factor {}'.format(site_range, coupler_range, scaling_factor))
+        fields = {k:v*scaling_factor for k,v in fields.items()}
+        couplings = {k:v*scaling_factor for k,v in couplings.items()}
+
+    return fields, couplings
+
+
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
+Range = namedtuple('Range', ['lb', 'ub'])
+
 
 class ChimeraQPU(object):
-    def __init__(self, sites, couplers, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None):
+    def __init__(self, sites, couplers, cell_size, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None):
         if chimera_degree_view == None:
             self.chimera_degree_view = chimera_degree
         else:
             self.chimera_degree_view = chimera_degree_view
 
+        self.cell_size = int(cell_size)
         self.chip_id = chip_id
 
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
@@ -159,7 +161,7 @@ class ChimeraQPU(object):
 
         self.chimera_cell_sites = {}
         for site in self.sites:
-            if not site.chimera_cell in self.chimera_cell_sites:
+            if site.chimera_cell not in self.chimera_cell_sites:
                 self.chimera_cell_sites[site.chimera_cell] = set([])
             self.chimera_cell_sites[site.chimera_cell].add(site)
         #print(self.chimera_cell_sites)
@@ -177,7 +179,7 @@ class ChimeraQPU(object):
         filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree_view)])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
 
     def chimera_cell(self, chimera_coordinate):
         return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)

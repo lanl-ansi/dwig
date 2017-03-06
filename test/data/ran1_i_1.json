@@ -1,94 +1,97 @@
 {
+  "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm  A random number seed of 0 was used.",
   "linear_terms": [],
   "metadata": {
-    "generated": "2017-02-25 17:03:33.879754",
+    "chimera_cell_size": 8,
+    "chimera_degree": 12,
+    "generated": "2017-03-03 22:24:20.410069",
     "generator": "ran"
   },
   "offset": 0.0,
   "quadratic_terms": [
     {
       "coeff": 1.0,
-      "idx_1": 0,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 0
     },
     {
       "coeff": 1.0,
-      "idx_1": 0,
-      "idx_2": 5
+      "id_head": 5,
+      "id_tail": 0
     },
     {
       "coeff": -1.0,
-      "idx_1": 0,
-      "idx_2": 6
+      "id_head": 6,
+      "id_tail": 0
     },
     {
       "coeff": -1.0,
-      "idx_1": 0,
-      "idx_2": 7
+      "id_head": 7,
+      "id_tail": 0
     },
     {
       "coeff": 1.0,
-      "idx_1": 1,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 1
     },
     {
       "coeff": -1.0,
-      "idx_1": 1,
-      "idx_2": 5
+      "id_head": 5,
+      "id_tail": 1
     },
     {
       "coeff": 1.0,
-      "idx_1": 1,
-      "idx_2": 6
+      "id_head": 6,
+      "id_tail": 1
     },
     {
       "coeff": -1.0,
-      "idx_1": 1,
-      "idx_2": 7
+      "id_head": 7,
+      "id_tail": 1
     },
     {
       "coeff": -1.0,
-      "idx_1": 2,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 2
     },
     {
       "coeff": 1.0,
-      "idx_1": 2,
-      "idx_2": 5
+      "id_head": 5,
+      "id_tail": 2
     },
     {
       "coeff": 1.0,
-      "idx_1": 2,
-      "idx_2": 6
+      "id_head": 6,
+      "id_tail": 2
     },
     {
       "coeff": 1.0,
-      "idx_1": 2,
-      "idx_2": 7
+      "id_head": 7,
+      "id_tail": 2
     },
     {
       "coeff": -1.0,
-      "idx_1": 3,
-      "idx_2": 4
+      "id_head": 4,
+      "id_tail": 3
     },
     {
       "coeff": 1.0,
-      "idx_1": 3,
-      "idx_2": 5
+      "id_head": 5,
+      "id_tail": 3
     },
     {
       "coeff": 1.0,
-      "idx_1": 3,
-      "idx_2": 6
+      "id_head": 6,
+      "id_tail": 3
     },
     {
       "coeff": -1.0,
-      "idx_1": 3,
-      "idx_2": 7
+      "id_head": 7,
+      "id_tail": 3
     }
   ],
   "variable_domain": "spin",
-  "variable_idxs": [
+  "variable_ids": [
     0,
     1,
     2,

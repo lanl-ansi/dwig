@@ -1,4 +1,7 @@
-c generated : 2017-02-25 17:03:33.879754
+c This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm  A random number seed of 0 was used.
+c chimera_cell_size : 8
+c chimera_degree : 12
+c generated : 2017-03-03 22:24:20.410069
 c generator : ran
 p qubo 0 8 4 16
 c linear terms

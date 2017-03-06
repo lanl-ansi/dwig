@@ -6,6 +6,7 @@ from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
 from structure import ChimeraQPU
+from structure import Range
 
 import generator
 from common import print_err
@@ -50,7 +51,13 @@ def main(args):
     #print_err(qpu_config)
 
     data = qpu_config.build_dict()
+
+    data['description'] = 'This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the {} algorithm'.format(args.generator)
+    if not args.seed is None:
+        data['description'] = data['description'] + '  A random number seed of {} was used.'.format(args.seed)
+
     data['metadata'] = build_metadata(args, qpu)
+
     validate_bqp_data(data)
     data_string = json.dumps(data, **json_dumps_kwargs)
     print(data_string)
@@ -65,6 +72,10 @@ def build_metadata(args, qpu):
     if not qpu.chip_id is None:
         metadata['dw_chip_id'] = qpu.chip_id
 
+    metadata['chimera_cell_size'] = qpu.cell_size
+    metadata['chimera_degree'] = qpu.chimera_degree
+    
+
     metadata['generator'] = args.generator
     metadata['generated'] = str(datetime.datetime.utcnow())
     return metadata
@@ -72,6 +83,7 @@ def build_metadata(args, qpu):
 
 def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
     chip_id = None
+    cell_size = 8
 
     if not url is None and not token is None and not solver_name is None:
         print_err('QPU connection details found, accessing "{}" at "{}"'.format(solver_name, url))
@@ -88,24 +100,25 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
 
         sites = solver.properties['qubits']
 
-        solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/8.0)))
+        solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
         if hardware_chimera_degree != solver_chimera_degree:
             print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
 
-        site_range = tuple(solver.properties['h_range'])
-        coupler_range = tuple(solver.properties['j_range'])
+        site_range = Range(*solver.properties['h_range'])
+        coupler_range = Range(*solver.properties['j_range'])
         chip_id = solver.properties['chip_id']
 
     else:
         print_err('QPU connection details not found, assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
 
-        site_range = (-2.0, 2.0)
-        coupler_range = (-1.0, 1.0)
+        site_range = Range(-2.0, 2.0)
+        coupler_range = Range(-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
-        arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, 4)
+        arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
 
         # turn arcs into couplers
+        # this step is nessisary to be consistent with the solver.properties['couplers'] data
         couplers = []
         for i,j in arcs:
             assert(i != j)
@@ -118,11 +131,11 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
 
         sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
 
-    # sanity check on couplers
+    # sanity check on coupler consistency across both branches
     for i,j in couplers:
         assert(i < j)
 
-    return ChimeraQPU(sites, couplers, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id)
+    return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id)
 
 
 # loads a configuration file and sets up undefined CLI arguments

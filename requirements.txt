@@ -1,8 +1,8 @@
 appdirs==1.4.0
 coverage==4.3.4
-dwave-sapi2==2.4.1
-find-embedding==2.4.1
-fix-variables==2.4.1
+dwave-sapi2>=2.4.0
+find-embedding>=2.4.0
+fix-variables>=2.4.0
 funcsigs==1.0.2
 functools32==3.2.3.post2
 jsonschema==2.6.0
@@ -12,7 +12,7 @@ py==1.4.32
 pyparsing==2.1.10
 pytest==3.0.6
 pytest-cov==2.4.0
-qsage==2.4.1
-sapilocal==2.4.1
-sapiremote==2.4.1
+qsage>=2.4.0
+sapilocal>=2.4.0
+sapiremote>=2.4.0
 six==1.10.0
