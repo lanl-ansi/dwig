@@ -28,14 +28,14 @@ def generate_ran(qpu, steps=1, feild=False):
 
 
 def generate_clq(qpu):
-    couplings = {coupler : -0.5 for coupler in sorted(qpu.couplers)}
+    couplings = {coupler : 0.5 for coupler in sorted(qpu.couplers)}
     fields = {site : -0.5 for site in sorted(qpu.sites)}
 
     for i,j in qpu.couplers:
-        fields[i] += -0.5
-        fields[j] += -0.5
+        fields[i] += 0.5
+        fields[j] += 0.5
 
-    obj_constant = -0.5*(len(qpu.couplers) + len(qpu.sites))
+    obj_constant = 0.5*(len(qpu.couplers) - len(qpu.sites))
 
     return QPUConfiguration(qpu, fields, couplings, obj_constant)
 
