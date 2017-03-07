@@ -56,8 +56,8 @@ Each of the top level items is as follows,
 * _metadata_ - data describing how and when the problem was created
 * _variable_ids_ - a list of integers defining the valid variable identifier values
 * _variable_domain_ - indicates if the problem variables take boolean or spin values
-* _scale_ - a scaling factor for the evaluation of the offset, linear and quadratic terms
-* _offset_ - an offset for the evaluation of the linear and quadratic terms
+* _scale_ - a scaling factor for the evaluation of the offset, linear and quadratic terms (typically 1.0)
+* _offset_ - an offset for the evaluation of the linear and quadratic terms (typically 0.0)
 * _linear_terms_ - a list of coefficients for individual variables (a.k.a. fields)
 * _quadratic_terms_ - a list of coefficients for products variables (a.k.a. couplings)
 * _description_ - an optional textual description of the bqp data 
