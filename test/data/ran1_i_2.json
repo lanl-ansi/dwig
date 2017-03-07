@@ -123,6 +123,7 @@
       "id_tail": 3
     }
   ],
+  "scale": 1.0,
   "variable_domain": "spin",
   "variable_ids": [
     0,
