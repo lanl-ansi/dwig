@@ -7,6 +7,7 @@
 
 set of int: Domain = {-1,1};
 float: offset = 0.0;
+float: scale = 1.0;
 
 var Domain: x0;
 var Domain: x1;
@@ -17,8 +18,8 @@ var Domain: x5;
 var Domain: x6;
 var Domain: x7;
 
-var float: objective = offset + 1.0*x0*x4 + 1.0*x0*x5 + -1.0*x0*x6 + -1.0*x0*x7 + 1.0*x1*x4 + -1.0*x1*x5 + 1.0*x1*x6 + -1.0*x1*x7 + -1.0*x2*x4 + 1.0*x2*x5 + 1.0*x2*x6 + 1.0*x2*x7 + -1.0*x3*x4 + 1.0*x3*x5 + 1.0*x3*x6 + -1.0*x3*x7;
+var float: objective = 1.0*x0*x4 + 1.0*x0*x5 + -1.0*x0*x6 + -1.0*x0*x7 + 1.0*x1*x4 + -1.0*x1*x5 + 1.0*x1*x6 + -1.0*x1*x7 + -1.0*x2*x4 + 1.0*x2*x5 + 1.0*x2*x6 + 1.0*x2*x7 + -1.0*x3*x4 + 1.0*x3*x5 + 1.0*x3*x6 + -1.0*x3*x7;
 
 solve minimize objective;
 
-output [show(objective), " - ", show([x0, x1, x2, x3, x4, x5, x6, x7])];
+output [show(scale*(objective + offset)), " - ", show(objective), " - ", show([x0, x1, x2, x3, x4, x5, x6, x7])];

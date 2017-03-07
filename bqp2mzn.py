@@ -33,6 +33,7 @@ def main(args, data_stream):
         quit()
 
     print('float: offset = {};'.format(data['offset']))
+    print('float: scale = {};'.format(data['scale']))
     # this does not work becuose minizinc requires "array index set must be contiguous range"
     #var_ids_str = [str(var_id) for var_id in data['variable_id']]
     #print('set of int: Vars = {{{}}};'.format(','.join(var_ids_str)))
@@ -59,7 +60,7 @@ def main(args, data_stream):
 
     print('')
     objective_expr = ' + '.join(objective_terms)
-    print('var float: objective = offset + {};'.format(objective_expr))
+    print('var float: objective = {};'.format(objective_expr))
 
     print('')
     print('solve minimize objective;'.format(objective_expr))
@@ -68,7 +69,7 @@ def main(args, data_stream):
     var_list = []
     for var_id in data['variable_ids']:
         var_list.append(mzn_var[var_id])
-    print('output [show(objective), " - ", show([{}])];'.format(', '.join(var_list)))
+    print('output [show(scale*(objective + offset)), " - ", show(objective), " - ", show([{}])];'.format(', '.join(var_list)))
 
     # print('')
     # print('output [show(objective), " - ", show(x)]')
