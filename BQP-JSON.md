@@ -92,21 +92,21 @@ Each id pair should be referenced no more than once in the "quadratic_terms" lis
 For example, this is __not__ allowed,
 ```
 [
-{"id_tail": 0, "id_head": 1, "coeff": 2.4},
-{"id_tail": 0, "id_head": 1, "coeff": 1.7},
+  {"id_tail": 0, "id_head": 1, "coeff": 2.4},
+  {"id_tail": 0, "id_head": 1, "coeff": 1.7}
 ]
 ```
 This is allowed, but not preferable,
 ```
 [
-{"id_tail": 0, "id_head": 1, "coeff": 2.4},
-{"id_tail": 1, "id_head": 0, "coeff": 1.7},
+  {"id_tail": 0, "id_head": 1, "coeff": 2.4},
+  {"id_tail": 1, "id_head": 0, "coeff": 1.7}
 ]
 ```
 This is the best practice,
 ```
 [
-{"id_tail": 0, "id_head": 1, "coeff": 4.1}
+  {"id_tail": 0, "id_head": 1, "coeff": 4.1}
 ]
 ```
 
