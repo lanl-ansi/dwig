@@ -75,7 +75,9 @@ def build_metadata(args, qpu):
     
     metadata['dwig_generator'] = args.generator
 
-    metadata['generated'] = str(datetime.datetime.utcnow())
+    if not args.timeless:
+        metadata['generated'] = str(datetime.datetime.utcnow())
+
     return metadata
 
 
@@ -176,6 +178,8 @@ def build_cli_parser():
     parser.add_argument('-proxy', '--dw-proxy', help='proxy for accessing the d-wave machine')
     parser.add_argument('-solver', '--dw-solver-name', help='d-wave solver to use', type=int)
 
+
+    parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)

@@ -4,7 +4,6 @@
 % chimera_cell_size : 8
 % chimera_degree : 12
 % dwig_generator : wscn
-% generated : 2017-03-07 00:07:56.139835
 
 set of int: Domain = {-1,1};
 float: offset = 0.0;
