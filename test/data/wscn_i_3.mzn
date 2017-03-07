@@ -1,8 +1,10 @@
-% This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the wscn algorithm  A random number seed of 0 was used.
+% id : 1998946882
+% description : This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the wscn algorithm.  A random number seed of 0 was used.
+% 
 % chimera_cell_size : 8
 % chimera_degree : 12
 % dwig_generator : wscn
-% generated : 2017-03-06 23:31:14.986432
+% generated : 2017-03-07 00:08:03.243401
 
 set of int: Domain = {-1,1};
 float: offset = 0.0;

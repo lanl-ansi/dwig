@@ -35,6 +35,7 @@ This section provides an informal and intuitive description of bqp-json.  Refer 
 The root of a bqp-json document is as follows,
 ```
 {
+  "id": <integer>,
   "metadata": {...},
   "variable_ids": [...],
   "variable_domain": ("spin" | "boolean"),
@@ -46,7 +47,8 @@ The root of a bqp-json document is as follows,
 }
 ```
 Each of the top level items is as follows,
-* _metadata_ - data describing how and when the problem was created.
+* _id_ - is an integer for identifying this bqp dataset
+* _metadata_ - data describing how and when the problem was created
 * _variable_ids_ - a list of integers defining the valid variable identifier values
 * _variable_domain_ - indicates if the problem variables take boolean or spin values
 * _offset_ - an offset for the evaluation of the linear and quadratic terms

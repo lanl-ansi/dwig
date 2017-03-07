@@ -50,7 +50,7 @@ def main(args):
 
     data = qpu_config.build_dict()
 
-    data['description'] = 'This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the {} algorithm'.format(args.generator)
+    data['description'] = 'This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the {} algorithm.'.format(args.generator)
     if not args.seed is None:
         data['description'] = data['description'] + '  A random number seed of {} was used.'.format(args.seed)
 

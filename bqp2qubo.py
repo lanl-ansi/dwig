@@ -18,11 +18,16 @@ def main(args, data_stream):
         print_err('Error: unable to generate qubo data file from stdin, only boolean domains are supported by qubo')
         quit()
 
+    print('c id : {}'.format(data['id']))
+
     if 'description' in data:
-        print('c {}'.format(data['description']))
+        print('c description : {}'.format(data['description']))
+    print('c ')
 
     for k in sorted(data['metadata']):
          print('c {} : {}'.format(k, data['metadata'][k]))
+    if len(data['metadata']):
+        print('c ')
 
     max_index = max(data['variable_ids'])+1
     num_diagonals = len(data['linear_terms'])

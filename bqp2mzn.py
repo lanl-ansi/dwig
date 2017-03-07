@@ -14,8 +14,11 @@ def main(args, data_stream):
         quit()
     validate_bqp_data(data)
 
+    print('% id : {}'.format(data['id']))
+
     if 'description' in data:
-        print('% {}'.format(data['description']))
+        print('% description : {}'.format(data['description']))
+    print('% ')
 
     for k in sorted(data['metadata']):
          print('% {} : {}'.format(k, data['metadata'][k]))
