@@ -87,7 +87,7 @@ Where,
 * _id_head_ - is the second variable identifier value, it must appear in the "variable_ids" list
 * _coeff_ - this is a floating point value defining the coefficient of the product of the given variables
 
-Each id pair should be referenced no more than once in the "quadratic_terms" list and the value of _id_tail_ cannot be the same as the value of _id_head_.  It is recomended, but not required, that _id_tail_ be less than _id_head_.
+Each id pair should be referenced no more than once in the "quadratic_terms" list and the value of _id_tail_ cannot be the same as the value of _id_head_.  It is recommended, but not required, that _id_tail_ be less than _id_head_.
 
 For example, this is __not__ allowed,
 ```
