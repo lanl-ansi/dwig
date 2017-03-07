@@ -26,6 +26,7 @@ def main(args, data_stream):
 
     print('c scale : {}'.format(data['scale']))
     print('c offset : {}'.format(data['offset']))
+    print('c ')
 
     for k in sorted(data['metadata']):
          print('c {} : {}'.format(k, data['metadata'][k]))
