@@ -6,9 +6,10 @@ from common import print_err
 
 
 class QPUAssignment(object):
-    def __init__(self, qpu_config, spins={}, description=None):
+    def __init__(self, qpu_config, spins={}, identifier=0, description=None):
         self.qpu_config = qpu_config
         self.spins = spins
+        self.identifier = identifier
         self.description = description
 
         for k, v in self.spins.items():
@@ -26,7 +27,7 @@ class QPUAssignment(object):
         for coupler, coupling in self.qpu_config.couplings.items():
             energy += coupling*self.spins[coupler[0]]*self.spins[coupler[1]]
             #print(coupling*self.spins[coupler[0]]*self.spins[coupler[1]])
-        return energy
+        return self.qpu_config.scale*(energy + self.qpu_config.offset)
 
     def build_dict(self):
         sorted_sites = sorted(self.spins.keys(), key=lambda x: x.index)
@@ -34,7 +35,7 @@ class QPUAssignment(object):
         assignment = [{'id':site.index, 'value':self.spins[site]} for site in sorted_sites]
 
         solution = {
-            'id':0,
+            'id':self.identifier,
             'assignment':assignment,
             'evaluation':self.eval()
         }
