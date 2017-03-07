@@ -87,8 +87,28 @@ Where,
 * _id_head_ - is the second variable identifier value, it must appear in the "variable_ids" list
 * _coeff_ - this is a floating point value defining the coefficient of the product of the given variables
 
-Each id pair should be referenced no more than once in the "quadratic_terms" list and the value of _id_tail_ cannot be the same as the value of _id_head_.  It is recomended, but not required, that _id_tail_ be less than _id_head_.  
+Each id pair should be referenced no more than once in the "quadratic_terms" list and the value of _id_tail_ cannot be the same as the value of _id_head_.  It is recommended, but not required, that _id_tail_ be less than _id_head_.
 
+For example, this is __not__ allowed,
+```
+[
+  {"id_tail": 0, "id_head": 1, "coeff": 2.4},
+  {"id_tail": 0, "id_head": 1, "coeff": 1.7}
+]
+```
+This is allowed, but not preferable,
+```
+[
+  {"id_tail": 0, "id_head": 1, "coeff": 2.4},
+  {"id_tail": 1, "id_head": 0, "coeff": 1.7}
+]
+```
+This is the best practice,
+```
+[
+  {"id_tail": 0, "id_head": 1, "coeff": 4.1}
+]
+```
 
 ### Solutions
 
