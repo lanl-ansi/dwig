@@ -53,8 +53,8 @@ class QPUAssignment(object):
 
 
 class QPUConfiguration(object):
-    def __init__(self, qpu, fields={}, couplings={}, offset=0.0):
-        scaled_fields, scaled_couplings, scaled_offset = _rescale(fields, couplings, offset, qpu.site_range, qpu.coupler_range)
+    def __init__(self, qpu, fields={}, couplings={}, offset=0.0, unitless=True):
+        scaled_fields, scaled_couplings, scaled_offset, scale = _rescale(fields, couplings, offset, qpu.site_range, qpu.coupler_range)
 
         filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
         filtered_couplings = {k:v for k,v in scaled_couplings.items() if v != 0.0}
@@ -63,6 +63,9 @@ class QPUConfiguration(object):
         self.fields = filtered_fields
         self.couplings = filtered_couplings
         self.offset = scaled_offset
+        self.scale = 1.0
+        if not unitless:
+            self.scale = scale
 
         for k, v in self.fields.items():
             assert(qpu.site_range.lb <= v and qpu.site_range.ub >= v)
@@ -97,6 +100,7 @@ class QPUConfiguration(object):
             'id': random.randint(0, 2**31 - 1),
             'variable_domain': 'spin',
             'variable_ids':[site.index for site in sorted_sites],
+            'scale': self.scale,
             'offset': self.offset,
             'linear_terms':linear_terms_data,
             'quadratic_terms':quadratic_terms_data
@@ -115,6 +119,7 @@ def _rescale(fields, couplings, offset, site_range, coupler_range):
     assert(coupler_range.lb + coupler_range.ub == 0.0)
 
     scaling_factor = 1.0
+    scale = 1.0
 
     for field in fields.values():
         if field != 0:
@@ -135,8 +140,9 @@ def _rescale(fields, couplings, offset, site_range, coupler_range):
         fields = {k:v*scaling_factor for k,v in fields.items()}
         couplings = {k:v*scaling_factor for k,v in couplings.items()}
         offset = offset*scaling_factor
+        scale = 1/scaling_factor
 
-    return fields, couplings, offset
+    return fields, couplings, offset, scale
 
 
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
