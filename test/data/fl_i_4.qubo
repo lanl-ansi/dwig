@@ -4,7 +4,6 @@ c
 c chimera_cell_size : 8
 c chimera_degree : 12
 c dwig_generator : fl
-c generated : 2017-03-07 00:07:39.800254
 c 
 p qubo 0 1152 1015 1808
 c linear terms

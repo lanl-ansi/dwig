@@ -54,7 +54,7 @@ class QPUAssignment(object):
 
 class QPUConfiguration(object):
     def __init__(self, qpu, fields={}, couplings={}, offset=0.0):
-        scaled_fields, scaled_couplings = _rescale(fields, couplings, qpu.site_range, qpu.coupler_range)
+        scaled_fields, scaled_couplings, scaled_offset = _rescale(fields, couplings, offset, qpu.site_range, qpu.coupler_range)
 
         filtered_fields = {k:v for k,v in scaled_fields.items() if v != 0.0}
         filtered_couplings = {k:v for k,v in scaled_couplings.items() if v != 0.0}
@@ -62,7 +62,7 @@ class QPUConfiguration(object):
         self.qpu = qpu
         self.fields = filtered_fields
         self.couplings = filtered_couplings
-        self.offset = offset
+        self.offset = scaled_offset
 
         for k, v in self.fields.items():
             assert(qpu.site_range.lb <= v and qpu.site_range.ub >= v)
@@ -110,7 +110,7 @@ class QPUConfiguration(object):
             '\ncouplings: '+' '.join(['('+str(i)+', '+str(j)+'):'+str(value) for (i,j), value in self.couplings.items()])
 
 
-def _rescale(fields, couplings, site_range, coupler_range):
+def _rescale(fields, couplings, offset, site_range, coupler_range):
     assert(site_range.lb + site_range.ub == 0.0)
     assert(coupler_range.lb + coupler_range.ub == 0.0)
 
@@ -134,8 +134,9 @@ def _rescale(fields, couplings, site_range, coupler_range):
         print_err('info: rescaling field to {} and couplings to {} with scaling factor {}'.format(site_range, coupler_range, scaling_factor))
         fields = {k:v*scaling_factor for k,v in fields.items()}
         couplings = {k:v*scaling_factor for k,v in couplings.items()}
+        offset = offset*scaling_factor
 
-    return fields, couplings
+    return fields, couplings, offset
 
 
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
