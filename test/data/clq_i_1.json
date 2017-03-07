@@ -3,123 +3,122 @@
   "id": 1813382118,
   "linear_terms": [
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 0
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 1
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 2
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 3
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 4
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 5
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 6
     },
     {
-      "coeff": 2.0,
+      "coeff": -2.0,
       "id": 7
     }
   ],
   "metadata": {
     "chimera_cell_size": 8,
     "chimera_degree": 12,
-    "dwig_generator": "clq",
-    "generated": "2017-03-07 00:25:42.927960"
+    "dwig_generator": "clq"
   },
-  "offset": 12.0,
+  "offset": -9.600000000000001,
   "quadratic_terms": [
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 4,
       "id_tail": 0
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 5,
       "id_tail": 0
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 6,
       "id_tail": 0
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 7,
       "id_tail": 0
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 4,
       "id_tail": 1
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 5,
       "id_tail": 1
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 6,
       "id_tail": 1
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 7,
       "id_tail": 1
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 4,
       "id_tail": 2
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 5,
       "id_tail": 2
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 6,
       "id_tail": 2
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 7,
       "id_tail": 2
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 4,
       "id_tail": 3
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 5,
       "id_tail": 3
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 6,
       "id_tail": 3
     },
     {
-      "coeff": 0.4,
+      "coeff": -0.4,
       "id_head": 7,
       "id_tail": 3
     }

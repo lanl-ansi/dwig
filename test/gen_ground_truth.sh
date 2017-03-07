@@ -16,9 +16,9 @@ rm data/*.qubo
 ../dwig.py -cd 9 -tl -rs 0 wscn > data/wscn_i_2.json
 ../dwig.py -cd 12 -tl -rs 0 wscn > data/wscn_i_3.json
 
-../dwig.py -cd 1 -rs 0 clq > data/clq_i_1.json
-../dwig.py -cd 2 -rs 0 clq > data/clq_i_2.json
-../dwig.py -cd 3 -rs 0 clq > data/clq_i_3.json
+../dwig.py -cd 1 -tl -rs 0 clq > data/clq_i_1.json
+../dwig.py -cd 2 -tl -rs 0 clq > data/clq_i_2.json
+../dwig.py -cd 3 -tl -rs 0 clq > data/clq_i_3.json
 
 for file in $(find data -name *.json); do
     cat $file | ../bqp2qh.py > ${file//.json/.qh}
