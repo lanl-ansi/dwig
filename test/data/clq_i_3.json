@@ -1,5 +1,6 @@
 {
-  "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the clq algorithm  A random number seed of 0 was used.",
+  "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the clq algorithm.  A random number seed of 0 was used.",
+  "id": 1813382118,
   "linear_terms": [
     {
       "coeff": 1.7142857142857142,
@@ -293,8 +294,8 @@
   "metadata": {
     "chimera_cell_size": 8,
     "chimera_degree": 12,
-    "generated": "2017-03-06 22:09:53.595867",
-    "generator": "clq"
+    "dwig_generator": "clq",
+    "generated": "2017-03-07 00:25:53.034023"
   },
   "offset": 132.0,
   "quadratic_terms": [

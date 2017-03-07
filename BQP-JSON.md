@@ -35,6 +35,7 @@ This section provides an informal and intuitive description of bqp-json.  Refer 
 The root of a bqp-json document is as follows,
 ```
 {
+  "id": <integer>,
   "metadata": {...},
   "variable_ids": [...],
   "variable_domain": ("spin" | "boolean"),
@@ -46,7 +47,8 @@ The root of a bqp-json document is as follows,
 }
 ```
 Each of the top level items is as follows,
-* _metadata_ - data describing how and when the problem was created.
+* _id_ - is an integer for identifying this bqp dataset
+* _metadata_ - data describing how and when the problem was created
 * _variable_ids_ - a list of integers defining the valid variable identifier values
 * _variable_domain_ - indicates if the problem variables take boolean or spin values
 * _offset_ - an offset for the evaluation of the linear and quadratic terms
@@ -128,7 +130,7 @@ A solution object has the form,
 ```
 {
   ("generated": <string>,)
-  ("generator": <string>,)
+  ("dwig_generator": <string>,)
   ("dw_url": <string>,)
   ("dw_solver_name": <string>,)
   ("dw_chip_id": <string>,)
@@ -140,13 +142,13 @@ A solution object has the form,
 
 Where,
 * _generated_ - the utc time and date that the problem was generated
-* _generator_ - the algorithm used to generate the problem
+* _dwig_generator_ - the dwig algorithm used to generate the problem
 * _dw_url_ - the url of the d-wave qpu used to generate the problem
 * _dw_solver_name_ - the name of the d-wave solver used to generate the problem
 * _dw_chip_id_ - the chip identifier of the d-wave qpu used to generate the problem
 * _chimera_cell_size_ - the number of variables in each chimera unit cell
 * _chimera_degree_ - the size of a square laytout of chimera unit cells
 
-All of the metadata parameters are optional and arability user defined parameters are permitted. 
+All of the metadata parameters are optional and arbitrary user defined parameters are permitted. 
 
 

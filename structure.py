@@ -1,4 +1,4 @@
-import copy, math
+import copy, random, math
 
 from collections import namedtuple
 
@@ -94,6 +94,7 @@ class QPUConfiguration(object):
             linear_terms_data.append({'id':k.index, 'coeff':v})
 
         data_dict = {
+            'id': random.randint(0, 2**31 - 1),
             'variable_domain': 'spin',
             'variable_ids':[site.index for site in sorted_sites],
             'offset': self.offset,

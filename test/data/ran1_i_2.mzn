@@ -1,8 +1,10 @@
-% This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm  A random number seed of 0 was used.
+% id : 1013918760
+% description : This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm.  A random number seed of 0 was used.
+% 
 % chimera_cell_size : 8
 % chimera_degree : 12
-% generated : 2017-03-06 22:09:02.671763
-% generator : ran
+% dwig_generator : ran
+% generated : 2017-03-07 00:06:54.739420
 
 set of int: Domain = {-1,1};
 float: offset = 0.0;
