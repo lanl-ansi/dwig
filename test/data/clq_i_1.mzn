@@ -6,7 +6,8 @@
 % dwig_generator : clq
 
 set of int: Domain = {-1,1};
-float: offset = -9.6;
+float: offset = 4.0;
+float: scale = 1.0;
 
 var Domain: x0;
 var Domain: x1;
@@ -17,8 +18,8 @@ var Domain: x5;
 var Domain: x6;
 var Domain: x7;
 
-var float: objective = offset + -2.0*x0 + -2.0*x1 + -2.0*x2 + -2.0*x3 + -2.0*x4 + -2.0*x5 + -2.0*x6 + -2.0*x7 + -0.4*x0*x4 + -0.4*x0*x5 + -0.4*x0*x6 + -0.4*x0*x7 + -0.4*x1*x4 + -0.4*x1*x5 + -0.4*x1*x6 + -0.4*x1*x7 + -0.4*x2*x4 + -0.4*x2*x5 + -0.4*x2*x6 + -0.4*x2*x7 + -0.4*x3*x4 + -0.4*x3*x5 + -0.4*x3*x6 + -0.4*x3*x7;
+var float: objective = 1.5*x0 + 1.5*x1 + 1.5*x2 + 1.5*x3 + 1.5*x4 + 1.5*x5 + 1.5*x6 + 1.5*x7 + 0.5*x0*x4 + 0.5*x0*x5 + 0.5*x0*x6 + 0.5*x0*x7 + 0.5*x1*x4 + 0.5*x1*x5 + 0.5*x1*x6 + 0.5*x1*x7 + 0.5*x2*x4 + 0.5*x2*x5 + 0.5*x2*x6 + 0.5*x2*x7 + 0.5*x3*x4 + 0.5*x3*x5 + 0.5*x3*x6 + 0.5*x3*x7;
 
 solve minimize objective;
 
-output [show(objective), " - ", show([x0, x1, x2, x3, x4, x5, x6, x7])];
+output [show(scale*(objective + offset)), " - ", show(objective), " - ", show([x0, x1, x2, x3, x4, x5, x6, x7])];

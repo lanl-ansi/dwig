@@ -37,7 +37,7 @@ def generate_clq(qpu):
 
     obj_constant = 0.5*(len(qpu.couplers) - len(qpu.sites))
 
-    return QPUConfiguration(qpu, fields, couplings, obj_constant)
+    return QPUConfiguration(qpu, fields, couplings, obj_constant, unitless=False)
 
 
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):

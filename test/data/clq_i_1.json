@@ -3,35 +3,35 @@
   "id": 1813382118,
   "linear_terms": [
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 0
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 1
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 2
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 3
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 4
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 5
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 6
     },
     {
-      "coeff": -2.0,
+      "coeff": 1.5,
       "id": 7
     }
   ],
@@ -40,89 +40,90 @@
     "chimera_degree": 12,
     "dwig_generator": "clq"
   },
-  "offset": -9.600000000000001,
+  "offset": 4.0,
   "quadratic_terms": [
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 4,
       "id_tail": 0
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 5,
       "id_tail": 0
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 6,
       "id_tail": 0
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 7,
       "id_tail": 0
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 4,
       "id_tail": 1
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 5,
       "id_tail": 1
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 6,
       "id_tail": 1
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 7,
       "id_tail": 1
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 4,
       "id_tail": 2
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 5,
       "id_tail": 2
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 6,
       "id_tail": 2
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 7,
       "id_tail": 2
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 4,
       "id_tail": 3
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 5,
       "id_tail": 3
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 6,
       "id_tail": 3
     },
     {
-      "coeff": -0.4,
+      "coeff": 0.5,
       "id_head": 7,
       "id_tail": 3
     }
   ],
+  "scale": 1.0,
   "variable_domain": "spin",
   "variable_ids": [
     0,
