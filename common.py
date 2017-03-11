@@ -13,6 +13,8 @@ json_dumps_kwargs = {
     'separators':(',', ': ')
 }
 
+bqpjson_version = '0.1.0'
+
 # this is slow in python 2
 from jsonschema import validate, ValidationError
 

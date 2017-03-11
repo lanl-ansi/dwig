@@ -3,7 +3,7 @@ import copy, random, math
 from collections import namedtuple
 
 from common import print_err
-
+from common import bqpjson_version
 
 class QPUAssignment(object):
     def __init__(self, qpu_config, spins={}, identifier=0, description=None):
@@ -98,6 +98,7 @@ class QPUConfiguration(object):
             linear_terms_data.append({'id':k.index, 'coeff':v})
 
         data_dict = {
+            'version': bqpjson_version,
             'id': random.randint(0, 2**31 - 1),
             'variable_domain': 'spin',
             'variable_ids':[site.index for site in sorted_sites],

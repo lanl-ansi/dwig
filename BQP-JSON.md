@@ -39,6 +39,7 @@ This section provides an informal and intuitive description of bqp-json.  Refer 
 The root of a bqp-json document is as follows,
 ```
 {
+  "version": <string>,
   "id": <integer>,
   "metadata": {...},
   "variable_ids": [...],
@@ -52,6 +53,7 @@ The root of a bqp-json document is as follows,
 }
 ```
 Each of the top level items is as follows,
+* _version_ - the version of bqp-json of this file
 * _id_ - is an integer for identifying this bqp dataset
 * _metadata_ - data describing how and when the problem was created
 * _variable_ids_ - a list of integers defining the valid variable identifier values

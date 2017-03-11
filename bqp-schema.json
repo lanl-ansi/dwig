@@ -2,8 +2,12 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "binary quadratic program schema",
   "type": "object",
-  "required":["id", "variable_ids", "variable_domain", "scale", "offset", "linear_terms", "quadratic_terms", "metadata"],
+  "required":["version", "id", "variable_ids", "variable_domain", "scale", "offset", "linear_terms", "quadratic_terms", "metadata"],
   "properties": {
+    "variable_domain": {
+      "type":"version",
+      "enum":["0.1.0"]
+    },
     "id": {
       "type":"integer"
     },
