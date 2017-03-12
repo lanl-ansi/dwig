@@ -2,13 +2,7 @@
 
 The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 
-The D-WIG toolset includes,
-* `bqp-schema.json` - a JSON-Schema for encoding Binary Quadratic Programs (B-QP), i.e. bqp-json
-* `dwig.py` - a command line tool for generating B-QP instances in the bqp-json format
-* `spin2bool.py` - a command line tool for converting a bqp-json data files between the spin and boolean variable spaces
-* `bqp2qh.py` - a command line tool for converting bqp-json data files into a qubist compatible Hamiltonians
-* `bqp2qubo.py` - a command line tool for converting bqp-json data into a qubo data
-* `bqp2mzn.py` - a command line tool for converting bqp-json data into a minizinc model
+`dwig.py` is the primary entry point and generats B-QP instances in the bqpjson format.
 
 The remainder of this documentation assumes that,
 
@@ -46,7 +40,7 @@ Bash stream redirection can be used to save the standard output to a file, for e
 ```
 ./dwig.py ran > ran1.json
 ```
-The `ran1.json` file is a json document in the bqp-json format.  A detailed description of this format can be found in the `BQP-JSON.md` file.
+The `ran1.json` file is a json document in the bqpjson format.  A detailed description of this format can be found in the (bqpjson)[https://github.com/lanl-ansi/bqpjson] python package.
 
 A helpful feature of D-WIG is to reduce the size of the QPU that you are working with.  The _chimera degree_ argument `-cd n` can be used to reduce D-WIG's view of the full QPU to a smaller n-by-n QPU.  For example try,
 ```
@@ -99,7 +93,7 @@ The configuration file is a json document that can be use to set default values 
 
 The Qubist Solver Visualization tool is helpful in understanding complex B-QP datasets.  To that end, the `bqp2qh.py` script converts a B-QP problem into the Qubist Hamiltonian format so that it can be viewed in the Solver Visualization tool.  For example, the following command will generate a 2-by-2 RAN1 problem in the qubist format and then print it to standard output,
 ```
-./dwig.py -cd 2 ran | ./bqp2qh.py
+./dwig.py -cd 2 ran | bqp2qh
 ```
 To view this problem paste the terminal output into the Data tab of the Qubist Solver Visualization tool.
 
@@ -108,20 +102,15 @@ To view this problem paste the terminal output into the Data tab of the Qubist S
 
 The B-QP format supports problems with spin variables (i.e. {-1,1}) and boolean variables (i.e. {0,1}).  However, the D-WIG toolset generates problems only using spin variables.  The `spin2bool.py` tool can be used to make the transformation after the problem is generated.  For example, the following  command will generate 2-by-2 RAN1 problem and convert it to a boolean variable space,
 ```
-./dwig.py -cd 1 ran | ./spin2bool.py
+./dwig.py -cd 1 ran | spin2bool -pp
 ```
 
 ### The QUBO Format
 
 The QUBO format is supported by a variety of the tools provided by D-Wave, such as __qbsolv__, __aqc__, and __toq__.  The `bqp2qubo.py` tool can be combined with the `spin2bool.py` tool to convert D-WIG cases into the qubo format.  For example, the following  command will generate 2-by-2 RAN1 problem and convert it to the QUBO format,
 ```
-./dwig.py -cd 1 ran | ./spin2bool.py | ./bqp2qubo.py
+./dwig.py -cd 1 ran | spin2bool | bqp2qubo
 ```
-
-## Known Issues
-
-The json schema validation library `jsonschema` is designed for python 3 while the `dwave-sapi2` library requires python 2.  Consequently, it takes about 2 seconds to load the compatibility libraries to use jsonschema in python 2.
-
 
 ## Acknowledgments
 
