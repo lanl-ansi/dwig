@@ -1,11 +1,12 @@
 appdirs==1.4.0
+bqpjson>=0.5.0
 coverage==4.3.4
 dwave-sapi2>=2.4.0
 find-embedding>=2.4.0
 fix-variables>=2.4.0
 funcsigs==1.0.2
 functools32==3.2.3.post2
-bqpjson>=0.1.0
+jsonschema>=2.6.0
 packaging==16.8
 pbr==1.10.0
 py==1.4.32

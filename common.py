@@ -10,14 +10,8 @@ json_dumps_kwargs = {
     'separators':(',', ': ')
 }
 
-bqpjson_version = '0.1.0'
+bqpjson_version = '1.0.0'
 
 def validate_bqp_data(data):
-    try:
-        bqpjson.validate(data)
-    except ValidationError as e:
-        data_string = json.dumps(data, **json_dumps_kwargs)
-        print_err(data_string)
-        raise e
+    bqpjson.validate(data)
     return True
-    
