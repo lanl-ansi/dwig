@@ -13,7 +13,7 @@ The remainder of this documentation assumes that,
 
 ## Installation
 
-The D-WIG toolset requires `dwave-sapi2` and `jsonschema` to run and `pytest` for testing.
+The D-WIG toolset requires `dwave-sapi2` and `bqpjson` to run and `pytest` for testing.
 To install these requirements first make sure that the `dwave-sapi2` library is installed by running,
 ```
 python <path to sapi>/install.py
