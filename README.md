@@ -138,6 +138,16 @@ For the FL-k formulation,
 }
 ```
 
+For the FCL-k formulation,
+```
+@article{king2017quantum,
+  title={Quantum Annealing amid Local Ruggedness and Global Frustration},
+  author={King, James and Yarkoni, Sheir and Raymond, Jack and Ozfidan, Isil and King, Andrew D and Nevisi, Mayssam Mohammadi and Hilton, Jeremy P, and McGeoch, Catherine C},
+  journal={arXiv preprint arXiv:1701.04579},
+  year={2017}
+}
+```
+
 For the weak-strong cluster network formulation,
 ```
 @article{denchev2016computational,
