@@ -1,5 +1,7 @@
 import sys, os, json
 
+from cStringIO import StringIO
+
 sys.path.append('.')
 
 import dwig
@@ -19,10 +21,11 @@ def json_comp(parser, capfd, ground_truth_file, cli_args):
     with open(os.path.join(data_dir, ground_truth_file)) as file:
         ground_truth = json.load(file)
 
-    dwig.main(parser.parse_args(cli_args))
+    output = StringIO()
+    dwig.main(parser.parse_args(cli_args), output)
 
     resout, reserr = capfd.readouterr()
 
-    json_output = json.loads(resout)
+    json_output = json.loads(output.getvalue())
 
     assert(ground_truth == json_output)

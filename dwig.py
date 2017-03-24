@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function
+
 import sys, os, json, argparse, random, math, datetime
 
 from dwave_sapi2.util import get_chimera_adjacency
@@ -16,7 +18,7 @@ from common import json_dumps_kwargs
 DEFAULT_CONFIG_FILE = '_config'
 
 
-def main(args):
+def main(args, output_stream=sys.stdout):
     if not args.seed is None:
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
@@ -57,8 +59,10 @@ def main(args):
     data['metadata'] = build_metadata(args, qpu)
 
     validate_bqp_data(data)
-    data_string = json.dumps(data, **json_dumps_kwargs)
-    print(data_string)
+    if args.pretty_print:
+        print(json.dumps(data, **json_dumps_kwargs), file=output_stream)
+    else:
+        print(json.dumps(data, sort_keys=True), file=output_stream)
 
 
 def build_metadata(args, qpu):
@@ -183,6 +187,7 @@ def build_cli_parser():
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
+    parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
 
 
     subparsers = parser.add_subparsers()
