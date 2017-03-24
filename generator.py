@@ -26,26 +26,41 @@ def generate_ran(qpu, steps=1, feild=False):
     return QPUConfiguration(qpu, fields, couplings)
 
 
-def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
-    https://arxiv.org/abs/1502.02098.  Because random walks are used for 
-    finding cycles in the graph and constraints are applied to these cycles,
-    termination of this function for all possible parameter settings is not 
-    guaranteed.  Various limits are used to ensure the problem generator will 
-    terminate.
+    https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.
+    Because random walks are used for finding cycles in the graph and 
+    constraints are applied to these cycles, termination of this function for 
+    all possible parameter settings is not guaranteed.  Various limits are 
+    used to ensure the problem generator will terminate.
     '''
-    num_cycles = int(alpha*len(qpu.sites))
+    if cluster_cells:
+        sites = qpu.chimera_cells
+        couplers = set()
+        for i,j in qpu.couplers:
+            cell_i = i.chimera_cell
+            cell_j = j.chimera_cell
+            if cell_i != cell_j:
+                if cell_i < cell_j:
+                    couplers.add((cell_i, cell_j))
+                else:
+                    couplers.add((cell_j, cell_i))
+    else:
+        sites = qpu.sites
+        couplers = qpu.couplers
+
+    num_cycles = int(alpha*len(sites))
 
     incident = {}
     cycle_count = {}
-    for site in qpu.sites:
+    for site in sites:
         incident[site] = []
-    for coupler in sorted(qpu.couplers):
+    for coupler in sorted(couplers):
         incident[coupler[0]].append(coupler)
         incident[coupler[1]].append(coupler)
         cycle_count[coupler] = 0
 
-    site_list = sorted(list(qpu.sites))
+    site_list = sorted(list(sites))
 
     reject_count = 0
     cycles = []
@@ -68,7 +83,7 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
             reject_count += 1
             continue
 
-        if multicell:
+        if multicell and not cluster_cells:
             chimera_cell = cycle[0][0].chimera_cell
 
             second_cell = False
@@ -107,8 +122,40 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, min_cycle_length=7, cy
         rand_coupler = random.choice(cycle)
         couplings[rand_coupler] = val + 1.0
 
+    #print(couplings)
+
+    if cluster_cells:
+        max_val = max(abs(v) for k,v in couplings.items())
+        #print(max_val)
+
+        active_cells = set()
+        for cell_i, cell_j in couplings:
+            active_cells.add(cell_i)
+            active_cells.add(cell_j)
+
+        site_couplings = {}
+        for site_coupler in qpu.couplers:
+            i,j = site_coupler
+            cell_i = i.chimera_cell
+            cell_j = j.chimera_cell
+            if cell_i in active_cells and cell_j in active_cells:
+                if cell_i == cell_j:
+                    site_couplings[site_coupler] = -max_val
+                else:
+                    if cell_i < cell_j:
+                        cell_coupler = (cell_i, cell_j)
+                    else:
+                        cell_coupler = (cell_j, cell_i)
+                    #print(site_coupler, cell_coupler)
+                    if cell_coupler in couplings:
+                        site_couplings[site_coupler] = couplings[cell_coupler]
+
+        couplings = site_couplings
+
+
     config = QPUConfiguration(qpu, {}, couplings)
 
+    #quit()
     # include ground state with -1 values, so the variable domain is clearly 'spin'
     spins = { site:-1 for site in config.active_sites()}
 

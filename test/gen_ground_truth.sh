@@ -10,6 +10,10 @@ rm data/*.json
 ../dwig.py -cd  2 -tl -rs 0 fl -mc -mll 0 > data/fl_i_3.json
 ../dwig.py -cd 12 -tl -rs 0 fl > data/fl_i_4.json
 
+../dwig.py -cd 6 -tl -rs 0 fl -cc -a 0.1 > data/fcl_i_1.json
+../dwig.py -cd 6 -tl -rs 0 fl -cc -s 4 > data/fcl_i_2.json
+../dwig.py -cd 12 -tl -rs 1 fl -cc > data/fcl_i_3.json
+
 ../dwig.py -cd 6 -tl -rs 0 wscn > data/wscn_i_1.json
 ../dwig.py -cd 9 -tl -rs 0 wscn > data/wscn_i_2.json
 ../dwig.py -cd 12 -tl -rs 0 wscn > data/wscn_i_3.json

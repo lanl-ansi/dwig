@@ -13,7 +13,7 @@ The remainder of this documentation assumes that,
 
 ## Installation
 
-The D-WIG toolset requires `dwave-sapi2` and `jsonschema` to run and `pytest` for testing.
+The D-WIG toolset requires `dwave-sapi2` and `bqpjson` to run and `pytest` for testing.
 To install these requirements first make sure that the `dwave-sapi2` library is installed by running,
 ```
 python <path to sapi>/install.py
@@ -135,6 +135,16 @@ For the FL-k formulation,
   author={King, Andrew D and Lanting, Trevor and Harris, Richard},
   journal={arXiv preprint arXiv:1502.02098},
   year={2015}
+}
+```
+
+For the FCL-k formulation,
+```
+@article{king2017quantum,
+  title={Quantum Annealing amid Local Ruggedness and Global Frustration},
+  author={King, James and Yarkoni, Sheir and Raymond, Jack and Ozfidan, Isil and King, Andrew D and Nevisi, Mayssam Mohammadi and Hilton, Jeremy P, and McGeoch, Catherine C},
+  journal={arXiv preprint arXiv:1701.04579},
+  year={2017}
 }
 ```
 

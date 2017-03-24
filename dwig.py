@@ -31,7 +31,7 @@ def main(args):
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.steps, args.field)
     elif args.generator == 'fl':
-        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
+        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
         if qpu.chimera_degree_view < 6:
             print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is {}.'.format(qpu.chimera_degree_view))
@@ -197,6 +197,7 @@ def build_cli_parser():
     parser_fl.add_argument('-s', '--steps', help='the number of allowed steps in output Hamiltonian', type=int, default=2)
     parser_fl.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.2)
     parser_fl.add_argument('-mc', '--multicell', help='reject loops that are within one chimera cell', action='store_true', default=False)
+    parser_fl.add_argument('-cc', '--cluster-cells', help='treats each chimera cell as a single logical spin', action='store_true', default=False)
     parser_fl.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
     parser_fl.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=1000)
     parser_fl.add_argument('-lsl', '--loop-sample-limit', help='the maximum amount of random walk samples', type=int, default=10000)
@@ -205,6 +206,7 @@ def build_cli_parser():
     parser_wscn.set_defaults(generator='wscn')
     parser_wscn.add_argument('-wf', '--weak-field', help='strength of the weak field', type=float, default=0.44)
     parser_wscn.add_argument('-sf', '--strong-field', help='strength of the weak field', type=float, default=-1)
+
 
     return parser
 
