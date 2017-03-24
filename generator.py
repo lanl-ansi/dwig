@@ -83,7 +83,7 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, m
             reject_count += 1
             continue
 
-        if multicell:
+        if multicell and not cluster_cells:
             chimera_cell = cycle[0][0].chimera_cell
 
             second_cell = False
