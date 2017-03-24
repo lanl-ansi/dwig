@@ -169,8 +169,11 @@ class ChimeraQPU(object):
         self.site_range = site_range
         self.coupler_range = coupler_range
 
+
+        self.chimera_cells = set()
         self.chimera_cell_sites = {}
         for site in self.sites:
+            self.chimera_cells.add(site.chimera_cell)
             if site.chimera_cell not in self.chimera_cell_sites:
                 self.chimera_cell_sites[site.chimera_cell] = set([])
             self.chimera_cell_sites[site.chimera_cell].add(site)
