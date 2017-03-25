@@ -19,6 +19,15 @@ DEFAULT_CONFIG_FILE = '_config'
 
 
 def main(args, output_stream=sys.stdout):
+    case = build_case(args)
+    validate_bqp_data(case)
+    if args.pretty_print:
+        print(json.dumps(case, **json_dumps_kwargs), file=output_stream)
+    else:
+        print(json.dumps(case, sort_keys=True), file=output_stream)
+
+
+def build_case(args):
     if not args.seed is None:
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
@@ -58,11 +67,7 @@ def main(args, output_stream=sys.stdout):
 
     data['metadata'] = build_metadata(args, qpu)
 
-    validate_bqp_data(data)
-    if args.pretty_print:
-        print(json.dumps(data, **json_dumps_kwargs), file=output_stream)
-    else:
-        print(json.dumps(data, sort_keys=True), file=output_stream)
+    return data
 
 
 def build_metadata(args, qpu):
