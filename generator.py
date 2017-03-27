@@ -104,6 +104,8 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, m
             if cycle_count[coupler] >= steps:
                 incident[coupler[0]].remove(coupler)
                 incident[coupler[1]].remove(coupler)
+                #if cycle_count[coupler] > steps:
+                #    print_err(cycle)
 
         cycles.append(cycle)
 
@@ -119,11 +121,15 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, m
                 val = couplings[coupler]
             couplings[coupler] = val - 1.0
 
-        # make one edge in cycle different
         rand_coupler = random.choice(cycle)
-        couplings[rand_coupler] = val + 1.0
+        couplings[rand_coupler] = couplings[rand_coupler] + 1.0
 
-    #print(couplings)
+    for coupler, value in couplings.items():
+        if abs(value) > steps:
+            raise DWIGException('encountered a bug in the fl generator.  Coupler {} has a value of {} and it should be in the range {} to {}.'.format(coupler, value, -steps, steps))
+
+    # for k in sorted(couplings, key=couplings.get):
+    #     print_err('{} {}'.format(k, couplings[k]))
 
     if cluster_cells:
         max_val = max(abs(v) for k,v in couplings.items())
