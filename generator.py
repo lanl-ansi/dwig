@@ -2,6 +2,7 @@ import random, math
 
 from collections import namedtuple
 
+from common import DWIGException
 from common import print_err
 
 from structure import QPUAssignment
@@ -66,14 +67,14 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, m
     cycles = []
     while len(cycles) < num_cycles:
         if reject_count >= cycle_reject_limit:
-            print_err('Error: hit cycle rejection limit of {}.\ntry relaxing the cycle constraints'.format(cycle_reject_limit))
-            quit()
+            #print_err('Error: hit cycle rejection limit of {}.\ntry relaxing the cycle constraints'.format(cycle_reject_limit))
+            raise DWIGException('hit cycle rejection limit of {}.  try relaxing the cycle constraints'.format(cycle_reject_limit))
 
         cycle = _build_cycle(site_list, incident, cycle_sample_limit)
 
         if cycle == None:
-            print_err('Error: unable to find a vaild random walk cycle in {} samples.\ntry increasing the number of steps or decreasing alpha'.format(cycle_sample_limit))
-            quit()
+            #print_err('Error: unable to find a vaild random walk cycle in {} samples.\ntry increasing the number of steps or decreasing alpha'.format(cycle_sample_limit))
+            raise DWIGException('unable to find a vaild random walk cycle in {} samples.  try increasing the number of steps or decreasing alpha'.format(cycle_sample_limit))
 
         # print_err('')
         # for coupler in cycle:

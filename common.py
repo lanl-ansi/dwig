@@ -1,5 +1,8 @@
 import os, sys, json, bqpjson
 
+class DWIGException(Exception):
+    pass
+
 # prints a line to standard error
 def print_err(data):
     sys.stderr.write(str(data)+'\n')
