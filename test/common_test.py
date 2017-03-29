@@ -21,11 +21,14 @@ def json_comp(parser, capfd, ground_truth_file, cli_args):
     with open(os.path.join(data_dir, ground_truth_file)) as file:
         ground_truth = json.load(file)
 
-    output = StringIO()
-    dwig.main(parser.parse_args(cli_args), output)
-
+    json_output = run_dwig_cli(parser, cli_args)
     resout, reserr = capfd.readouterr()
 
-    json_output = json.loads(output.getvalue())
-
     assert(ground_truth == json_output)
+
+
+def run_dwig_cli(parser, cli_args):
+    output = StringIO()
+    dwig.main(parser.parse_args(cli_args), output)
+    json_output = json.loads(output.getvalue())
+    return json_output
