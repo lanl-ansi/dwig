@@ -6,6 +6,7 @@ import dwig
 from common_test import json_comp
 from common_test import run_dwig_cli
 
+
 class TestFLGeneration:
     def setup_class(self):
         self.parser = dwig.build_cli_parser()
