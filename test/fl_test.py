@@ -25,3 +25,7 @@ class TestFLGeneration:
     #../dwig.py -pp -cd 12 -tl -rs 0 fl -sgs > data/fl_i_4.json
     def test_fl_i_4(self, capfd):
         json_comp(self.parser, capfd, 'fl_i_4.json', ['-pp', '-cd', '12', '-tl', '-rs', '0', 'fl', '-sgs'])
+
+    #../dwig.py -pp -cd  2 -tl -rs 0 fl > data/fl_i_5.json
+    def test_fl_i_5(self, capfd):
+        json_comp(self.parser, capfd, 'fl_i_5.json', ['-pp', '-cd', '2', '-tl', '-rs', '0', 'fl'])

@@ -138,7 +138,7 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, s
 
     if not simple_ground_state:
         choices = [-1, 1]
-        spins = {site:random.choice(choices) for site in active_sites}
+        spins = {site:random.choice(choices) for site in sorted(active_sites)}
 
         for coupler, value in couplings.items():
             site_i, site_j = coupler
