@@ -42,7 +42,7 @@ def build_case(args):
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.steps, args.field)
     elif args.generator == 'fl':
-        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
+        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
         if qpu.chimera_degree_view < 6:
             print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is {}.'.format(qpu.chimera_degree_view))
@@ -208,6 +208,7 @@ def build_cli_parser():
     parser_fl.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.2)
     parser_fl.add_argument('-mc', '--multicell', help='reject loops that are within one chimera cell', action='store_true', default=False)
     parser_fl.add_argument('-cc', '--cluster-cells', help='treats each chimera cell as a single logical spin', action='store_true', default=False)
+    parser_fl.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
     parser_fl.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
     parser_fl.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=1000)
     parser_fl.add_argument('-lsl', '--loop-sample-limit', help='the maximum amount of random walk samples', type=int, default=10000)

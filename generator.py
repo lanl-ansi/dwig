@@ -27,7 +27,7 @@ def generate_ran(qpu, steps=1, feild=False):
     return QPUConfiguration(qpu, fields, couplings)
 
 
-def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.
     Because random walks are used for finding cycles in the graph and 
@@ -131,9 +131,32 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, m
     # for k in sorted(couplings, key=couplings.get):
     #     print_err('{} {}'.format(k, couplings[k]))
 
+    active_sites = set()
+    for site_i, site_j in couplings:
+        active_sites.add(site_i)
+        active_sites.add(site_j)
+
+    if not simple_ground_state:
+        choices = [-1, 1]
+        spins = {site:random.choice(choices) for site in active_sites}
+
+        for coupler, value in couplings.items():
+            site_i, site_j = coupler
+            if spins[site_i] != spins[site_j]:
+                couplings[coupler] = -couplings[coupler]
+    else:
+        spins = { site:-1 for site in active_sites}
+
+
     if cluster_cells:
         max_val = max(abs(v) for k,v in couplings.items())
         #print(max_val)
+
+        site_spins = {}
+        for site in qpu.sites:
+            cell = site.chimera_cell
+            if cell in spins:
+                site_spins[site] = spins[cell]
 
         active_cells = set()
         for cell_i, cell_j in couplings:
@@ -157,15 +180,10 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, m
                     if cell_coupler in couplings:
                         site_couplings[site_coupler] = couplings[cell_coupler]
 
+        spins = site_spins
         couplings = site_couplings
 
-
     config = QPUConfiguration(qpu, {}, couplings)
-
-    #quit()
-    # include ground state with -1 values, so the variable domain is clearly 'spin'
-    spins = { site:-1 for site in config.active_sites()}
-
     return QPUAssignment(config, spins, 0, 'planted ground state, most likely non-unique')
 
 
