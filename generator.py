@@ -122,7 +122,7 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, s
             couplings[coupler] = val - 1.0
 
         rand_coupler = random.choice(cycle)
-        couplings[rand_coupler] = couplings[rand_coupler] + 1.0
+        couplings[rand_coupler] = couplings[rand_coupler] + 2.0
 
     for coupler, value in couplings.items():
         if abs(value) > steps:

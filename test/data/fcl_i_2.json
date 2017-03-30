@@ -30,11 +30,6 @@
       "id_tail": 8
     },
     {
-      "coeff": -0.25,
-      "id_head": 104,
-      "id_tail": 8
-    },
-    {
       "coeff": -1.0,
       "id_head": 12,
       "id_tail": 9
@@ -52,11 +47,6 @@
     {
       "coeff": -1.0,
       "id_head": 15,
-      "id_tail": 9
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 105,
       "id_tail": 9
     },
     {
@@ -80,11 +70,6 @@
       "id_tail": 10
     },
     {
-      "coeff": -0.25,
-      "id_head": 106,
-      "id_tail": 10
-    },
-    {
       "coeff": -1.0,
       "id_head": 12,
       "id_tail": 11
@@ -102,11 +87,6 @@
     {
       "coeff": -1.0,
       "id_head": 15,
-      "id_tail": 11
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 107,
       "id_tail": 11
     },
     {
@@ -570,26 +550,6 @@
       "id_tail": 99
     },
     {
-      "coeff": -0.25,
-      "id_head": 108,
-      "id_tail": 100
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 109,
-      "id_tail": 101
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 110,
-      "id_tail": 102
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 111,
-      "id_tail": 103
-    },
-    {
       "coeff": -1.0,
       "id_head": 108,
       "id_tail": 104
@@ -790,6 +750,26 @@
       "id_tail": 115
     },
     {
+      "coeff": 0.25,
+      "id_head": 124,
+      "id_tail": 116
+    },
+    {
+      "coeff": 0.25,
+      "id_head": 125,
+      "id_tail": 117
+    },
+    {
+      "coeff": 0.25,
+      "id_head": 126,
+      "id_tail": 118
+    },
+    {
+      "coeff": 0.25,
+      "id_head": 127,
+      "id_tail": 119
+    },
+    {
       "coeff": -1.0,
       "id_head": 124,
       "id_tail": 120
@@ -810,11 +790,6 @@
       "id_tail": 120
     },
     {
-      "coeff": -0.25,
-      "id_head": 216,
-      "id_tail": 120
-    },
-    {
       "coeff": -1.0,
       "id_head": 124,
       "id_tail": 121
@@ -832,11 +807,6 @@
     {
       "coeff": -1.0,
       "id_head": 127,
-      "id_tail": 121
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 217,
       "id_tail": 121
     },
     {
@@ -860,11 +830,6 @@
       "id_tail": 122
     },
     {
-      "coeff": -0.25,
-      "id_head": 218,
-      "id_tail": 122
-    },
-    {
       "coeff": -1.0,
       "id_head": 124,
       "id_tail": 123
@@ -882,11 +847,6 @@
     {
       "coeff": -1.0,
       "id_head": 127,
-      "id_tail": 123
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 219,
       "id_tail": 123
     },
     {
@@ -1108,26 +1068,6 @@
       "coeff": -0.5,
       "id_head": 291,
       "id_tail": 195
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 204,
-      "id_tail": 196
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 205,
-      "id_tail": 197
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 206,
-      "id_tail": 198
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 207,
-      "id_tail": 199
     },
     {
       "coeff": -1.0,
@@ -1450,22 +1390,22 @@
       "id_tail": 219
     },
     {
-      "coeff": -0.5,
+      "coeff": -0.25,
       "id_head": 228,
       "id_tail": 220
     },
     {
-      "coeff": -0.5,
+      "coeff": -0.25,
       "id_head": 229,
       "id_tail": 221
     },
     {
-      "coeff": -0.5,
+      "coeff": -0.25,
       "id_head": 230,
       "id_tail": 222
     },
     {
-      "coeff": -0.5,
+      "coeff": -0.25,
       "id_head": 231,
       "id_tail": 223
     },
@@ -2770,26 +2710,6 @@
       "id_tail": 507
     },
     {
-      "coeff": -0.25,
-      "id_head": 516,
-      "id_tail": 508
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 517,
-      "id_tail": 509
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 518,
-      "id_tail": 510
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 519,
-      "id_tail": 511
-    },
-    {
       "coeff": -1.0,
       "id_head": 516,
       "id_tail": 512
@@ -3740,7 +3660,7 @@
         }
       ],
       "description": "planted ground state, most likely non-unique",
-      "evaluation": -497.0,
+      "evaluation": -490.0,
       "id": 0
     }
   ],

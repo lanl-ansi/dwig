@@ -210,6 +210,26 @@
       "id_tail": 19
     },
     {
+      "coeff": 1.0,
+      "id_head": 28,
+      "id_tail": 20
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 29,
+      "id_tail": 21
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 30,
+      "id_tail": 22
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 31,
+      "id_tail": 23
+    },
+    {
       "coeff": -1.0,
       "id_head": 28,
       "id_tail": 24
@@ -2110,11 +2130,6 @@
       "id_tail": 416
     },
     {
-      "coeff": -0.5,
-      "id_head": 512,
-      "id_tail": 416
-    },
-    {
       "coeff": -1.0,
       "id_head": 420,
       "id_tail": 417
@@ -2132,11 +2147,6 @@
     {
       "coeff": -1.0,
       "id_head": 423,
-      "id_tail": 417
-    },
-    {
-      "coeff": -0.5,
-      "id_head": 513,
       "id_tail": 417
     },
     {
@@ -2160,11 +2170,6 @@
       "id_tail": 418
     },
     {
-      "coeff": -0.5,
-      "id_head": 514,
-      "id_tail": 418
-    },
-    {
       "coeff": -1.0,
       "id_head": 420,
       "id_tail": 419
@@ -2182,11 +2187,6 @@
     {
       "coeff": -1.0,
       "id_head": 423,
-      "id_tail": 419
-    },
-    {
-      "coeff": -0.5,
-      "id_head": 515,
       "id_tail": 419
     },
     {
@@ -3376,7 +3376,7 @@
         }
       ],
       "description": "planted ground state, most likely non-unique",
-      "evaluation": -470.0,
+      "evaluation": -464.0,
       "id": 0
     }
   ],

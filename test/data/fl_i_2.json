@@ -45,11 +45,6 @@
       "id_tail": 2
     },
     {
-      "coeff": -0.25,
-      "id_head": 6,
-      "id_tail": 2
-    },
-    {
       "coeff": -0.5,
       "id_head": 98,
       "id_tail": 2
@@ -65,12 +60,17 @@
       "id_tail": 3
     },
     {
+      "coeff": 0.25,
+      "id_head": 7,
+      "id_tail": 3
+    },
+    {
       "coeff": -0.5,
       "id_head": 99,
       "id_tail": 3
     },
     {
-      "coeff": -0.5,
+      "coeff": -0.25,
       "id_head": 12,
       "id_tail": 4
     },
@@ -165,6 +165,11 @@
       "id_tail": 96
     },
     {
+      "coeff": 0.25,
+      "id_head": 102,
+      "id_tail": 96
+    },
+    {
       "coeff": -0.5,
       "id_head": 103,
       "id_tail": 96
@@ -172,6 +177,11 @@
     {
       "coeff": -0.25,
       "id_head": 100,
+      "id_tail": 97
+    },
+    {
+      "coeff": 0.25,
+      "id_head": 101,
       "id_tail": 97
     },
     {
@@ -190,7 +200,7 @@
       "id_tail": 98
     },
     {
-      "coeff": -0.75,
+      "coeff": -0.5,
       "id_head": 103,
       "id_tail": 98
     },
@@ -220,7 +230,7 @@
       "id_tail": 100
     },
     {
-      "coeff": -0.5,
+      "coeff": -0.25,
       "id_head": 110,
       "id_tail": 102
     },
@@ -228,6 +238,11 @@
       "coeff": -0.25,
       "id_head": 111,
       "id_tail": 103
+    },
+    {
+      "coeff": 0.25,
+      "id_head": 108,
+      "id_tail": 104
     },
     {
       "coeff": -0.25,
@@ -243,11 +258,6 @@
       "coeff": -0.5,
       "id_head": 111,
       "id_tail": 104
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 108,
-      "id_tail": 105
     },
     {
       "coeff": -0.25,
@@ -420,7 +430,7 @@
         }
       ],
       "description": "planted ground state, most likely non-unique",
-      "evaluation": -24.25,
+      "evaluation": -22.0,
       "id": 0
     }
   ],
