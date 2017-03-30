@@ -32,6 +32,20 @@ class TestFLGeneration:
         json_comp(self.parser, capfd, 'fl_i_5.json', ['-pp', '-cd', '2', '-tl', '-rs', '0', 'fl'])
 
 
+class TestFLFrustration:
+    def setup_class(self):
+        self.parser = dwig.build_cli_parser()
+
+    # alpha settingh ensures that this generates exactly one cycle
+    def test_eq(self, capfd):
+        cli_args = ['-cd', '1', '-tl', '-rs', '0', 'fl', '-s', '1', '-a', '0.13', '-sgs']
+        case = run_dwig_cli(self.parser, cli_args)
+
+        coefficients = [qt['coeff'] for qt in case['quadratic_terms']]
+
+        assert(sum(c > 0 for c in coefficients) == 1)
+
+
 class TestFLGroundState:
     def setup_class(self):
         self.parser = dwig.build_cli_parser()
