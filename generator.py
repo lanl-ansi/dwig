@@ -206,6 +206,15 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, s
         spins = site_spins
         couplings = site_couplings
 
+    # it is possible that couplings cancel eliminating some sites from the active set
+    active_sites = set()
+    for coupler, value in couplings.items():
+        site_i, site_j = coupler
+        if value != 0.0:
+            active_sites.add(site_i)
+            active_sites.add(site_j)
+    spins = {site:spin for site,spin in spins.items() if site in active_sites}
+
     config = QPUConfiguration(qpu, {}, couplings)
     return QPUAssignment(config, spins, 0, 'planted ground state, most likely non-unique')
 
