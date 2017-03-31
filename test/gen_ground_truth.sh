@@ -19,3 +19,7 @@ rm data/*.json
 ../dwig.py -pp -cd 6 -tl -rs 0 wscn > data/wscn_i_1.json
 ../dwig.py -pp -cd 9 -tl -rs 0 wscn > data/wscn_i_2.json
 ../dwig.py -pp -cd 12 -tl -rs 0 wscn > data/wscn_i_3.json
+
+../dwig.py -pp -cd 1 -tl -rs 0 rfm > data/rfm1_i_1.json
+../dwig.py -pp -cd 1 -tl -rs 0 rfm -f > data/rfm1_i_2.json
+../dwig.py -pp -cd 1 -tl -rs 0 rfm -f -s 4 > data/rfm4_i_1.json
