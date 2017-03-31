@@ -12,7 +12,7 @@ from structure import ChimeraCoordinate
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
 
 def generate_ran(qpu, steps=1, feild=False):
-    '''This function builds random coupleings as described by, https://arxiv.org/abs/1508.05087
+    '''This function builds random couplings as described by, https://arxiv.org/abs/1508.05087
     '''
     assert(isinstance(steps, int))
     assert(steps >= 1)
@@ -25,6 +25,29 @@ def generate_ran(qpu, steps=1, feild=False):
         fields = {site : random.choice(choices) for site in sorted(qpu.sites)}
     couplings = {coupler : random.choice(choices) for coupler in sorted(qpu.couplers)}
     return QPUConfiguration(qpu, fields, couplings)
+
+
+def generate_rfm(qpu, steps=1, feild=False):
+    '''This function builds a ferromagnet with seemingly random couplings
+    '''
+    assert(isinstance(steps, int))
+    assert(steps >= 1)
+
+    choices = range(1, steps+1)
+    choices = [float(x) for x in choices]
+
+    spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
+    discription = 'planted ground state, one of two'
+
+    fields = {}
+    if feild:
+        fields = {site : -1*spins[site]*random.choice(choices) for site in sorted(qpu.sites)}
+        discription = 'unique planted ground state'
+
+    couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(choices) for coupler in sorted(qpu.couplers)}
+
+    config = QPUConfiguration(qpu, fields, couplings)
+    return QPUAssignment(config, spins, 0, discription)
 
 
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
