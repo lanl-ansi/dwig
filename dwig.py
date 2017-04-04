@@ -61,7 +61,7 @@ def build_case(args):
         assert(False) # CLI failed
 
     #print_err(qpu_config)
-    if args.omit_assigment:
+    if args.omit_solution:
         if isinstance(qpu_config, QPUAssignment):
             qpu_config = qpu_config.qpu_config
 
@@ -199,7 +199,7 @@ def build_cli_parser():
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
-    parser.add_argument('-oa', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
+    parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
 
 
     subparsers = parser.add_subparsers()
