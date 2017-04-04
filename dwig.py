@@ -40,7 +40,7 @@ def build_case(args):
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
 
     if args.generator == 'ran':
-        qpu_config = generator.generate_ran(qpu, args.steps, args.field)
+        qpu_config = generator.generate_ran(qpu, args.alpha, args.steps, args.field)
     elif args.generator == 'rfm':
         qpu_config = generator.generate_rfm(qpu, args.steps, args.field)
     elif args.generator == 'fl':
@@ -201,11 +201,7 @@ def build_cli_parser():
 
     parser_ran = subparsers.add_parser('ran', help='generates a random problem')
     parser_ran.set_defaults(generator='ran')
-    parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
-    parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
-
-    parser_ran = subparsers.add_parser('rfm', help='generates a random ferromagnet problem')
-    parser_ran.set_defaults(generator='rfm')
+    parser_ran.add_argument('-a', '--alpha', help='the probability of setting a value at random', type=float, default=1.0)
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
 
