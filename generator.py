@@ -22,38 +22,36 @@ def generate_ran(qpu, alpha=1.0, steps=1, feild=False):
     fields = {}
     couplings = {}
 
-    if alpha < 1.0:
-        spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
-        if alpha > 0.0:
-            discription = 'initial state for building this case, is most likely not a ground state'
-        else:
-            if feild:
-                discription = 'unique planted ground state'
-            else:
-                discription = 'planted ground state, one of two'
-
-        fm_choices = [float(x) for x in range(1, steps+1)]
-
-        if feild:
-            fields = {site : -1*spins[site]*random.choice(fm_choices) for site in sorted(qpu.sites)}
-
-        couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(fm_choices) for coupler in sorted(qpu.couplers)}
-
+    # Build an initial spin state for generating the case
+    spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
+    if alpha > 0.0:
+        discription = 'initial state for building this case with an alpha of {}, is most likely not a ground state'.format(alpha)
     else:
-        spins = {site : 1 for site in sorted(qpu.sites)}
-        discription = 'all spins up'
+        if feild:
+            discription = 'unique planted ground state'
+        else:
+            discription = 'planted ground state, one of two'
+
+    # Assign non-frustrated couplings and fields at random
+    fm_choices = [float(x) for x in range(1, steps+1)]
+
+    if feild:
+        fields = {site : -1*spins[site]*random.choice(fm_choices) for site in sorted(qpu.sites)}
+
+    couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(fm_choices) for coupler in sorted(qpu.couplers)}
 
 
+    # With probability alpha, override non-frustrated couplings and fields with random ones
     ran_choices = range(-steps, 0) + range(1, steps+1)
     ran_choices = [float(x) for x in ran_choices]
 
     if feild:
         for site in sorted(qpu.sites):
-            if alpha >= 1.0 or alpha > random.random():
+            if alpha > random.random():
                 fields[site] = random.choice(ran_choices)
 
     for coupler in sorted(qpu.couplers):
-        if alpha >= 1.0 or alpha > random.random():
+        if alpha > random.random():
             couplings[coupler] = random.choice(ran_choices)
 
     config = QPUConfiguration(qpu, fields, couplings)
