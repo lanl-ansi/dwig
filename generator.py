@@ -9,42 +9,50 @@ from structure import QPUAssignment
 from structure import QPUConfiguration
 from structure import ChimeraCoordinate
 
-# Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
 
-def generate_ran(qpu, steps=1, feild=False):
+# Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
+def generate_ran(qpu, alpha=1.0, steps=1, feild=False):
     '''This function builds random couplings as described by, https://arxiv.org/abs/1508.05087
     '''
+    assert(isinstance(alpha, float))
+    assert(alpha <= 1.0 and alpha >= 0.0)
     assert(isinstance(steps, int))
     assert(steps >= 1)
-
-    choices = range(-steps, 0) + range(1, steps+1)
-    choices = [float(x) for x in choices]
 
     fields = {}
-    if feild:
-        fields = {site : random.choice(choices) for site in sorted(qpu.sites)}
-    couplings = {coupler : random.choice(choices) for coupler in sorted(qpu.couplers)}
-    return QPUConfiguration(qpu, fields, couplings)
+    couplings = {}
 
-
-def generate_rfm(qpu, steps=1, feild=False):
-    '''This function builds a ferromagnet with seemingly random couplings
-    '''
-    assert(isinstance(steps, int))
-    assert(steps >= 1)
-
-    choices = range(1, steps+1)
-    choices = [float(x) for x in choices]
-
+    # Build an initial spin state for generating the case
     spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
-    discription = 'planted ground state, one of two'
+    if alpha > 0.0:
+        discription = 'initial state for building this case with an alpha of {}, is most likely not a ground state'.format(alpha)
+    else:
+        if feild:
+            discription = 'unique planted ground state'
+        else:
+            discription = 'planted ground state, one of two'
 
-    fields = {}
+    # Assign non-frustrated couplings and fields at random
+    fm_choices = [float(x) for x in range(1, steps+1)]
+
     if feild:
-        fields = {site : -1*spins[site]*random.choice(choices) for site in sorted(qpu.sites)}
-        discription = 'unique planted ground state'
+        fields = {site : -1*spins[site]*random.choice(fm_choices) for site in sorted(qpu.sites)}
 
-    couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(choices) for coupler in sorted(qpu.couplers)}
+    couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(fm_choices) for coupler in sorted(qpu.couplers)}
+
+
+    # With probability alpha, override non-frustrated couplings and fields with random ones
+    ran_choices = range(-steps, 0) + range(1, steps+1)
+    ran_choices = [float(x) for x in ran_choices]
+
+    if feild:
+        for site in sorted(qpu.sites):
+            if alpha > random.random():
+                fields[site] = random.choice(ran_choices)
+
+    for coupler in sorted(qpu.couplers):
+        if alpha > random.random():
+            couplings[coupler] = random.choice(ran_choices)
 
     config = QPUConfiguration(qpu, fields, couplings)
     return QPUAssignment(config, spins, 0, discription)
