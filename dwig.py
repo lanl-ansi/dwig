@@ -41,7 +41,7 @@ def build_case(args):
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
 
     if args.generator == 'ran':
-        qpu_config = generator.generate_ran(qpu, args.alpha, args.steps, args.field, args.simple_ground_state)
+        qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
     elif args.generator == 'rfm':
         qpu_config = generator.generate_rfm(qpu, args.steps, args.field)
     elif args.generator == 'fl':
@@ -186,7 +186,7 @@ def load_config(args):
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-cf', '--config-file', help='a configuration file for specifing common parameters', default=DEFAULT_CONFIG_FILE)
+    parser.add_argument('-cf', '--config-file', help='a configuration file for specifying common parameters', default=DEFAULT_CONFIG_FILE)
 
     parser.add_argument('-url', '--dw-url', help='url of the d-wave machine')
     parser.add_argument('-token', '--dw-token', help='token for accessing the d-wave machine')
@@ -206,7 +206,7 @@ def build_cli_parser():
 
     parser_ran = subparsers.add_parser('ran', help='generates a random problem')
     parser_ran.set_defaults(generator='ran')
-    parser_ran.add_argument('-a', '--alpha', help='the probability of setting a value at random', type=float, default=1.0)
+    parser_ran.add_argument('-pr', '--probability', help='the probability that a coupling or field agrees with the planted ground state', type=float, default=0.5)
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     parser_ran.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)

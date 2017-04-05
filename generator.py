@@ -11,11 +11,12 @@ from structure import ChimeraCoordinate
 
 
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
-def generate_ran(qpu, alpha=1.0, steps=1, feild=False, simple_ground_state=False):
-    '''This function builds random couplings as described by, https://arxiv.org/abs/1508.05087
+def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state=False):
+    '''This function builds random couplings as described by, https://arxiv.org/abs/1511.02476,
+    which is a generalization of https://arxiv.org/abs/1508.05087
     '''
-    assert(isinstance(alpha, float))
-    assert(alpha <= 1.0 and alpha >= 0.0)
+    assert(isinstance(probability, float))
+    assert(probability <= 1.0 and probability >= 0.0)
     assert(isinstance(steps, int))
     assert(steps >= 1)
 
@@ -28,8 +29,8 @@ def generate_ran(qpu, alpha=1.0, steps=1, feild=False, simple_ground_state=False
     else:
         spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
 
-    if alpha > 0.0:
-        discription = 'initial state for building this case with an alpha of {}, is most likely not a ground state'.format(alpha)
+    if probability < 1.0:
+        discription = 'initial state for building this case with a probability of {}, is most likely not a ground state'.format(probability)
     else:
         if feild:
             discription = 'unique planted ground state'
@@ -51,12 +52,12 @@ def generate_ran(qpu, alpha=1.0, steps=1, feild=False, simple_ground_state=False
 
     if feild:
         for site in sorted(qpu.sites):
-            if alpha > random.random():
-                fields[site] = random.choice(ran_choices)
+            if probability < random.random():
+                fields[site] = -fields[site]
 
     for coupler in sorted(qpu.couplers):
-        if alpha > random.random():
-            couplings[coupler] = random.choice(ran_choices)
+        if probability < random.random():
+            couplings[coupler] = -couplings[coupler]
 
     config = QPUConfiguration(qpu, fields, couplings)
     return QPUAssignment(config, spins, 0, discription)

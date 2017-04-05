@@ -34,15 +34,15 @@ class TestRFMGeneration:
 
     #../dwig.py -pp -cd 1 -tl -rs 0 rfm > data/rfm1_i_1.json
     def test_rfm_i_1(self, capfd):
-        json_comp(self.parser, capfd, 'rfm1_i_1.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-a', '0.0'])
+        json_comp(self.parser, capfd, 'rfm1_i_1.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-pr', '1.0'])
 
     #../dwig.py -pp -cd 1 -tl -rs 0 rfm -f > data/rfm1_i_2.json
     def test_rfm1_i_2(self, capfd):
-        json_comp(self.parser, capfd, 'rfm1_i_2.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-f', '-a', '0.0'])
+        json_comp(self.parser, capfd, 'rfm1_i_2.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-f', '-pr', '1.0'])
 
     #../dwig.py -pp -cd 1 -tl -rs 0 rfm -f -s 4 > data/rfm4_i_1.json
     def test_rfm3_i_1(self, capfd):
-        json_comp(self.parser, capfd, 'rfm4_i_1.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-f', '-s', '4', '-a', '0.0'])
+        json_comp(self.parser, capfd, 'rfm4_i_1.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-f', '-s', '4', '-pr', '1.0'])
 
 
 class TestRANGroundState:
@@ -50,7 +50,7 @@ class TestRANGroundState:
         self.parser = dwig.build_cli_parser()
 
     def test_sgs(self, capfd):
-        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'ran', '-sgs', '-a', '0.0']
+        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'ran', '-sgs', '-pr', '1.0']
 
         json_base = run_dwig_cli(self.parser, cli_args)
 
@@ -61,7 +61,7 @@ class TestRANGroundState:
             assert(qt['coeff'] <= -1.0)
 
     def test_sgs_feild(self, capfd):
-        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'ran', '-sgs', '-f', '-a', '0.0']
+        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'ran', '-sgs', '-f', '-pr', '1.0']
 
         json_base = run_dwig_cli(self.parser, cli_args)
 

@@ -1,6 +1,6 @@
 {
   "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm.  A random number seed of 0 was used.",
-  "id": 234199940,
+  "id": 2454185,
   "linear_terms": [],
   "metadata": {
     "chimera_cell_size": 8,
@@ -10,82 +10,82 @@
   "offset": 0.0,
   "quadratic_terms": [
     {
-      "coeff": -1.0,
+      "coeff": -0.5,
       "id_head": 4,
       "id_tail": 0
     },
     {
-      "coeff": 0.25,
+      "coeff": 0.75,
       "id_head": 5,
       "id_tail": 0
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 6,
       "id_tail": 0
     },
     {
-      "coeff": 0.75,
+      "coeff": -0.75,
       "id_head": 7,
       "id_tail": 0
-    },
-    {
-      "coeff": 0.75,
-      "id_head": 4,
-      "id_tail": 1
-    },
-    {
-      "coeff": -1.0,
-      "id_head": 5,
-      "id_tail": 1
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 6,
-      "id_tail": 1
     },
     {
       "coeff": 0.5,
+      "id_head": 4,
+      "id_tail": 1
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 5,
+      "id_tail": 1
+    },
+    {
+      "coeff": -0.75,
+      "id_head": 6,
+      "id_tail": 1
+    },
+    {
+      "coeff": -0.5,
       "id_head": 7,
       "id_tail": 1
     },
     {
-      "coeff": -0.25,
+      "coeff": 1.0,
       "id_head": 4,
       "id_tail": 2
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 5,
+      "id_tail": 2
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 6,
+      "id_tail": 2
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 7,
+      "id_tail": 2
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 4,
+      "id_tail": 3
     },
     {
       "coeff": -0.75,
       "id_head": 5,
-      "id_tail": 2
+      "id_tail": 3
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 6,
+      "id_tail": 3
     },
     {
       "coeff": 0.75,
-      "id_head": 6,
-      "id_tail": 2
-    },
-    {
-      "coeff": 0.25,
-      "id_head": 7,
-      "id_tail": 2
-    },
-    {
-      "coeff": 1.0,
-      "id_head": 4,
-      "id_tail": 3
-    },
-    {
-      "coeff": -0.25,
-      "id_head": 5,
-      "id_tail": 3
-    },
-    {
-      "coeff": -0.5,
-      "id_head": 6,
-      "id_tail": 3
-    },
-    {
-      "coeff": 1.0,
       "id_head": 7,
       "id_tail": 3
     }
