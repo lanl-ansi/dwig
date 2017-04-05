@@ -4,6 +4,7 @@ sys.path.append('.')
 import dwig
 
 from common_test import json_comp
+from common_test import run_dwig_cli
 
 
 class TestRanGeneration:
@@ -27,7 +28,6 @@ class TestRanGeneration:
         json_comp(self.parser, capfd, 'ran1_i_3.json', ['-pp', '-cd', '12', '-tl', '-rs', '0', '-os', 'ran'])
 
 
-
 class TestRFMGeneration:
     def setup_class(self):
         self.parser = dwig.build_cli_parser()
@@ -43,3 +43,31 @@ class TestRFMGeneration:
     #../dwig.py -pp -cd 1 -tl -rs 0 rfm -f -s 4 > data/rfm4_i_1.json
     def test_rfm3_i_1(self, capfd):
         json_comp(self.parser, capfd, 'rfm4_i_1.json', ['-pp', '-cd', '1', '-tl', '-rs', '0', 'ran', '-f', '-s', '4', '-a', '0.0'])
+
+
+class TestRANGroundState:
+    def setup_class(self):
+        self.parser = dwig.build_cli_parser()
+
+    def test_sgs(self, capfd):
+        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'ran', '-sgs', '-a', '0.0']
+
+        json_base = run_dwig_cli(self.parser, cli_args)
+
+        for lt in json_base['linear_terms']:
+            assert(lt['coeff'] == 0.0)
+
+        for qt in json_base['quadratic_terms']:
+            assert(qt['coeff'] <= -1.0)
+
+    def test_sgs_feild(self, capfd):
+        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'ran', '-sgs', '-f', '-a', '0.0']
+
+        json_base = run_dwig_cli(self.parser, cli_args)
+
+        for lt in json_base['linear_terms']:
+            assert(lt['coeff'] >= 1.0)
+
+        for qt in json_base['quadratic_terms']:
+            assert(qt['coeff'] <= -1.0)
+

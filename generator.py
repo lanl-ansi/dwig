@@ -11,7 +11,7 @@ from structure import ChimeraCoordinate
 
 
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
-def generate_ran(qpu, alpha=1.0, steps=1, feild=False):
+def generate_ran(qpu, alpha=1.0, steps=1, feild=False, simple_ground_state=False):
     '''This function builds random couplings as described by, https://arxiv.org/abs/1508.05087
     '''
     assert(isinstance(alpha, float))
@@ -23,7 +23,11 @@ def generate_ran(qpu, alpha=1.0, steps=1, feild=False):
     couplings = {}
 
     # Build an initial spin state for generating the case
-    spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
+    if simple_ground_state:
+        spins = {site : -1 for site in sorted(qpu.sites)}
+    else:
+        spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
+
     if alpha > 0.0:
         discription = 'initial state for building this case with an alpha of {}, is most likely not a ground state'.format(alpha)
     else:
