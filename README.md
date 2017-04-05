@@ -118,6 +118,21 @@ This code has been developed as part of the Advanced Network Science Initiative 
 
 The D-WIG development team would like to thank Denny Dahl for suggesting the D-WIG name.  Special thanks are given to these works, which provided significant inspiration for the D-WIG toolset.
 
+For the RAN-pr formulation,
+```
+@article{Zdeborova2016statistical,
+  author = {Lenka Zdeborova and Florent Krzakala},
+  title = {Statistical physics of inference: thresholds and algorithms},
+  journal = {Advances in Physics},
+  volume = {65},
+  number = {5},
+  pages = {453-552},
+  year = {2016},
+  doi = {10.1080/00018732.2016.1211393},
+  URL = {http://dx.doi.org/10.1080/00018732.2016.1211393}
+}
+```
+
 For the RAN-k formulation,
 ```
 @article{king2015benchmarking,
