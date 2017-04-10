@@ -194,6 +194,23 @@ class ChimeraQPU(object):
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
 
+    def cell_filter(self, max_cell):
+        assert(max_cell >= 1)
+        # TODO add warning if max_cell is larger than chimera_degree_view**2
+
+        chimera_rows = max(s.chimera_row for s in self.sites)+1
+        cell_distances = {}
+        for s in self.sites:
+            cell_distances[s.chimera_cell] = (s.chimera_cell_distance, s.chimera_row)
+
+        cells = sorted(cell_distances, key=cell_distances.get)
+        cells = set(cells[:max_cell])
+
+        filtered_sites = set([n.index for n in self.sites if n.chimera_cell in cells])
+        filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
+
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id)
+
     def chimera_cell(self, chimera_coordinate):
         return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)
 
@@ -215,6 +232,7 @@ class ChimeraSite(object):
         self.chimera_cell = int(math.floor(index / unit_cell_size))
         self.chimera_row = int(math.floor(self.chimera_cell / chimera_degree))
         self.chimera_column = int(self.chimera_cell % chimera_degree)
+        self.chimera_cell_distance = math.sqrt(self.chimera_row**2 + self.chimera_column**2)
 
     def is_chimera_degree(self, chimera_degree):
         return self.chimera_row+1 <= chimera_degree and self.chimera_column+1 <= chimera_degree

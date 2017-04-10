@@ -49,6 +49,11 @@ def build_case(args):
         print_err('filtering QPU to chimera of degree {}'.format(args.chimera_degree))
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
 
+    if args.cell_limit != None:
+        print_err('filtering QPU to the first {} chimera cells'.format(args.cell_limit))
+        qpu = qpu.cell_filter(args.cell_limit)
+
+
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
     elif args.generator == 'rfm':
@@ -56,6 +61,10 @@ def build_case(args):
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
+        if args.cell_limit != None:
+            print_err('weak-strong cluster networks cannot be constricted with a cell limit.')
+            quit()
+
         if qpu.chimera_degree_view < 6:
             print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is {}.'.format(qpu.chimera_degree_view))
             quit()
@@ -219,15 +228,15 @@ def build_cli_parser():
     parser.add_argument('-proxy', '--dw-proxy', help='proxy for accessing the d-wave machine')
     parser.add_argument('-solver', '--dw-solver-name', help='d-wave solver to use', type=int)
 
-
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
+    parser.add_argument('-cl', '--cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
     parser.add_argument('-rr', '--random-regular', help='uses a degree six random regular graph instead of a chimera graph ', action='store_true', default=False)
-    
+
 
     subparsers = parser.add_subparsers()
 
