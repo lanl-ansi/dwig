@@ -4,17 +4,23 @@ from __future__ import print_function
 
 import sys, os, json, argparse, random, math, datetime
 
+import networkx as nx
+
 from dwave_sapi2.util import get_chimera_adjacency
 from dwave_sapi2.remote import RemoteConnection
 
 from structure import QPUAssignment
 from structure import ChimeraQPU
-from structure import Range
 
 import generator
 from common import print_err
 from common import validate_bqp_data
 from common import json_dumps_kwargs
+
+from common import default_cell_size
+from common import default_site_range
+from common import default_coupler_range
+
 
 DEFAULT_CONFIG_FILE = '_config'
 
@@ -33,7 +39,10 @@ def build_case(args):
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
-    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.dw_solver_name, args.hardware_chimera_degree)
+    if not args.random_regular:
+        qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.dw_solver_name, args.hardware_chimera_degree)
+    else:
+        qpu = get_random_regular_qpu(args.chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
@@ -70,6 +79,8 @@ def build_case(args):
     data['description'] = 'This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the {} algorithm.'.format(args.generator)
     if not args.seed is None:
         data['description'] = data['description'] + '  A random number seed of {} was used.'.format(args.seed)
+    if args.random_regular:
+        data['description'] = data['description'] + '  A degree six random regular graph was used instead of a chimera topology.'
 
     data['metadata'] = build_metadata(args, qpu)
 
@@ -98,7 +109,7 @@ def build_metadata(args, qpu):
 
 def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
     chip_id = None
-    cell_size = 8
+    cell_size = default_cell_size
 
     if not url is None and not token is None and not solver_name is None:
         print_err('QPU connection details found, accessing "{}" at "{}"'.format(solver_name, url))
@@ -126,8 +137,8 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
     else:
         print_err('QPU connection details not found, assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
 
-        site_range = Range(-2.0, 2.0)
-        coupler_range = Range(-1.0, 1.0)
+        site_range = default_site_range
+        coupler_range = default_coupler_range
 
         # the hard coded 4 here assumes an 4x2 unit cell
         arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
@@ -151,6 +162,21 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
         assert(i < j)
 
     return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id)
+
+
+def get_random_regular_qpu(chimera_degree):
+    site_count = chimera_degree*chimera_degree*default_cell_size
+
+    G = nx.random_regular_graph(6, site_count)
+
+    #print(G.nodes())
+    #print(G.edges())
+
+    # sanity check on coupler consistency across both branches
+    for i,j in G.edges():
+        assert(i < j)
+
+    return ChimeraQPU(G.nodes(), G.edges(), default_cell_size, chimera_degree, default_site_range, default_coupler_range)
 
 
 # loads a configuration file and sets up undefined CLI arguments
@@ -200,7 +226,8 @@ def build_cli_parser():
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
-
+    parser.add_argument('-rr', '--random-regular', help='uses a degree six random regular graph instead of a chimera graph ', action='store_true', default=False)
+    
 
     subparsers = parser.add_subparsers()
 

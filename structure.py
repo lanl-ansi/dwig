@@ -2,6 +2,7 @@ import copy, random, math
 
 from collections import namedtuple
 
+from common import Range
 from common import print_err
 from common import bqpjson_version
 
@@ -148,7 +149,6 @@ def _rescale(fields, couplings, offset, site_range, coupler_range):
 
 
 ChimeraCoordinate = namedtuple('ChimeraCordinate', ['row', 'col'])
-Range = namedtuple('Range', ['lb', 'ub'])
 
 
 class ChimeraQPU(object):
