@@ -195,7 +195,7 @@ class ChimeraQPU(object):
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
 
     def cell_filter(self, max_cell):
-        assert(max_cell > 1)
+        assert(max_cell >= 1)
 
         # TODO add warning if max_cell is larger than chimera_degree_view**2
 
