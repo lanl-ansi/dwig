@@ -3,6 +3,7 @@ rm data/*.json
 ../dwig.py -pp -cd  1 -tl -rs 0 -os ran > data/ran1_i_1.json
 ../dwig.py -pp -cd  1 -tl -rs 0 -os ran -f > data/ran1_i_2.json
 ../dwig.py -pp -cd  1 -tl -rs 0 -os ran -s 4 > data/ran4_i_0.json
+../dwig.py -pp -cd  6 -tl -rs 0 -os -rr ran -f -s 4 > data/ran4_i_1.json
 ../dwig.py -pp -cd 12 -tl -rs 0 -os ran > data/ran1_i_3.json
 
 ../dwig.py -pp -cd 1 -tl -rs 0 ran -pr 1.0 > data/rfm1_i_1.json
