@@ -196,24 +196,15 @@ class ChimeraQPU(object):
 
     def cell_filter(self, max_cell):
         assert(max_cell >= 1)
-
         # TODO add warning if max_cell is larger than chimera_degree_view**2
 
         chimera_rows = max(s.chimera_row for s in self.sites)+1
-        #print(chimera_rows)
         cell_distances = {}
         for s in self.sites:
             cell_distances[s.chimera_cell] = (s.chimera_cell_distance, s.chimera_row)
-            #cell_distances[s.chimera_cell] = s.chimera_cell_distance
-
-        # for k,v in cell_distances.items():
-        #     print(k, v)
 
         cells = sorted(cell_distances, key=cell_distances.get)
         cells = set(cells[:max_cell])
-
-        #filtered_sites = set(s.index for s in filtered_sites[:max_spin])
-        #print([x for x in sorted(filtered_sites)])
 
         filtered_sites = set([n.index for n in self.sites if n.chimera_cell in cells])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
