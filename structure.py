@@ -229,9 +229,9 @@ class ChimeraQPU(object):
 class ChimeraSite(object):
     def __init__(self, index, chimera_degree, unit_cell_size = 8):
         self.index = index
-        self.chimera_cell = int(math.floor(index / unit_cell_size))
-        self.chimera_row = int(math.floor(self.chimera_cell / chimera_degree))
-        self.chimera_column = int(self.chimera_cell % chimera_degree)
+        self.chimera_cell = self.index//unit_cell_size
+        self.chimera_row = self.chimera_cell//chimera_degree
+        self.chimera_column = self.chimera_cell%chimera_degree
         self.chimera_cell_distance = math.sqrt(self.chimera_row**2 + self.chimera_column**2)
 
     def is_chimera_degree(self, chimera_degree):

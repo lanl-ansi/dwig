@@ -60,7 +60,7 @@ def build_case(args):
             print_err('weak-strong cluster networks require a qpu with chimera degree of at least 6, the given degree is {}.'.format(qpu.chimera_degree_view))
             quit()
 
-        effective_chimera_degree = 3*int(math.floor(qpu.chimera_degree_view/3))
+        effective_chimera_degree = 3*(qpu.chimera_degree_view//3)
         if effective_chimera_degree != qpu.chimera_degree_view:
             print_err('the weak-strong cluster network will occupy a space of chimera degree {}.'.format(effective_chimera_degree))
         qpu = qpu.chimera_degree_filter(effective_chimera_degree)
