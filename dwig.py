@@ -234,7 +234,7 @@ def build_cli_parser():
     parser_wscn = subparsers.add_parser('wscn', help='generates a weak-strong cluster network problem')
     parser_wscn.set_defaults(generator='wscn')
     parser_wscn.add_argument('-wf', '--weak-field', help='strength of the weak field', type=float, default=0.44)
-    parser_wscn.add_argument('-sf', '--strong-field', help='strength of the weak field', type=float, default=-1)
+    parser_wscn.add_argument('-sf', '--strong-field', help='strength of the strong field', type=float, default=-1)
 
 
     return parser
