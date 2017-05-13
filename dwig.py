@@ -239,7 +239,7 @@ def build_cli_parser():
     parser_nbsc = subparsers.add_parser('nbsc', help='generates a random problem')
     parser_nbsc.set_defaults(generator='nbsc')
     parser_nbsc.add_argument('-pr', '--probability', help='', type=float, default=0.5)
-    parser_nbsc.add_argument('-ff', '--field-fidelity', help='the number of decimal places used for field values', type=int, default=2)
+    parser_nbsc.add_argument('-ff', '--field-fidelity', help='the number of decimal places used for field values', type=int, default=3)
     #parser_nbsc.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     #parser_nbsc.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     #parser_nbsc.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
