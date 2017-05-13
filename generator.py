@@ -63,6 +63,75 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
     return QPUAssignment(config, spins, 0, discription)
 
 
+def generate_nbsc(qpu, probability=0.5):
+    '''Comment TBD
+    '''
+    assert(isinstance(probability, float))
+    assert(probability < 1.0 and probability > 0.0)
+
+    choices = [-1,1]
+    couplings = {coupler : random.choice(choices) for coupler in sorted(qpu.couplers)}
+
+    print('computing local min')
+    spins = _compute_local_minimum(qpu.sites, couplings)
+
+    objective = _eval(spins, couplings)
+    print('local min: {0:d} {1:.5f}'.format(objective, objective/float(len(qpu.couplers))))
+
+    field_magnitude = 0.5 * math.log((1.0-probability)/probability)
+
+    print('field magnitude: {}'.format(field_magnitude))
+
+    fields = {}
+    for site in sorted(qpu.sites):
+        if probability < random.random():
+            # negating the sign encourages this spin state
+            fields[site] = -field_magnitude * spins[site]
+        else:
+            # keeping the sign discourages this spin state
+            fields[site] =  field_magnitude * spins[site]
+
+    discription = 'solution biased with probability {}'.format(probability)
+    config = QPUConfiguration(qpu, fields, couplings)
+    return QPUAssignment(config, spins, 0, discription)
+
+
+def _compute_local_minimum(sites, couplings):
+    spins = {site : random.choice([-1, 1]) for site in sorted(sites)}
+
+    incident = {}
+    for site in sites:
+        incident[site] = []
+    for coupler in sorted(couplings):
+        incident[coupler[0]].append(coupler)
+        incident[coupler[1]].append(coupler)
+
+    site_list = [s for s in sorted(sites)]
+    improved = True
+    while improved:
+        objective = _eval(spins, couplings)
+        #print('eval: {} {}'.format(objective, objective/float(len(couplings))))
+
+        improved = False
+        random.shuffle(site_list)
+        for s in site_list:
+            stick = 0
+            flip = 0
+            for i,j in incident[s]:
+                stick += couplings[(i,j)] * spins[i] * spins[j]
+                flip += -couplings[(i,j)] * spins[i] * spins[j]
+            if flip < stick:
+                #print('flipping {}'.format(s))
+                spins[s] = -spins[s]
+                improved = True
+
+    return spins
+
+
+def _eval(spins, couplings):
+    return sum( c*spins[i]*spins[j] for (i,j),c in couplings.items())
+
+
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.
