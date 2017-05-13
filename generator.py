@@ -63,7 +63,7 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
     return QPUAssignment(config, spins, 0, discription)
 
 
-def generate_nbsc(qpu, probability=0.5):
+def generate_nbsc(qpu, probability=0.5, field_fidelity=2):
     '''Comment TBD
     '''
     assert(isinstance(probability, float))
@@ -78,8 +78,7 @@ def generate_nbsc(qpu, probability=0.5):
     objective = _eval(spins, couplings)
     print_err('local min: {0:d} {1:.5f}'.format(objective, objective/float(len(qpu.couplers))))
 
-    field_magnitude = 0.5 * math.log((1.0-probability)/probability)
-
+    field_magnitude = round(0.5 * math.log((1.0-probability)/probability), field_fidelity)
     print_err('field magnitude: {}'.format(field_magnitude))
 
     fields = {}

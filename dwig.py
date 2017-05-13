@@ -48,7 +48,7 @@ def build_case(args):
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
     if args.generator == 'nbsc':
-        qpu_config = generator.generate_nbsc(qpu, args.probability)
+        qpu_config = generator.generate_nbsc(qpu, args.probability, args.field_fidelity)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
@@ -239,6 +239,7 @@ def build_cli_parser():
     parser_nbsc = subparsers.add_parser('nbsc', help='generates a random problem')
     parser_nbsc.set_defaults(generator='nbsc')
     parser_nbsc.add_argument('-pr', '--probability', help='', type=float, default=0.5)
+    parser_nbsc.add_argument('-ff', '--field-fidelity', help='the number of decimal places used for field values', type=int, default=2)
     #parser_nbsc.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     #parser_nbsc.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     #parser_nbsc.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
