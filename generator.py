@@ -72,15 +72,15 @@ def generate_nbsc(qpu, probability=0.5):
     choices = [-1,1]
     couplings = {coupler : random.choice(choices) for coupler in sorted(qpu.couplers)}
 
-    print('computing local min')
+    print_err('computing local min')
     spins = _compute_local_minimum(qpu.sites, couplings)
 
     objective = _eval(spins, couplings)
-    print('local min: {0:d} {1:.5f}'.format(objective, objective/float(len(qpu.couplers))))
+    print_err('local min: {0:d} {1:.5f}'.format(objective, objective/float(len(qpu.couplers))))
 
     field_magnitude = 0.5 * math.log((1.0-probability)/probability)
 
-    print('field magnitude: {}'.format(field_magnitude))
+    print_err('field magnitude: {}'.format(field_magnitude))
 
     fields = {}
     for site in sorted(qpu.sites):
