@@ -11,7 +11,7 @@ from structure import ChimeraCoordinate
 
 
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
-def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state=False):
+def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state=False, internal_coupler_scale=1.0):
     '''This function builds random couplings as described by, https://arxiv.org/abs/1511.02476,
     which is a generalization of https://arxiv.org/abs/1508.05087
     '''
@@ -45,6 +45,9 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
 
     couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(fm_choices) for coupler in sorted(qpu.couplers)}
 
+    for i,j in sorted(qpu.couplers):
+        if i.chimera_cell == j.chimera_cell:
+            couplings[(i,j)] = internal_coupler_scale*couplings[(i,j)]
 
     # With probability alpha, override non-frustrated couplings and fields with random ones
     ran_choices = range(-steps, 0) + range(1, steps+1)

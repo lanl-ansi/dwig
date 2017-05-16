@@ -46,7 +46,7 @@ def build_case(args):
 
 
     if args.generator == 'ran':
-        qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
+        qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state, args.internal_coupler_scale)
     elif args.generator == 'rfm':
         qpu_config = generator.generate_rfm(qpu, args.steps, args.field)
     elif args.generator == 'fl':
@@ -218,6 +218,7 @@ def build_cli_parser():
     parser_ran.add_argument('-pr', '--probability', help='the probability that a coupling or field agrees with the planted ground state', type=float, default=0.5)
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+    parser_ran.add_argument('-ics', '--internal-coupler-scale', help='scaling factor for couplers within a unit cell', type=float, default=1.0)
     parser_ran.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
 
     parser_fl = subparsers.add_parser('fl', help='generates a frustrated loop problem')
