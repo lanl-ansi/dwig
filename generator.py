@@ -13,7 +13,8 @@ from structure import ChimeraCoordinate
 # Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
 def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state=False, internal_coupler_scale=1.0):
     '''This function builds random couplings as described by, https://arxiv.org/abs/1511.02476,
-    which is a generalization of https://arxiv.org/abs/1508.05087
+    which is a generalization of https://arxiv.org/abs/1508.05087.
+    The internal coupler scaling was proposed in http://www.archduke.org/stuff/d-wave-comment-on-comparison-with-classical-computers/harder-qubo-instances-on-a-chimera-graph/
     '''
     assert(isinstance(probability, float))
     assert(probability <= 1.0 and probability >= 0.0)
