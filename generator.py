@@ -63,6 +63,27 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
     return QPUAssignment(config, spins, 0, discription)
 
 
+def generate_srf(qpu, field_probability=1.0, field_strength=1.0):
+    assert(isinstance(field_probability, float))
+    assert(field_probability <= 1.0 and field_probability >= 0.0)
+    assert(isinstance(field_strength, float))
+    assert(field_strength >= 0.0)
+
+    fields = {}
+    couplings = {}
+
+    #fm_choices = [float(x) for x in range(1, steps+1)]
+    choices = [-1.0, 1.0]
+
+    couplings = {coupler : random.choice(choices) for coupler in sorted(qpu.couplers)}
+
+    for site in sorted(qpu.sites):
+        if field_probability > random.random():
+            fields[site] = field_strength*random.choice(choices)
+
+    return QPUConfiguration(qpu, fields, couplings, unitless=False)
+
+
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.
