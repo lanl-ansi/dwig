@@ -63,6 +63,56 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
     return QPUAssignment(config, spins, 0, discription)
 
 
+# Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
+def generate_bfm(qpu, probability=0.5, field_strength=1.0, simple_ground_state=False):
+    '''This function builds random couplings as described by, https://arxiv.org/abs/1511.02476,
+    which is a generalization of https://arxiv.org/abs/1508.05087
+    '''
+    assert(isinstance(probability, float))
+    assert(probability <= 1.0 and probability >= 0.0)
+    assert(isinstance(field_strength, float))
+
+    fields = {}
+    couplings = {}
+
+    # Build an initial spin state for generating the case
+    if simple_ground_state:
+        spins = {site : -1 for site in sorted(qpu.sites)}
+    else:
+        spins = {site : random.choice([-1, 1]) for site in sorted(qpu.sites)}
+
+    discription = 'planted state'
+    # if probability < 1.0:
+    #     discription = 'initial state for building this case with a probability of {}, is most likely not a ground state'.format(probability)
+    # else:
+    #     if feild:
+    #         discription = 'unique planted ground state'
+    #     else:
+    #         discription = 'planted ground state, one of two'
+
+    fields = {site : -field_strength*spins[site] for site in sorted(qpu.sites)}
+    couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]] for coupler in sorted(qpu.couplers)}
+
+    for site in sorted(qpu.sites):
+        if probability < random.random():
+            fields[site] = -fields[site]
+
+        # # deterministic pure frustration
+        # if (site.chimera_row % 2 + site.chimera_column % 2) % 2 == 0:
+        #     if site.chimera_cell_row == 0:
+        #         fields[site] = -fields[site]
+        # else:
+        #     if site.chimera_cell_row == 1:
+        #         fields[site] = -fields[site]
+
+    # for coupler in sorted(qpu.couplers):
+    #     if probability < random.random():
+    #         couplings[coupler] = -couplings[coupler]
+
+    config = QPUConfiguration(qpu, fields, couplings, unitless=False)
+    return QPUAssignment(config, spins, 0, discription)
+
+
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.

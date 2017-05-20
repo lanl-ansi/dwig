@@ -47,6 +47,8 @@ def build_case(args):
 
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
+    elif args.generator == 'bfm':
+        qpu_config = generator.generate_bfm(qpu, args.probability, args.field_strength, args.simple_ground_state)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
@@ -216,6 +218,12 @@ def build_cli_parser():
     parser_ran.add_argument('-pr', '--probability', help='the probability that a coupling or field agrees with the planted ground state', type=float, default=0.5)
     parser_ran.add_argument('-s', '--steps', help='the number of steps in random numbers', type=int, default=1)
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+    parser_ran.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
+
+    parser_ran = subparsers.add_parser('bfm', help='generates a random biased ferromagnet')
+    parser_ran.set_defaults(generator='bfm')
+    parser_ran.add_argument('-pr', '--probability', help='the probability that a coupling or field agrees with the planted ground state', type=float, default=0.5)
+    parser_ran.add_argument('-fs', '--field-strength', help='field strength scaler', type=float, default=1.0)
     parser_ran.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
 
     parser_fl = subparsers.add_parser('fl', help='generates a frustrated loop problem')
