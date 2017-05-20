@@ -47,8 +47,6 @@ def build_case(args):
 
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
-    elif args.generator == 'rfm':
-        qpu_config = generator.generate_rfm(qpu, args.steps, args.field)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
