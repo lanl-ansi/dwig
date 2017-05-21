@@ -63,6 +63,28 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
     return QPUAssignment(config, spins, 0, discription)
 
 
+def generate_src(qpu, internal_coupler_probability=1.0, external_coupler_probability=1.0):
+    assert(isinstance(internal_coupler_probability, float))
+    assert(internal_coupler_probability <= 1.0 and internal_coupler_probability >= 0.0)
+    assert(isinstance(external_coupler_probability, float))
+    assert(external_coupler_probability <= 1.0 and external_coupler_probability >= 0.0)
+
+    fields = {}
+    couplings = {}
+
+    choices = [-1, 1]
+
+    for i,j in sorted(qpu.couplers):
+        if i.chimera_cell == j.chimera_cell:
+            if internal_coupler_probability > random.random():
+                couplings[(i,j)] = random.choice(choices)
+        else:
+            if external_coupler_probability > random.random():
+                couplings[(i,j)] = random.choice(choices)
+
+    return QPUConfiguration(qpu, fields, couplings)
+
+
 def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.
