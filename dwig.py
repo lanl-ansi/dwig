@@ -125,6 +125,7 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
         solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
         if hardware_chimera_degree != solver_chimera_degree:
             print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
+            hardware_chimera_degree = solver_chimera_degree
 
         site_range = Range(*solver.properties['h_range'])
         coupler_range = Range(*solver.properties['j_range'])
