@@ -211,6 +211,28 @@ class ChimeraQPU(object):
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id)
 
+    def chimera_cell_box_filter(self, chimera_cell_1, chimera_cell_2):
+        chimera_rows = (chimera_cell_1[0], chimera_cell_2[0])
+        chimera_columns = (chimera_cell_1[1], chimera_cell_2[1])
+
+        assert(chimera_rows[0] >= 0 and chimera_rows[0] <= self.chimera_degree_view)
+        assert(chimera_rows[1] >= 0 and chimera_rows[1] <= self.chimera_degree_view)
+        assert(chimera_rows[0] <= chimera_rows[1])
+        assert(chimera_columns[0] >= 0 and chimera_columns[0] <= self.chimera_degree_view)
+        assert(chimera_columns[1] >= 0 and chimera_columns[1] <= self.chimera_degree_view)
+        assert(chimera_columns[0] <= chimera_columns[1])
+
+        filtered_sites = set([])
+        for site in self.sites:
+            if site.chimera_row >= chimera_rows[0] and site.chimera_row <= chimera_rows[1] and \
+                site.chimera_column >= chimera_columns[0] and site.chimera_column <= chimera_columns[1]:
+                filtered_sites.add(site.index)
+
+        filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
+
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id)
+
+
     def chimera_cell(self, chimera_coordinate):
         return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)
 
