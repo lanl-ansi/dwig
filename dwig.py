@@ -50,7 +50,9 @@ def build_case(args):
         print_err('filtering QPU to the chimera cell box {} by {}'.format(chimera_cell_1, chimera_cell_2))
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
-    if args.generator == 'ran':
+    if args.generator == 'const':
+        qpu_config = generator.generate_const(qpu, args.coupling, args.field)
+    elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
@@ -218,6 +220,11 @@ def build_cli_parser():
 
 
     subparsers = parser.add_subparsers()
+
+    parser_ran = subparsers.add_parser('const', help='generates a problem with constant coupling and/or field')
+    parser_ran.set_defaults(generator='const')
+    parser_ran.add_argument('-cp', '--coupling', help='set all couplers to the given value', type=float, default=0.0)
+    parser_ran.add_argument('-f', '--field', help='set all fields to the given value', type=float, default=0.0)
 
     parser_ran = subparsers.add_parser('ran', help='generates a random problem')
     parser_ran.set_defaults(generator='ran')

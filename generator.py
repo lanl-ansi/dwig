@@ -9,8 +9,23 @@ from structure import QPUAssignment
 from structure import QPUConfiguration
 from structure import ChimeraCoordinate
 
+# Generators take an instance of ChimeraQPU (qpu) and a generate 
+# a problem and return the data as a QPUConfiguration object
 
-# Generators take an instance of ChimeraQPU (qpu) and a generate a random problem and return the data as a QPUConfiguration object
+
+def generate_const(qpu, coupling=0.0, field=0.0):
+    fields = {}
+    couplings = {}
+
+    if field != 0.0:
+        fields = {site : field for site in qpu.sites}
+
+    if coupling != 0.0:
+        couplings = {coupler : coupling for coupler in qpu.couplers}
+
+    return QPUConfiguration(qpu, fields, couplings)
+
+
 def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state=False):
     '''This function builds random couplings as described by, https://arxiv.org/abs/1511.02476,
     which is a generalization of https://arxiv.org/abs/1508.05087
