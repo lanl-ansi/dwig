@@ -47,7 +47,7 @@ def build_case(args):
     if args.chimera_cell_box != None:
         chimera_cell_1 = tuple(args.chimera_cell_box[0:2])
         chimera_cell_2 = tuple(args.chimera_cell_box[2:4])
-        print_err('filtering QPU to the chimera cell box {},{}'.format(chimera_cell_1, chimera_cell_2))
+        print_err('filtering QPU to the chimera cell box {} by {}'.format(chimera_cell_1, chimera_cell_2))
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
     if args.generator == 'ran':
