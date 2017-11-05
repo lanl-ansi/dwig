@@ -44,6 +44,11 @@ def build_case(args):
         print_err('filtering QPU to the first {} chimera cells'.format(args.cell_limit))
         qpu = qpu.cell_filter(args.cell_limit)
 
+    if args.chimera_cell_box != None:
+        chimera_cell_1 = tuple(args.chimera_cell_box[0:2])
+        chimera_cell_2 = tuple(args.chimera_cell_box[2:4])
+        print_err('filtering QPU to the chimera cell box {},{}'.format(chimera_cell_1, chimera_cell_2))
+        qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
     if args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.simple_ground_state)
@@ -208,6 +213,8 @@ def build_cli_parser():
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
     parser.add_argument('-cl', '--cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
+
+    parser.add_argument('-ccb', '--chimera-cell-box', help='two chimera cell coordinates define a box that is used to filter the hardware graph', nargs=4, type=int)
 
 
     subparsers = parser.add_subparsers()
