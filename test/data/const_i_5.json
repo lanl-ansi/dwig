@@ -1,0 +1,1479 @@
+{
+  "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the const algorithm.  A random number seed of 0 was used.",
+  "id": 1813382118,
+  "linear_terms": [
+    {
+      "coeff": -0.5,
+      "id": 104
+    },
+    {
+      "coeff": -0.5,
+      "id": 105
+    },
+    {
+      "coeff": -0.5,
+      "id": 106
+    },
+    {
+      "coeff": -0.5,
+      "id": 107
+    },
+    {
+      "coeff": -0.5,
+      "id": 108
+    },
+    {
+      "coeff": -0.5,
+      "id": 109
+    },
+    {
+      "coeff": -0.5,
+      "id": 110
+    },
+    {
+      "coeff": -0.5,
+      "id": 111
+    },
+    {
+      "coeff": -0.5,
+      "id": 112
+    },
+    {
+      "coeff": -0.5,
+      "id": 113
+    },
+    {
+      "coeff": -0.5,
+      "id": 114
+    },
+    {
+      "coeff": -0.5,
+      "id": 115
+    },
+    {
+      "coeff": -0.5,
+      "id": 116
+    },
+    {
+      "coeff": -0.5,
+      "id": 117
+    },
+    {
+      "coeff": -0.5,
+      "id": 118
+    },
+    {
+      "coeff": -0.5,
+      "id": 119
+    },
+    {
+      "coeff": -0.5,
+      "id": 120
+    },
+    {
+      "coeff": -0.5,
+      "id": 121
+    },
+    {
+      "coeff": -0.5,
+      "id": 122
+    },
+    {
+      "coeff": -0.5,
+      "id": 123
+    },
+    {
+      "coeff": -0.5,
+      "id": 124
+    },
+    {
+      "coeff": -0.5,
+      "id": 125
+    },
+    {
+      "coeff": -0.5,
+      "id": 126
+    },
+    {
+      "coeff": -0.5,
+      "id": 127
+    },
+    {
+      "coeff": -0.5,
+      "id": 128
+    },
+    {
+      "coeff": -0.5,
+      "id": 129
+    },
+    {
+      "coeff": -0.5,
+      "id": 130
+    },
+    {
+      "coeff": -0.5,
+      "id": 131
+    },
+    {
+      "coeff": -0.5,
+      "id": 132
+    },
+    {
+      "coeff": -0.5,
+      "id": 133
+    },
+    {
+      "coeff": -0.5,
+      "id": 134
+    },
+    {
+      "coeff": -0.5,
+      "id": 135
+    },
+    {
+      "coeff": -0.5,
+      "id": 136
+    },
+    {
+      "coeff": -0.5,
+      "id": 137
+    },
+    {
+      "coeff": -0.5,
+      "id": 138
+    },
+    {
+      "coeff": -0.5,
+      "id": 139
+    },
+    {
+      "coeff": -0.5,
+      "id": 140
+    },
+    {
+      "coeff": -0.5,
+      "id": 141
+    },
+    {
+      "coeff": -0.5,
+      "id": 142
+    },
+    {
+      "coeff": -0.5,
+      "id": 143
+    },
+    {
+      "coeff": -0.5,
+      "id": 200
+    },
+    {
+      "coeff": -0.5,
+      "id": 201
+    },
+    {
+      "coeff": -0.5,
+      "id": 202
+    },
+    {
+      "coeff": -0.5,
+      "id": 203
+    },
+    {
+      "coeff": -0.5,
+      "id": 204
+    },
+    {
+      "coeff": -0.5,
+      "id": 205
+    },
+    {
+      "coeff": -0.5,
+      "id": 206
+    },
+    {
+      "coeff": -0.5,
+      "id": 207
+    },
+    {
+      "coeff": -0.5,
+      "id": 208
+    },
+    {
+      "coeff": -0.5,
+      "id": 209
+    },
+    {
+      "coeff": -0.5,
+      "id": 210
+    },
+    {
+      "coeff": -0.5,
+      "id": 211
+    },
+    {
+      "coeff": -0.5,
+      "id": 212
+    },
+    {
+      "coeff": -0.5,
+      "id": 213
+    },
+    {
+      "coeff": -0.5,
+      "id": 214
+    },
+    {
+      "coeff": -0.5,
+      "id": 215
+    },
+    {
+      "coeff": -0.5,
+      "id": 216
+    },
+    {
+      "coeff": -0.5,
+      "id": 217
+    },
+    {
+      "coeff": -0.5,
+      "id": 218
+    },
+    {
+      "coeff": -0.5,
+      "id": 219
+    },
+    {
+      "coeff": -0.5,
+      "id": 220
+    },
+    {
+      "coeff": -0.5,
+      "id": 221
+    },
+    {
+      "coeff": -0.5,
+      "id": 222
+    },
+    {
+      "coeff": -0.5,
+      "id": 223
+    },
+    {
+      "coeff": -0.5,
+      "id": 224
+    },
+    {
+      "coeff": -0.5,
+      "id": 225
+    },
+    {
+      "coeff": -0.5,
+      "id": 226
+    },
+    {
+      "coeff": -0.5,
+      "id": 227
+    },
+    {
+      "coeff": -0.5,
+      "id": 228
+    },
+    {
+      "coeff": -0.5,
+      "id": 229
+    },
+    {
+      "coeff": -0.5,
+      "id": 230
+    },
+    {
+      "coeff": -0.5,
+      "id": 231
+    },
+    {
+      "coeff": -0.5,
+      "id": 232
+    },
+    {
+      "coeff": -0.5,
+      "id": 233
+    },
+    {
+      "coeff": -0.5,
+      "id": 234
+    },
+    {
+      "coeff": -0.5,
+      "id": 235
+    },
+    {
+      "coeff": -0.5,
+      "id": 236
+    },
+    {
+      "coeff": -0.5,
+      "id": 237
+    },
+    {
+      "coeff": -0.5,
+      "id": 238
+    },
+    {
+      "coeff": -0.5,
+      "id": 239
+    }
+  ],
+  "metadata": {
+    "chimera_cell_size": 8,
+    "chimera_degree": 12,
+    "dwig_generator": "const"
+  },
+  "offset": 0.0,
+  "quadratic_terms": [
+    {
+      "coeff": 0.2,
+      "id_head": 108,
+      "id_tail": 104
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 109,
+      "id_tail": 104
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 110,
+      "id_tail": 104
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 111,
+      "id_tail": 104
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 200,
+      "id_tail": 104
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 108,
+      "id_tail": 105
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 109,
+      "id_tail": 105
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 110,
+      "id_tail": 105
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 111,
+      "id_tail": 105
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 201,
+      "id_tail": 105
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 108,
+      "id_tail": 106
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 109,
+      "id_tail": 106
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 110,
+      "id_tail": 106
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 111,
+      "id_tail": 106
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 202,
+      "id_tail": 106
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 108,
+      "id_tail": 107
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 109,
+      "id_tail": 107
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 110,
+      "id_tail": 107
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 111,
+      "id_tail": 107
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 203,
+      "id_tail": 107
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 116,
+      "id_tail": 108
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 117,
+      "id_tail": 109
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 118,
+      "id_tail": 110
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 119,
+      "id_tail": 111
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 116,
+      "id_tail": 112
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 117,
+      "id_tail": 112
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 118,
+      "id_tail": 112
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 119,
+      "id_tail": 112
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 208,
+      "id_tail": 112
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 116,
+      "id_tail": 113
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 117,
+      "id_tail": 113
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 118,
+      "id_tail": 113
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 119,
+      "id_tail": 113
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 209,
+      "id_tail": 113
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 116,
+      "id_tail": 114
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 117,
+      "id_tail": 114
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 118,
+      "id_tail": 114
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 119,
+      "id_tail": 114
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 210,
+      "id_tail": 114
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 116,
+      "id_tail": 115
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 117,
+      "id_tail": 115
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 118,
+      "id_tail": 115
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 119,
+      "id_tail": 115
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 211,
+      "id_tail": 115
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 124,
+      "id_tail": 116
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 125,
+      "id_tail": 117
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 126,
+      "id_tail": 118
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 127,
+      "id_tail": 119
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 124,
+      "id_tail": 120
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 125,
+      "id_tail": 120
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 126,
+      "id_tail": 120
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 127,
+      "id_tail": 120
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 216,
+      "id_tail": 120
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 124,
+      "id_tail": 121
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 125,
+      "id_tail": 121
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 126,
+      "id_tail": 121
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 127,
+      "id_tail": 121
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 217,
+      "id_tail": 121
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 124,
+      "id_tail": 122
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 125,
+      "id_tail": 122
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 126,
+      "id_tail": 122
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 127,
+      "id_tail": 122
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 218,
+      "id_tail": 122
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 124,
+      "id_tail": 123
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 125,
+      "id_tail": 123
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 126,
+      "id_tail": 123
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 127,
+      "id_tail": 123
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 219,
+      "id_tail": 123
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 124
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 125
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 134,
+      "id_tail": 126
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 135,
+      "id_tail": 127
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 134,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 135,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 224,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 129
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 129
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 134,
+      "id_tail": 129
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 135,
+      "id_tail": 129
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 225,
+      "id_tail": 129
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 130
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 130
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 134,
+      "id_tail": 130
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 135,
+      "id_tail": 130
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 226,
+      "id_tail": 130
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 131
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 131
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 134,
+      "id_tail": 131
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 135,
+      "id_tail": 131
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 227,
+      "id_tail": 131
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 140,
+      "id_tail": 132
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 141,
+      "id_tail": 133
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 134
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 143,
+      "id_tail": 135
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 140,
+      "id_tail": 136
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 141,
+      "id_tail": 136
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 136
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 143,
+      "id_tail": 136
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 232,
+      "id_tail": 136
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 140,
+      "id_tail": 137
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 141,
+      "id_tail": 137
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 137
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 143,
+      "id_tail": 137
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 233,
+      "id_tail": 137
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 140,
+      "id_tail": 138
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 141,
+      "id_tail": 138
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 138
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 143,
+      "id_tail": 138
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 234,
+      "id_tail": 138
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 140,
+      "id_tail": 139
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 141,
+      "id_tail": 139
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 139
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 143,
+      "id_tail": 139
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 235,
+      "id_tail": 139
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 204,
+      "id_tail": 200
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 205,
+      "id_tail": 200
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 206,
+      "id_tail": 200
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 207,
+      "id_tail": 200
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 204,
+      "id_tail": 201
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 205,
+      "id_tail": 201
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 206,
+      "id_tail": 201
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 207,
+      "id_tail": 201
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 204,
+      "id_tail": 202
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 205,
+      "id_tail": 202
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 206,
+      "id_tail": 202
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 207,
+      "id_tail": 202
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 204,
+      "id_tail": 203
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 205,
+      "id_tail": 203
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 206,
+      "id_tail": 203
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 207,
+      "id_tail": 203
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 212,
+      "id_tail": 204
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 213,
+      "id_tail": 205
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 214,
+      "id_tail": 206
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 215,
+      "id_tail": 207
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 212,
+      "id_tail": 208
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 213,
+      "id_tail": 208
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 214,
+      "id_tail": 208
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 215,
+      "id_tail": 208
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 212,
+      "id_tail": 209
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 213,
+      "id_tail": 209
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 214,
+      "id_tail": 209
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 215,
+      "id_tail": 209
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 212,
+      "id_tail": 210
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 213,
+      "id_tail": 210
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 214,
+      "id_tail": 210
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 215,
+      "id_tail": 210
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 212,
+      "id_tail": 211
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 213,
+      "id_tail": 211
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 214,
+      "id_tail": 211
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 215,
+      "id_tail": 211
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 220,
+      "id_tail": 212
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 221,
+      "id_tail": 213
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 222,
+      "id_tail": 214
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 223,
+      "id_tail": 215
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 220,
+      "id_tail": 216
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 221,
+      "id_tail": 216
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 222,
+      "id_tail": 216
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 223,
+      "id_tail": 216
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 220,
+      "id_tail": 217
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 221,
+      "id_tail": 217
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 222,
+      "id_tail": 217
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 223,
+      "id_tail": 217
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 220,
+      "id_tail": 218
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 221,
+      "id_tail": 218
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 222,
+      "id_tail": 218
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 223,
+      "id_tail": 218
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 220,
+      "id_tail": 219
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 221,
+      "id_tail": 219
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 222,
+      "id_tail": 219
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 223,
+      "id_tail": 219
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 228,
+      "id_tail": 220
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 229,
+      "id_tail": 221
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 230,
+      "id_tail": 222
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 231,
+      "id_tail": 223
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 228,
+      "id_tail": 224
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 229,
+      "id_tail": 224
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 230,
+      "id_tail": 224
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 231,
+      "id_tail": 224
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 228,
+      "id_tail": 225
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 229,
+      "id_tail": 225
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 230,
+      "id_tail": 225
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 231,
+      "id_tail": 225
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 228,
+      "id_tail": 226
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 229,
+      "id_tail": 226
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 230,
+      "id_tail": 226
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 231,
+      "id_tail": 226
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 228,
+      "id_tail": 227
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 229,
+      "id_tail": 227
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 230,
+      "id_tail": 227
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 231,
+      "id_tail": 227
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 236,
+      "id_tail": 228
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 237,
+      "id_tail": 229
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 238,
+      "id_tail": 230
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 239,
+      "id_tail": 231
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 236,
+      "id_tail": 232
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 237,
+      "id_tail": 232
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 238,
+      "id_tail": 232
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 239,
+      "id_tail": 232
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 236,
+      "id_tail": 233
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 237,
+      "id_tail": 233
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 238,
+      "id_tail": 233
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 239,
+      "id_tail": 233
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 236,
+      "id_tail": 234
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 237,
+      "id_tail": 234
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 238,
+      "id_tail": 234
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 239,
+      "id_tail": 234
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 236,
+      "id_tail": 235
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 237,
+      "id_tail": 235
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 238,
+      "id_tail": 235
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 239,
+      "id_tail": 235
+    }
+  ],
+  "scale": 1.0,
+  "variable_domain": "spin",
+  "variable_ids": [
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229,
+    230,
+    231,
+    232,
+    233,
+    234,
+    235,
+    236,
+    237,
+    238,
+    239
+  ],
+  "version": "1.0.0"
+}
