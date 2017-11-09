@@ -26,7 +26,7 @@ def generate_const(qpu, coupling=0.0, field=0.0):
     return QPUConfiguration(qpu, fields, couplings)
 
 
-def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state=False):
+def generate_ran(qpu, probability=0.5, steps=1, feild=False, scale=1.0, simple_ground_state=False):
     '''This function builds random couplings as described by, https://arxiv.org/abs/1511.02476,
     which is a generalization of https://arxiv.org/abs/1508.05087
     '''
@@ -56,9 +56,9 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, simple_ground_state
     fm_choices = [float(x) for x in range(1, steps+1)]
 
     if feild:
-        fields = {site : -1*spins[site]*random.choice(fm_choices) for site in sorted(qpu.sites)}
+        fields = {site : -scale*spins[site]*random.choice(fm_choices) for site in sorted(qpu.sites)}
 
-    couplings = {coupler : -1*spins[coupler[0]]*spins[coupler[1]]*random.choice(fm_choices) for coupler in sorted(qpu.couplers)}
+    couplings = {coupler : -scale*spins[coupler[0]]*spins[coupler[1]]*random.choice(fm_choices) for coupler in sorted(qpu.couplers)}
 
 
     # With probability alpha, override non-frustrated couplings and fields with random ones
