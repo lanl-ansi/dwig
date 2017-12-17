@@ -74,12 +74,25 @@ def build_case(args):
     else:
         assert(False) # CLI failed
 
+    if args.include_zeros:
+        config = qpu_config
+        if isinstance(qpu_config, QPUAssignment):
+            config = qpu_config.qpu_config
+        for site in config.qpu.sites:
+            if not site in config.fields:
+                config.fields[site] = 0.0
+        for coupler in config.qpu.couplers:
+            if not coupler in config.couplings:
+                config.couplings[coupler] = 0.0
+
     #print_err(qpu_config)
     if args.omit_solution:
         if isinstance(qpu_config, QPUAssignment):
             qpu_config = qpu_config.qpu_config
 
-    data = qpu_config.build_dict()
+
+
+    data = qpu_config.build_dict(args.include_zeros)
 
     data['description'] = 'This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the {} algorithm.'.format(args.generator)
     if not args.seed is None:
@@ -214,6 +227,7 @@ def build_cli_parser():
     parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
+    parser.add_argument('-iz', '--include-zeros', help='include zero values in output', action='store_true', default=False)
     parser.add_argument('-cl', '--cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
 
     parser.add_argument('-ccb', '--chimera-cell-box', help='two chimera cell coordinates define a box that is used to filter the hardware graph', nargs=4, type=int)
