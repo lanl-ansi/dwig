@@ -190,22 +190,28 @@ def load_config(args):
             try:
                 config_data = json.load(config_file)
                 for key, value in config_data.items():
-                    if isinstance(value, dict) or isinstance(value, list):
-                        print('invalid value for configuration key "{}", only single values are allowed'.format(config_file_path))
+                    if isinstance(value, dict):
+                        print_err('invalid value for configuration key "%s", only single values are allowed' % config_file_path)
                         quit()
                     if not hasattr(args, key) or getattr(args, key) == None:
                         if isinstance(value, unicode):
                             value = value.encode('ascii','ignore')
+                        if isinstance(value, list):
+                            new_list = []
+                            for item in value:
+                                if isinstance(item, unicode):
+                                    item = item.encode('ascii','ignore')
+                                new_list.append(item)
+                            value = new_list
                         setattr(args, key, value)
                     else:
-                        print('skipping the configuration key "{}", it already has a value of {}'.format(key, str(getattr(args, key))))
-                    #print(key, value)
+                        print_err('skipping the configuration key "%s", it already has a value of %s' % (key, str(getattr(args, key))))
             except ValueError:
-                print('the config file does not appear to be a valid json document: {}'.format(config_file_path))
+                print_err('the config file does not appear to be a valid json document: %s' % config_file_path)
                 quit()
     else:
         if config_file_path != DEFAULT_CONFIG_FILE:
-            print('unable to open conifguration file: {}'.format(config_file_path))
+            print_err('unable to open conifguration file: %s' % config_file_path)
             quit()
 
     return args
