@@ -83,7 +83,7 @@ class TestCellFilter:
     def test_cell_limit(self, capfd):
 
         for cell_limit in range(1,9):
-            cli_args = ['-cd', '3', '-tl', '-rs', '0', '-cl', str(cell_limit), 'ran']
+            cli_args = ['-cd', '3', '-tl', '-rs', '0', '-ccl', str(cell_limit), 'ran']
             json_base = run_dwig_cli(self.parser, cli_args)
 
             assert(len(json_base['variable_ids']) == 8*cell_limit)

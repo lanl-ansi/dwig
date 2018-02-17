@@ -154,7 +154,7 @@ Range = namedtuple('Range', ['lb', 'ub'])
 
 
 class ChimeraQPU(object):
-    def __init__(self, sites, couplers, cell_size, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None):
+    def __init__(self, sites, couplers, cell_size, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None, base_url = None, solver_name = None):
         if chimera_degree_view == None:
             self.chimera_degree_view = chimera_degree
         else:
@@ -162,6 +162,9 @@ class ChimeraQPU(object):
 
         self.cell_size = int(cell_size)
         self.chip_id = chip_id
+
+        self.base_url = base_url
+        self.solver_name = solver_name
 
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
 
