@@ -69,25 +69,7 @@ See the doc strings inside of `generator.py` for additional documentation on eac
 
 ### Connecting to a QPU
 
-Without any connection details, D-WIG will assume a full yield QPU of chimera degree 12.  Connection details are required to build B-QPs from a specific QPU.  The simplest way to add connection details is via the following command line arguments,
-```
-./dwig.py 
-    -url <d-wave endpoint url>
-    -token <sapi token>
-    -solver <solver name>
-    ran
-```
-
-Alternatively, a `_config` file can be placed in the D-WIG directory of the following form,
-```
-{
-    "dw_url":"<d-wave endpoint url>",
-    "dw_token":"<sapi token>",
-    "dw_solver_name":"<solver name>"
-}
-```
-The configuration file is a json document that can be use to set default values for all command line parameters.
-
+D-WIG uses the `dwave_micro_client` for connecting to the QPU and will use your `.dwrc` file for default connection details.  A specific conneciton can be selected with the command line argument `--connection-label <label>`.  If no connection details are found, D-WIG will assume a full yield QPU of chimera degree 12.  The command line argument `--ignore-connection` can be used to ignore the defaults specificed in `.dwrc`. 
 
 ### Viewing a B-QP
 
