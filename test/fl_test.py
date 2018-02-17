@@ -13,23 +13,23 @@ class TestFLGeneration:
 
     #../dwig.py -pp -cd 2 -tl -rs 0 fl -sgs > data/fl_i_1.json
     def test_fl_i_1(self, capfd):
-        json_comp(self.parser, capfd, 'fl_i_1.json', ['-pp', '-cd', '2', '-tl', '-rs', '0', 'fl', '-sgs'])
+        json_comp(self.parser, capfd, 'fl_i_1.json', ['-ic', '-pp', '-cd', '2', '-tl', '-rs', '0', 'fl', '-sgs'])
 
     #../dwig.py -pp -cd 2 -tl -rs 0 fl -sgs -s 4 -a 0.3 > data/fl_i_2.json
     def test_fl_i_2(self, capfd):
-        json_comp(self.parser, capfd, 'fl_i_2.json', ['-pp', '-cd', '2', '-tl', '-rs', '0', 'fl', '-sgs', '-s', '4', '-a', '0.3'])
+        json_comp(self.parser, capfd, 'fl_i_2.json', ['-ic', '-pp', '-cd', '2', '-tl', '-rs', '0', 'fl', '-sgs', '-s', '4', '-a', '0.3'])
 
     #../dwig.py -pp -cd 2 -tl -rs 0 fl -sgs -mc -mll 0 > data/fl_i_3.json
     def test_fl_i_3(self, capfd):
-        json_comp(self.parser, capfd, 'fl_i_3.json', ['-pp', '-cd', '2', '-tl', '-rs', '0', 'fl', '-sgs', '-mc', '-mll', '0'])
+        json_comp(self.parser, capfd, 'fl_i_3.json', ['-ic', '-pp', '-cd', '2', '-tl', '-rs', '0', 'fl', '-sgs', '-mc', '-mll', '0'])
 
     #../dwig.py -pp -cd 12 -tl -rs 0 fl -sgs > data/fl_i_4.json
     def test_fl_i_4(self, capfd):
-        json_comp(self.parser, capfd, 'fl_i_4.json', ['-pp', '-cd', '12', '-tl', '-rs', '0', 'fl', '-sgs'])
+        json_comp(self.parser, capfd, 'fl_i_4.json', ['-ic', '-pp', '-cd', '12', '-tl', '-rs', '0', 'fl', '-sgs'])
 
     #../dwig.py -pp -cd  2 -tl -rs 0 fl > data/fl_i_5.json
     def test_fl_i_5(self, capfd):
-        json_comp(self.parser, capfd, 'fl_i_5.json', ['-pp', '-cd', '2', '-tl', '-rs', '0', 'fl'])
+        json_comp(self.parser, capfd, 'fl_i_5.json', ['-ic', '-pp', '-cd', '2', '-tl', '-rs', '0', 'fl'])
 
 
 class TestFLFrustration:
@@ -38,7 +38,7 @@ class TestFLFrustration:
 
     # alpha settingh ensures that this generates exactly one cycle
     def test_eq(self, capfd):
-        cli_args = ['-cd', '1', '-tl', '-rs', '0', 'fl', '-s', '1', '-a', '0.13', '-sgs']
+        cli_args = ['-ic', '-cd', '1', '-tl', '-rs', '0', 'fl', '-s', '1', '-a', '0.13', '-sgs']
         case = run_dwig_cli(self.parser, cli_args)
 
         coefficients = [qt['coeff'] for qt in case['quadratic_terms']]
@@ -52,7 +52,7 @@ class TestFLGroundState:
 
     #../dwig.py -pp -cd 2 -tl -rs 0 fl -sgs > data/fl_i_1.json
     def test_eq(self, capfd):
-        cli_args = ['-cd', '2', '-tl', '-rs', '0', 'fl']
+        cli_args = ['-ic', '-cd', '2', '-tl', '-rs', '0', 'fl']
 
         json_base = run_dwig_cli(self.parser, cli_args)
 

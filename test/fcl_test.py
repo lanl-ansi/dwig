@@ -13,19 +13,19 @@ class TestFCLGeneration:
 
     #../dwig.py -pp -cd 6 -tl -rs 0 fl -sgs -ccc -a 0.1 > data/fcl_i_1.json
     def test_fcl_i_1(self, capfd):
-        json_comp(self.parser, capfd, 'fcl_i_1.json', ['-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-sgs', '-ccc', '-a', '0.1'])
+        json_comp(self.parser, capfd, 'fcl_i_1.json', ['-ic', '-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-sgs', '-ccc', '-a', '0.1'])
 
     #../dwig.py -pp -cd 6 -tl -rs 0 fl -sgs -ccc -s 4 > data/fcl_i_2.json
     def test_fcl_i_2(self, capfd):
-        json_comp(self.parser, capfd, 'fcl_i_2.json', ['-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-sgs', '-ccc', '-s', '4'])
+        json_comp(self.parser, capfd, 'fcl_i_2.json', ['-ic', '-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-sgs', '-ccc', '-s', '4'])
 
     #../dwig.py -pp -cd 12 -tl -rs 1 fl -sgs -ccc > data/fcl_i_3.json
     def test_fcl_i_3(self, capfd):
-        json_comp(self.parser, capfd, 'fcl_i_3.json', ['-pp', '-cd', '12', '-tl', '-rs', '1', 'fl', '-sgs', '-ccc'])
+        json_comp(self.parser, capfd, 'fcl_i_3.json', ['-ic', '-pp', '-cd', '12', '-tl', '-rs', '1', 'fl', '-sgs', '-ccc'])
 
     #../dwig.py -pp -cd 6 -tl -rs 0 fl -ccc -a 0.1 > data/fcl_i_4.json
     def test_fcl_i_4(self, capfd):
-        json_comp(self.parser, capfd, 'fcl_i_4.json', ['-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-ccc', '-a', '0.1'])
+        json_comp(self.parser, capfd, 'fcl_i_4.json', ['-ic', '-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-ccc', '-a', '0.1'])
 
 
 class TestFCLGroundState:
@@ -34,7 +34,7 @@ class TestFCLGroundState:
 
     #../dwig.py -pp -cd 6 -tl -rs 0 fl -sgs -ccc -a 0.1 > data/fcl_i_1.json
     def test_eq(self, capfd):
-        cli_args = ['-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-ccc', '-a', '0.1']
+        cli_args = ['-ic', '-pp', '-cd', '6', '-tl', '-rs', '0', 'fl', '-ccc', '-a', '0.1']
 
         json_base = run_dwig_cli(self.parser, cli_args)
 

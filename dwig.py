@@ -31,7 +31,7 @@ def build_case(args):
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
-    qpu = get_qpu(args.connection_label, args.hardware_chimera_degree)
+    qpu = get_qpu(args.connection_label, args.ignore_connection, args.hardware_chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
@@ -121,38 +121,41 @@ def build_metadata(args, qpu):
     return metadata
 
 
-def get_qpu(connection_label, hardware_chimera_degree):
+def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
     chip_id = None
     base_url = None
     solver_name = None
     cell_size = 8
 
-    try:
-        conn = dwave_micro_client.Connection(permissive_ssl=True)
-        solver = conn.get_solver()
+    if not ignore_connection:
+        try:
+            conn = dwave_micro_client.Connection(permissive_ssl=True)
+            solver = conn.get_solver()
 
-        base_url = conn.base_url
-        solver_name = conn.default_solver
+            base_url = conn.base_url
+            solver_name = conn.default_solver
 
-        couplers = solver.properties['couplers']
-        couplers = set([tuple(coupler) for coupler in couplers])
+            couplers = solver.properties['couplers']
+            couplers = set([tuple(coupler) for coupler in couplers])
 
-        sites = solver.properties['qubits']
+            sites = solver.properties['qubits']
 
-        solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
-        if hardware_chimera_degree != solver_chimera_degree:
-            print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
-            hardware_chimera_degree = solver_chimera_degree
+            solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
+            if hardware_chimera_degree != solver_chimera_degree:
+                print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
+                hardware_chimera_degree = solver_chimera_degree
 
-        site_range = Range(*solver.properties['h_range'])
-        coupler_range = Range(*solver.properties['j_range'])
-        chip_id = solver.properties['chip_id']
+            site_range = Range(*solver.properties['h_range'])
+            coupler_range = Range(*solver.properties['j_range'])
+            chip_id = solver.properties['chip_id']
 
-    # TODO remove try/except logic, if there is a better way to check the connection
-    except: 
-        print_err('QPU connection details not found or there was a connection error')
-        print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
+        # TODO remove try/except logic, if there is a better way to check the connection
+        except: 
+            print_err('QPU connection details not found or there was a connection error')
+            print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
+            ignore_connection = True
 
+    if ignore_connection:
         site_range = Range(-2.0, 2.0)
         coupler_range = Range(-1.0, 1.0)
 
@@ -173,9 +176,9 @@ def get_qpu(connection_label, hardware_chimera_degree):
 
         sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
 
-    # sanity check on coupler consistency across both branches
-    for i,j in couplers:
-        assert(i < j)
+        # sanity check on coupler consistency across both branches
+        for i,j in couplers:
+            assert(i < j)
 
     return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, base_url=base_url, solver_name=solver_name)
 
@@ -184,6 +187,7 @@ def build_cli_parser():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-cl', '--connection-label', help='connection details to load from .dwrc')
+    parser.add_argument('-ic', '--ignore-connection', help='force .dwrc connection details to be ignored', action='store_true', default=False)
 
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
