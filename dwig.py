@@ -165,9 +165,9 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
         coupler_range = Range(-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
-        graph = dwave_networkx.chimera_graph(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
+        graph = dwave_networkx.chimera_graph(hardware_chimera_degree, hardware_chimera_degree, cell_size//2)
         edges = graph.edges()
-        #arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
+        #arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size//2)
         #print(arcs)
 
         # turn arcs into couplers
