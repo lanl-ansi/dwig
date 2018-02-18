@@ -5,6 +5,7 @@ from __future__ import print_function
 import sys, os, json, argparse, random, math, datetime
 
 import dwave_micro_client
+import dwave_networkx
 
 from structure import QPUAssignment
 from structure import ChimeraQPU
@@ -14,7 +15,7 @@ import generator
 from common import print_err
 from common import validate_bqp_data
 from common import json_dumps_kwargs
-from common import get_chimera_adjacency
+#from common import get_chimera_adjacency
 
 
 def main(args, output_stream=sys.stdout):
@@ -129,7 +130,11 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
 
     if not ignore_connection:
         try:
-            conn = dwave_micro_client.Connection(permissive_ssl=True)
+            if connection_label != None:
+                conn = dwave_micro_client.Connection(connection_label, permissive_ssl=True)
+            else:
+                conn = dwave_micro_client.Connection(permissive_ssl=True)
+
             solver = conn.get_solver()
 
             base_url = conn.base_url
@@ -160,13 +165,15 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
         coupler_range = Range(-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
-        arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
+        graph = dwave_networkx.chimera_graph(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
+        edges = graph.edges()
+        #arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
         #print(arcs)
 
         # turn arcs into couplers
         # this step is nessisary to be consistent with the solver.properties['couplers'] data
         couplers = []
-        for i,j in arcs:
+        for i,j in edges:
             assert(i != j)
             if i < j:
                 couplers.append((i,j))
@@ -186,7 +193,7 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-cl', '--connection-label', help='connection details to load from .dwrc')
+    parser.add_argument('-cl', '--connection-label', help='connection details to load from .dwrc', default=None)
     parser.add_argument('-ic', '--ignore-connection', help='force .dwrc connection details to be ignored', action='store_true', default=False)
 
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
