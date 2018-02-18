@@ -3,11 +3,14 @@ bqpjson==0.5.0
 certifi==2018.1.18
 chardet==3.0.4
 coverage==4.5.1
+decorator==4.2.1
 dwave-micro-client==0.2.2
+dwave-networkx==0.6.0
 funcsigs==1.0.2
 functools32==3.2.3.post2
 idna==2.6
 jsonschema==2.6.0
+networkx==2.1
 pluggy==0.6.0
 py==1.5.2
 pytest==3.4.0
