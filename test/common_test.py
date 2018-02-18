@@ -1,6 +1,9 @@
 import sys, os, json
 
-from cStringIO import StringIO
+if (sys.version_info > (3, 0)):
+    from io import StringIO
+else:
+    from cStringIO import StringIO
 
 sys.path.append('.')
 
