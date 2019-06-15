@@ -4,6 +4,7 @@ bqpjson==0.5.1
 certifi==2019.3.9
 chardet==3.0.4
 Click==7.0
+coverage==4.5.3
 decorator==4.4.0
 dimod==0.8.14
 dwave-cloud-client==0.5.4
@@ -22,6 +23,7 @@ py==1.8.0
 pyparsing==2.4.0
 PySocks==1.7.0
 pytest==4.6.3
+pytest-cov==2.7.1
 python-dateutil==2.8.0
 requests==2.22.0
 six==1.12.0
