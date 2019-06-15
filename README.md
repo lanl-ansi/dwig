@@ -52,9 +52,10 @@ A detailed list of all command line options can be viewed via,
 
 The D-Wig toolset currently supports three types of problem generation,
 
-1. __ran__ - the fields are couplers are set uniformly at random
-2. __fl__ - frustrated loops
-3. __wscn__ - weak-strong cluster networks
+1. __const__ - fields are couplers are set to a given constant value
+2. __ran__ - fields are couplers are set uniformly at random
+3. __fl__ - frustrated loops
+4. __wscn__ - weak-strong cluster networks
 
 A detailed list of command line options for each problem type can be viewed via,
 ```
