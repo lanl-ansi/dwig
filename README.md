@@ -2,7 +2,7 @@
 
 The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 
-`dwig.py` is the primary entry point and generats B-QP instances in the bqpjson format.
+`dwig.py` is the primary entry point and generates Unconstrained Binary Quadratic Programming instances in the bqpjson format.
 
 The remainder of this documentation assumes that,
 
