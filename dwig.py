@@ -1,10 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 from __future__ import print_function
 
 import sys, os, json, argparse, random, math, datetime
 
-import dwave_micro_client
+from dwave.cloud import Client
 import dwave_networkx
 
 from structure import QPUAssignment
@@ -32,7 +32,7 @@ def build_case(args):
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
-    qpu = get_qpu(args.connection_label, args.ignore_connection, args.hardware_chimera_degree)
+    qpu = get_qpu(args.profile, args.ignore_connection, args.hardware_chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
@@ -122,7 +122,7 @@ def build_metadata(args, qpu):
     return metadata
 
 
-def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
+def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     chip_id = None
     base_url = None
     solver_name = None
@@ -130,20 +130,13 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
 
     if not ignore_connection:
         try:
-            if connection_label != None:
-                conn = dwave_micro_client.Connection(connection_label, permissive_ssl=True)
-            else:
-                conn = dwave_micro_client.Connection(permissive_ssl=True)
+            client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile, permissive_ssl=True)
+            base_url = client.endpoint
 
-            solver = conn.get_solver()
-
-            base_url = conn.base_url
-            solver_name = conn.default_solver
-
-            couplers = solver.properties['couplers']
-            couplers = set([tuple(coupler) for coupler in couplers])
-
-            sites = solver.properties['qubits']
+            solver = client.get_solver()
+            solver_name = solver.name
+            couplers = solver.undirected_edges
+            sites = solver.nodes
 
             solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
             if hardware_chimera_degree != solver_chimera_degree:
@@ -154,11 +147,11 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
             coupler_range = Range(*solver.properties['j_range'])
             chip_id = solver.properties['chip_id']
 
-        # TODO remove try/except logic, if there is a better way to check the connection
+        #TODO remove try/except logic, if there is a better way to check the connection
         except: 
-            print_err('QPU connection details not found or there was a connection error')
-            print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
-            ignore_connection = True
+           print_err('QPU connection details not found or there was a connection error')
+           print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
+           ignore_connection = True
 
     if ignore_connection:
         site_range = Range(-2.0, 2.0)
@@ -193,13 +186,13 @@ def get_qpu(connection_label, ignore_connection, hardware_chimera_degree):
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-cl', '--connection-label', help='connection details to load from .dwrc', default=None)
+    parser.add_argument('-p', '--profile', help='connection details to load from .dwrc', default=None)
     parser.add_argument('-ic', '--ignore-connection', help='force .dwrc connection details to be ignored', action='store_true', default=False)
 
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
-    parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
+    parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=16)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
     parser.add_argument('-iz', '--include-zeros', help='include zero values in output', action='store_true', default=False)
