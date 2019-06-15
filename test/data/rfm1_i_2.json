@@ -1,6 +1,6 @@
 {
   "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the ran algorithm.  A random number seed of 0 was used.",
-  "id": 234199940,
+  "id": 872745308,
   "linear_terms": [
     {
       "coeff": -1.0,
@@ -15,7 +15,7 @@
       "id": 2
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id": 3
     },
     {
@@ -23,7 +23,7 @@
       "id": 4
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id": 5
     },
     {
@@ -31,13 +31,13 @@
       "id": 6
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id": 7
     }
   ],
   "metadata": {
     "chimera_cell_size": 8,
-    "chimera_degree": 12,
+    "chimera_degree": 16,
     "dwig_generator": "ran"
   },
   "offset": 0.0,
@@ -48,7 +48,7 @@
       "id_tail": 0
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 5,
       "id_tail": 0
     },
@@ -58,7 +58,7 @@
       "id_tail": 0
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 7,
       "id_tail": 0
     },
@@ -68,7 +68,7 @@
       "id_tail": 1
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 5,
       "id_tail": 1
     },
@@ -78,7 +78,7 @@
       "id_tail": 1
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 7,
       "id_tail": 1
     },
@@ -88,7 +88,7 @@
       "id_tail": 2
     },
     {
-      "coeff": -1.0,
+      "coeff": 1.0,
       "id_head": 5,
       "id_tail": 2
     },
@@ -98,12 +98,12 @@
       "id_tail": 2
     },
     {
-      "coeff": -1.0,
+      "coeff": 1.0,
       "id_head": 7,
       "id_tail": 2
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 4,
       "id_tail": 3
     },
@@ -113,7 +113,7 @@
       "id_tail": 3
     },
     {
-      "coeff": 1.0,
+      "coeff": -1.0,
       "id_head": 6,
       "id_tail": 3
     },
@@ -141,7 +141,7 @@
         },
         {
           "id": 3,
-          "value": -1
+          "value": 1
         },
         {
           "id": 4,
@@ -149,7 +149,7 @@
         },
         {
           "id": 5,
-          "value": -1
+          "value": 1
         },
         {
           "id": 6,
@@ -157,7 +157,7 @@
         },
         {
           "id": 7,
-          "value": -1
+          "value": 1
         }
       ],
       "description": "unique planted ground state",

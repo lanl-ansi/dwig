@@ -1,52 +1,62 @@
 {
   "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the fl algorithm.  A random number seed of 0 was used.",
-  "id": 2123195369,
+  "id": 61380729,
   "linear_terms": [],
   "metadata": {
     "chimera_cell_size": 8,
-    "chimera_degree": 12,
+    "chimera_degree": 16,
     "dwig_generator": "fl"
   },
   "offset": 0.0,
   "quadratic_terms": [
     {
       "coeff": -0.5,
+      "id_head": 5,
+      "id_tail": 0
+    },
+    {
+      "coeff": -0.5,
       "id_head": 7,
       "id_tail": 0
     },
     {
-      "coeff": -0.5,
-      "id_head": 96,
+      "coeff": -1.0,
+      "id_head": 128,
       "id_tail": 0
     },
     {
-      "coeff": 0.5,
-      "id_head": 4,
-      "id_tail": 1
-    },
-    {
-      "coeff": -0.5,
-      "id_head": 97,
-      "id_tail": 1
-    },
-    {
       "coeff": -0.5,
       "id_head": 4,
-      "id_tail": 2
+      "id_tail": 1
     },
     {
       "coeff": -0.5,
       "id_head": 5,
-      "id_tail": 2
+      "id_tail": 1
+    },
+    {
+      "coeff": 0.5,
+      "id_head": 6,
+      "id_tail": 1
     },
     {
       "coeff": -0.5,
+      "id_head": 129,
+      "id_tail": 1
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 4,
+      "id_tail": 2
+    },
+    {
+      "coeff": -1.0,
       "id_head": 7,
       "id_tail": 2
     },
     {
       "coeff": -0.5,
-      "id_head": 98,
+      "id_head": 130,
       "id_tail": 2
     },
     {
@@ -56,7 +66,7 @@
     },
     {
       "coeff": -0.5,
-      "id_head": 5,
+      "id_head": 131,
       "id_tail": 3
     },
     {
@@ -65,38 +75,38 @@
       "id_tail": 4
     },
     {
+      "coeff": -0.5,
+      "id_head": 14,
+      "id_tail": 6
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 15,
+      "id_tail": 7
+    },
+    {
       "coeff": 0.5,
-      "id_head": 12,
+      "id_head": 13,
       "id_tail": 8
     },
     {
-      "coeff": -1.0,
+      "coeff": -0.5,
       "id_head": 15,
       "id_tail": 8
     },
     {
-      "coeff": -0.5,
-      "id_head": 104,
+      "coeff": -1.0,
+      "id_head": 136,
       "id_tail": 8
     },
     {
       "coeff": -0.5,
-      "id_head": 13,
-      "id_tail": 9
-    },
-    {
-      "coeff": -0.5,
-      "id_head": 14,
-      "id_tail": 9
-    },
-    {
-      "coeff": -1.0,
       "id_head": 15,
       "id_tail": 9
     },
     {
-      "coeff": -1.0,
-      "id_head": 105,
+      "coeff": -0.5,
+      "id_head": 137,
       "id_tail": 9
     },
     {
@@ -105,18 +115,23 @@
       "id_tail": 10
     },
     {
+      "coeff": -1.0,
+      "id_head": 14,
+      "id_tail": 10
+    },
+    {
       "coeff": -0.5,
-      "id_head": 13,
+      "id_head": 15,
       "id_tail": 10
     },
     {
       "coeff": -1.0,
-      "id_head": 106,
+      "id_head": 138,
       "id_tail": 10
     },
     {
       "coeff": -0.5,
-      "id_head": 12,
+      "id_head": 13,
       "id_tail": 11
     },
     {
@@ -126,93 +141,83 @@
     },
     {
       "coeff": -1.0,
-      "id_head": 107,
-      "id_tail": 11
+      "id_head": 132,
+      "id_tail": 128
     },
     {
       "coeff": -0.5,
-      "id_head": 103,
-      "id_tail": 96
-    },
-    {
-      "coeff": -0.5,
-      "id_head": 100,
-      "id_tail": 97
+      "id_head": 133,
+      "id_tail": 128
     },
     {
       "coeff": -1.0,
-      "id_head": 102,
-      "id_tail": 98
+      "id_head": 134,
+      "id_tail": 128
     },
     {
       "coeff": -0.5,
-      "id_head": 103,
-      "id_tail": 98
+      "id_head": 135,
+      "id_tail": 128
     },
     {
       "coeff": -0.5,
-      "id_head": 100,
-      "id_tail": 99
+      "id_head": 132,
+      "id_tail": 129
     },
     {
       "coeff": -0.5,
-      "id_head": 101,
-      "id_tail": 99
+      "id_head": 132,
+      "id_tail": 130
     },
     {
       "coeff": -1.0,
-      "id_head": 108,
-      "id_tail": 100
+      "id_head": 134,
+      "id_tail": 130
     },
     {
       "coeff": -0.5,
-      "id_head": 109,
-      "id_tail": 101
-    },
-    {
-      "coeff": -1.0,
-      "id_head": 110,
-      "id_tail": 102
+      "id_head": 134,
+      "id_tail": 131
     },
     {
       "coeff": -0.5,
-      "id_head": 109,
-      "id_tail": 104
-    },
-    {
-      "coeff": -1.0,
-      "id_head": 110,
-      "id_tail": 104
-    },
-    {
-      "coeff": -1.0,
-      "id_head": 108,
-      "id_tail": 105
+      "id_head": 141,
+      "id_tail": 133
     },
     {
       "coeff": -0.5,
-      "id_head": 109,
-      "id_tail": 106
-    },
-    {
-      "coeff": 0.5,
-      "id_head": 111,
-      "id_tail": 106
-    },
-    {
-      "coeff": -1.0,
-      "id_head": 108,
-      "id_tail": 107
+      "id_head": 142,
+      "id_tail": 134
     },
     {
       "coeff": -0.5,
-      "id_head": 109,
-      "id_tail": 107
+      "id_head": 143,
+      "id_tail": 135
     },
     {
       "coeff": -0.5,
-      "id_head": 111,
-      "id_tail": 107
+      "id_head": 140,
+      "id_tail": 136
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 142,
+      "id_tail": 136
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 140,
+      "id_tail": 137
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 141,
+      "id_tail": 139
+    },
+    {
+      "coeff": -0.5,
+      "id_head": 143,
+      "id_tail": 139
     }
   ],
   "scale": 1.0,
@@ -241,6 +246,10 @@
         },
         {
           "id": 5,
+          "value": -1
+        },
+        {
+          "id": 6,
           "value": -1
         },
         {
@@ -280,67 +289,67 @@
           "value": -1
         },
         {
-          "id": 96,
+          "id": 128,
           "value": -1
         },
         {
-          "id": 97,
+          "id": 129,
           "value": -1
         },
         {
-          "id": 98,
+          "id": 130,
           "value": -1
         },
         {
-          "id": 99,
+          "id": 131,
           "value": -1
         },
         {
-          "id": 100,
+          "id": 132,
           "value": -1
         },
         {
-          "id": 101,
+          "id": 133,
           "value": -1
         },
         {
-          "id": 102,
+          "id": 134,
           "value": -1
         },
         {
-          "id": 103,
+          "id": 135,
           "value": -1
         },
         {
-          "id": 104,
+          "id": 136,
           "value": -1
         },
         {
-          "id": 105,
+          "id": 137,
           "value": -1
         },
         {
-          "id": 106,
+          "id": 138,
           "value": -1
         },
         {
-          "id": 107,
+          "id": 139,
           "value": -1
         },
         {
-          "id": 108,
+          "id": 140,
           "value": -1
         },
         {
-          "id": 109,
+          "id": 141,
           "value": -1
         },
         {
-          "id": 110,
+          "id": 142,
           "value": -1
         },
         {
-          "id": 111,
+          "id": 143,
           "value": -1
         }
       ],
@@ -357,6 +366,7 @@
     3,
     4,
     5,
+    6,
     7,
     8,
     9,
@@ -366,22 +376,22 @@
     13,
     14,
     15,
-    96,
-    97,
-    98,
-    99,
-    100,
-    101,
-    102,
-    103,
-    104,
-    105,
-    106,
-    107,
-    108,
-    109,
-    110,
-    111
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143
   ],
   "version": "1.0.0"
 }

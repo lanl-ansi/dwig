@@ -21,7 +21,7 @@ class TestFCLGeneration:
 
     #../dwig.py -pp -cd 12 -tl -rs 1 fl -sgs -ccc > data/fcl_i_3.json
     def test_fcl_i_3(self, capfd):
-        json_comp(self.parser, capfd, 'fcl_i_3.json', ['-ic', '-pp', '-cd', '12', '-tl', '-rs', '1', 'fl', '-sgs', '-ccc'])
+        json_comp(self.parser, capfd, 'fcl_i_3.json', ['-ic', '-pp', '-cd', '16', '-tl', '-rs', '1', 'fl', '-sgs', '-ccc'])
 
     #../dwig.py -pp -cd 6 -tl -rs 0 fl -ccc -a 0.1 > data/fcl_i_4.json
     def test_fcl_i_4(self, capfd):

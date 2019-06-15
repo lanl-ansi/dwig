@@ -1,5 +1,3 @@
 #!/bin/bash
 
-python2 -m py.test --ignore=venv --cov=dwig --cov=common --cov=generator --cov=structure --cov-report=html $@
-
-# python3 -m pytest --ignore=venv --cov=dwig --cov=common --cov=generator --cov=structure --cov-report=html $@
+pytest test
