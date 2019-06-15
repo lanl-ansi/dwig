@@ -2,7 +2,7 @@
 
 The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 
-`dwig.py` is the primary entry point and generates Unconstrained Binary Quadratic Programming instances in the bqpjson format.
+`dwig.py` is the primary entry point and generates binary unconstrained quadratic programming problems (B-QP) in the bqpjson format.
 
 The remainder of this documentation assumes that,
 
@@ -13,12 +13,8 @@ The remainder of this documentation assumes that,
 
 ## Installation
 
-The D-WIG toolset requires `dwave-sapi2` and `bqpjson` to run and `pytest` for testing.
-To install these requirements first make sure that the `dwave-sapi2` library is installed by running,
-```
-python <path to sapi>/install.py
-```
-Then the remaining dependencies can be installed via,
+The D-WIG toolset requires `dwave-cloud-client`, `dwave_networkx` and `bqpjson` to run and `pytest` for testing.
+These requirements can be installed with,
 ```
 pip install -r requirements.txt
 ```
@@ -69,7 +65,8 @@ See the doc strings inside of `generator.py` for additional documentation on eac
 
 ### Connecting to a QPU
 
-D-WIG uses the `dwave_micro_client` for connecting to the QPU and will use your `.dwrc` file for default connection details.  A specific conneciton can be selected with the command line argument `--connection-label <label>`.  If no connection details are found, D-WIG will assume a full yield QPU of chimera degree 12.  The command line argument `--ignore-connection` can be used to ignore the defaults specificed in `.dwrc`. 
+D-WIG uses the `dwave-cloud-client` for connecting to the QPU and will use your `dwave.conf` file for the configuration details.  A specific profile can be selected with the command line argument `--profile <label>`.  If no configuration details are found, D-WIG will assume a full yield QPU of chimera degree 16.  The command line argument `--ignore-connection` can be used to ignore the defaults specified in `dwave.conf`. 
+
 
 ### Viewing a B-QP
 
