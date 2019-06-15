@@ -104,8 +104,8 @@ def build_case(args):
 
 def build_metadata(args, qpu):
     metadata = {}
-    if not qpu.base_url is None:
-        metadata['dw_url'] = qpu.base_url
+    if not qpu.endpoint is None:
+        metadata['dw_endpoint'] = qpu.endpoint
     if not qpu.solver_name is None:
         metadata['dw_solver_name'] = qpu.solver_name
     if not qpu.chip_id is None:
@@ -124,14 +124,14 @@ def build_metadata(args, qpu):
 
 def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     chip_id = None
-    base_url = None
+    endpoint = None
     solver_name = None
     cell_size = 8
 
     if not ignore_connection:
         try:
-            client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile, permissive_ssl=True)
-            base_url = client.endpoint
+            client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile)
+            endpoint = client.endpoint
 
             solver = client.get_solver()
             solver_name = solver.name
@@ -180,13 +180,13 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
         for i,j in couplers:
             assert(i < j)
 
-    return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, base_url=base_url, solver_name=solver_name)
+    return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, endpoint=endpoint, solver_name=solver_name)
 
 
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-p', '--profile', help='connection details to load from .dwrc', default=None)
+    parser.add_argument('-p', '--profile', help='connection details to load from dwave.conf', default=None)
     parser.add_argument('-ic', '--ignore-connection', help='force .dwrc connection details to be ignored', action='store_true', default=False)
 
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)

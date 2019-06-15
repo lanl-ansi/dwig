@@ -154,7 +154,7 @@ Range = namedtuple('Range', ['lb', 'ub'])
 
 
 class ChimeraQPU(object):
-    def __init__(self, sites, couplers, cell_size, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None, base_url = None, solver_name = None):
+    def __init__(self, sites, couplers, cell_size, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None, endpoint = None, solver_name = None):
         if chimera_degree_view == None:
             self.chimera_degree_view = chimera_degree
         else:
@@ -163,7 +163,7 @@ class ChimeraQPU(object):
         self.cell_size = int(cell_size)
         self.chip_id = chip_id
 
-        self.base_url = base_url
+        self.endpoint = endpoint
         self.solver_name = solver_name
 
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
@@ -197,7 +197,7 @@ class ChimeraQPU(object):
         filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree_view)])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
     def cell_filter(self, max_cell):
         assert(max_cell >= 1)
@@ -214,7 +214,7 @@ class ChimeraQPU(object):
         filtered_sites = set([n.index for n in self.sites if n.chimera_cell in cells])
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
     def chimera_cell_box_filter(self, chimera_cell_1, chimera_cell_2):
         chimera_rows = (chimera_cell_1[0], chimera_cell_2[0])
@@ -235,7 +235,7 @@ class ChimeraQPU(object):
 
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
-        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id)
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
 
     def chimera_cell(self, chimera_coordinate):
