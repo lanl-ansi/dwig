@@ -62,7 +62,7 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, scale=1.0, simple_g
 
 
     # With probability alpha, override non-frustrated couplings and fields with random ones
-    ran_choices = range(-steps, 0) + range(1, steps+1)
+    ran_choices = [i for i in range(-steps, 0)] + [i for i in range(1, steps+1)]
     ran_choices = [float(x) for x in ran_choices]
 
     if feild:
@@ -330,7 +330,7 @@ def generate_wscn(qpu, weak_field, strong_field):
 
     strong_cultsers = []
 
-    steps = qpu.chimera_degree_view/3 - 1
+    steps = qpu.chimera_degree_view//3 - 1
 
     wscbs = []
 
@@ -366,7 +366,7 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
     fields = {} 
     couplings = {}
 
-    steps = qpu.chimera_degree_view/3
+    steps = qpu.chimera_degree_view//3
 
     strong_cultsers = []
     for step_row in range(steps):

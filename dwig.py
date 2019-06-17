@@ -1,11 +1,11 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 from __future__ import print_function
 
 import sys, os, json, argparse, random, math, datetime
 
-from dwave_sapi2.util import get_chimera_adjacency
-from dwave_sapi2.remote import RemoteConnection
+from dwave.cloud import Client
+import dwave_networkx
 
 from structure import QPUAssignment
 from structure import ChimeraQPU
@@ -15,8 +15,7 @@ import generator
 from common import print_err
 from common import validate_bqp_data
 from common import json_dumps_kwargs
-
-DEFAULT_CONFIG_FILE = '_config'
+#from common import get_chimera_adjacency
 
 
 def main(args, output_stream=sys.stdout):
@@ -33,16 +32,16 @@ def build_case(args):
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
-    qpu = get_qpu(args.dw_url, args.dw_token, args.dw_proxy, args.dw_solver_name, args.hardware_chimera_degree)
+    qpu = get_qpu(args.profile, args.ignore_connection, args.hardware_chimera_degree)
     #print_err(qpu)
 
     if args.chimera_degree != None:
         print_err('filtering QPU to chimera of degree {}'.format(args.chimera_degree))
         qpu = qpu.chimera_degree_filter(args.chimera_degree)
 
-    if args.cell_limit != None:
-        print_err('filtering QPU to the first {} chimera cells'.format(args.cell_limit))
-        qpu = qpu.cell_filter(args.cell_limit)
+    if args.chimera_cell_limit != None:
+        print_err('filtering QPU to the first {} chimera cells'.format(args.chimera_cell_limit))
+        qpu = qpu.cell_filter(args.chimera_cell_limit)
 
     if args.chimera_cell_box != None:
         chimera_cell_1 = tuple(args.chimera_cell_box[0:2])
@@ -55,9 +54,9 @@ def build_case(args):
     elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.scale, args.simple_ground_state)
     elif args.generator == 'fl':
-        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
+        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_chimera_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
-        if args.cell_limit != None:
+        if args.chimera_cell_limit != None:
             print_err('weak-strong cluster networks cannot be constricted with a cell limit.')
             quit()
 
@@ -105,16 +104,16 @@ def build_case(args):
 
 def build_metadata(args, qpu):
     metadata = {}
-    if not args.dw_url is None:
-        metadata['dw_url'] = args.dw_url
-    if not args.dw_solver_name is None:
-        metadata['dw_solver_name'] = args.dw_solver_name
+    if not qpu.endpoint is None:
+        metadata['dw_endpoint'] = qpu.endpoint
+    if not qpu.solver_name is None:
+        metadata['dw_solver_name'] = qpu.solver_name
     if not qpu.chip_id is None:
         metadata['dw_chip_id'] = qpu.chip_id
 
     metadata['chimera_cell_size'] = qpu.cell_size
     metadata['chimera_degree'] = qpu.chimera_degree
-    
+
     metadata['dwig_generator'] = args.generator
 
     if not args.timeless:
@@ -123,47 +122,51 @@ def build_metadata(args, qpu):
     return metadata
 
 
-def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
+def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     chip_id = None
+    endpoint = None
+    solver_name = None
     cell_size = 8
 
-    if not url is None and not token is None and not solver_name is None:
-        print_err('QPU connection details found, accessing "{}" at "{}"'.format(solver_name, url))
-        if proxy is None: 
-            remote_connection = RemoteConnection(url, token)
-        else:
-            remote_connection = RemoteConnection(url, token, proxy)
+    if not ignore_connection:
+        try:
+            client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile)
+            endpoint = client.endpoint
 
-        solver = remote_connection.get_solver(solver_name)
+            solver = client.get_solver()
+            solver_name = solver.name
+            couplers = solver.undirected_edges
+            sites = solver.nodes
 
-        couplers = solver.properties['couplers']
+            solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
+            if hardware_chimera_degree != solver_chimera_degree:
+                print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
+                hardware_chimera_degree = solver_chimera_degree
 
-        couplers = set([tuple(coupler) for coupler in couplers])
+            site_range = Range(*solver.properties['h_range'])
+            coupler_range = Range(*solver.properties['j_range'])
+            chip_id = solver.properties['chip_id']
 
-        sites = solver.properties['qubits']
+        #TODO remove try/except logic, if there is a better way to check the connection
+        except: 
+           print_err('QPU connection details not found or there was a connection error')
+           print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
+           ignore_connection = True
 
-        solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
-        if hardware_chimera_degree != solver_chimera_degree:
-            print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
-            hardware_chimera_degree = solver_chimera_degree
-
-        site_range = Range(*solver.properties['h_range'])
-        coupler_range = Range(*solver.properties['j_range'])
-        chip_id = solver.properties['chip_id']
-
-    else:
-        print_err('QPU connection details not found, assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
-
+    if ignore_connection:
         site_range = Range(-2.0, 2.0)
         coupler_range = Range(-1.0, 1.0)
 
         # the hard coded 4 here assumes an 4x2 unit cell
-        arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size/2)
+        graph = dwave_networkx.chimera_graph(hardware_chimera_degree, hardware_chimera_degree, cell_size//2)
+        edges = graph.edges()
+        #arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size//2)
+        #print(arcs)
 
         # turn arcs into couplers
         # this step is nessisary to be consistent with the solver.properties['couplers'] data
         couplers = []
-        for i,j in arcs:
+        for i,j in edges:
             assert(i != j)
             if i < j:
                 couplers.append((i,j))
@@ -171,70 +174,29 @@ def get_qpu(url, token, proxy, solver_name, hardware_chimera_degree):
                 couplers.append((j,i))
         couplers = set(couplers)
 
-
         sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
 
-    # sanity check on coupler consistency across both branches
-    for i,j in couplers:
-        assert(i < j)
+        # sanity check on coupler consistency across both branches
+        for i,j in couplers:
+            assert(i < j)
 
-    return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id)
-
-
-# loads a configuration file and sets up undefined CLI arguments
-def load_config(args):
-    config_file_path = args.config_file
-
-    if os.path.isfile(config_file_path):
-        with open(config_file_path, 'r') as config_file:
-            try:
-                config_data = json.load(config_file)
-                for key, value in config_data.items():
-                    if isinstance(value, dict):
-                        print_err('invalid value for configuration key "%s", only single values are allowed' % config_file_path)
-                        quit()
-                    if not hasattr(args, key) or getattr(args, key) == None:
-                        if isinstance(value, unicode):
-                            value = value.encode('ascii','ignore')
-                        if isinstance(value, list):
-                            new_list = []
-                            for item in value:
-                                if isinstance(item, unicode):
-                                    item = item.encode('ascii','ignore')
-                                new_list.append(item)
-                            value = new_list
-                        setattr(args, key, value)
-                    else:
-                        print_err('skipping the configuration key "%s", it already has a value of %s' % (key, str(getattr(args, key))))
-            except ValueError:
-                print_err('the config file does not appear to be a valid json document: %s' % config_file_path)
-                quit()
-    else:
-        if config_file_path != DEFAULT_CONFIG_FILE:
-            print_err('unable to open conifguration file: %s' % config_file_path)
-            quit()
-
-    return args
+    return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, endpoint=endpoint, solver_name=solver_name)
 
 
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-cf', '--config-file', help='a configuration file for specifying common parameters', default=DEFAULT_CONFIG_FILE)
-
-    parser.add_argument('-url', '--dw-url', help='url of the d-wave machine')
-    parser.add_argument('-token', '--dw-token', help='token for accessing the d-wave machine')
-    parser.add_argument('-proxy', '--dw-proxy', help='proxy for accessing the d-wave machine')
-    parser.add_argument('-solver', '--dw-solver-name', help='d-wave solver to use', type=int)
+    parser.add_argument('-p', '--profile', help='connection details to load from dwave.conf', default=None)
+    parser.add_argument('-ic', '--ignore-connection', help='force .dwrc connection details to be ignored', action='store_true', default=False)
 
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
     parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
-    parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=12)
+    parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=16)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
     parser.add_argument('-iz', '--include-zeros', help='include zero values in output', action='store_true', default=False)
-    parser.add_argument('-cl', '--cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
+    parser.add_argument('-ccl', '--chimera-cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
 
     parser.add_argument('-ccb', '--chimera-cell-box', help='two chimera cell coordinates define a box that is used to filter the hardware graph', nargs=4, type=int)
 
@@ -259,7 +221,7 @@ def build_cli_parser():
     parser_fl.add_argument('-s', '--steps', help='the number of allowed steps in output Hamiltonian', type=int, default=2)
     parser_fl.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.2)
     parser_fl.add_argument('-mc', '--multicell', help='reject loops that are within one chimera cell', action='store_true', default=False)
-    parser_fl.add_argument('-cc', '--cluster-cells', help='treats each chimera cell as a single logical spin', action='store_true', default=False)
+    parser_fl.add_argument('-ccc', '--cluster-chimera-cells', help='treats each chimera cell as a single logical spin', action='store_true', default=False)
     parser_fl.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
     parser_fl.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
     parser_fl.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=1000)
@@ -276,4 +238,4 @@ def build_cli_parser():
 
 if __name__ == '__main__':
     parser = build_cli_parser()
-    main(load_config(parser.parse_args()))
+    main(parser.parse_args())
