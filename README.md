@@ -1,5 +1,7 @@
 # D-Wave Instance Generator (D-WIG)
 
+[![Build Status](https://travis-ci.org/lanl-ansi/dwig.svg?branch=master)](https://travis-ci.org/lanl-ansi/dwig) [![codecov](https://codecov.io/gh/lanl-ansi/dwig/branch/master/graph/badge.svg)](https://codecov.io/gh/lanl-ansi/dwig)
+
 The D-WIG toolset is used to generate binary quadratic programs based on a specific D-Wave QPU.  A key motivation for generating problems on a specific QPU is that these problems do not require an embedding step to test them on the hardware.  The D-WIG problem generator assumes that the QPU has a chimera topology.
 
 `dwig.py` is the primary entry point and generates binary unconstrained quadratic programming problems (B-QP) in the bqpjson format.
