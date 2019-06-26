@@ -70,6 +70,8 @@ def build_case(args):
         qpu = qpu.chimera_degree_filter(effective_chimera_degree)
 
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
+    elif args.generator == 'fclg':
+        qpu_config = generator.generate_fclg(qpu, args.steps, args.alpha, args.gadget_fraction, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     else:
         assert(False) # CLI failed
 
@@ -232,6 +234,15 @@ def build_cli_parser():
     parser_wscn.add_argument('-wf', '--weak-field', help='strength of the weak field', type=float, default=0.44)
     parser_wscn.add_argument('-sf', '--strong-field', help='strength of the strong field', type=float, default=-1)
 
+    parser_fclg = subparsers.add_parser('fclg', help='generates a frustrated clustered loop and gadgets problem')
+    parser_fclg.set_defaults(generator='fclg')
+    parser_fclg.add_argument('-s', '--steps', help='the number of allowed steps in output Hamiltonian', type=int, default=2)
+    parser_fclg.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.2)
+    parser_fclg.add_argument('-gf', '--gadget-fraction', help='', type=float, default=0.2)
+    parser_fclg.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
+    parser_fclg.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
+    parser_fclg.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=1000)
+    parser_fclg.add_argument('-lsl', '--loop-sample-limit', help='the maximum amount of random walk samples', type=int, default=10000)
 
     return parser
 

@@ -1,6 +1,7 @@
 import random, math
 
 from collections import namedtuple
+from itertools import product, chain
 
 from common import DWIGException
 from common import print_err
@@ -567,4 +568,150 @@ def _update_fc(fields, couplings, new_fields, new_couplings, strict = True):
         if strict:
             assert(k not in couplings)
         couplings[k] = v
+
+
+def generate_fclg(qpu, steps=2, alpha=0.2, gadget_fraction=0.1, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+    '''This function builds frustrated clustered loops and gadgets as described
+    by https://journals.aps.org/prx/abstract/10.1103/PhysRevX.8.031016.
+    '''
+    assert qpu.cell_size == 8
+
+    def ordered(i, j):
+        return (i, j) if i <= j else (j, i)
+
+    def the_other(pair, i):
+        return pair[0] if pair[0] != i else pair[1]
+
+    def add_values(values, new_values):
+        for k, v in new_values.items():
+            values[k] = v + values.get(k, 0)
+
+    def scale(values, scalar):
+        return {k: scalar * v for k, v in values.items()}
+
+    def is_complete_cell(qpu, sites):
+        return len(sites) == 8 and \
+            all((sites[i], sites[j]) in qpu.couplers for i, j in product(range(4), range(4,8)))
+
+    def find_complete_cells(qpu):
+        sites_of_cell = {}
+        for site in qpu.sites:
+            cell_sites = sites_of_cell.setdefault(site.chimera_cell, [])
+            cell_sites.append(site)
+        cells = {cell: sorted(sites) for cell, sites in sites_of_cell.items()}
+        return {cell: sites for cell, sites in cells.items() if is_complete_cell(qpu, sites)}
+
+    def randomize_ground_state(fields, couplings):
+        active_sites = set(chain.from_iterable(couplings))
+        ground_state = {site: random.choice([-1, 1]) for site in active_sites}
+        for site, spin in ground_state.items():
+            if spin == -1 and site in fields:
+                fields[site] *= -1
+        for coupler, value in couplings.items():
+            site_i, site_j = coupler
+            if ground_state[site_i] != ground_state[site_j]:
+                couplings[coupler] *= -1
+        return ground_state
+
+    # find complete chimera cells and build logical graph
+    sites_of_cell = find_complete_cells(qpu)
+    cells = sites_of_cell.keys()
+    cells_list = sorted(cells)
+    cell_couplers = {
+        ordered(i.chimera_cell, j.chimera_cell) for i, j in qpu.couplers
+        if i.chimera_cell in cells and j.chimera_cell in cells
+    }
+
+    # build adjacent list
+    incident = {}
+    cycle_count = {}
+    for i, j in cell_couplers:
+        incident.setdefault(i, []).append((i, j))
+        incident.setdefault(j, []).append((i, j))
+        cycle_count[i, j] = 0
+
+    # generate cycles
+    def generate_cycle_once():
+        path = [random.choice(cells_list)]
+        touched_cells = set()
+        touched_edges = set()
+        while path[-1] not in touched_cells:
+            touched_cells.add(path[-1])
+            remaining_edges = list(set(incident[path[-1]]) - touched_edges)
+            if remaining_edges == 0:
+                return None
+            edge = random.choice(remaining_edges)
+            cell = the_other(edge, path[-1])
+            touched_edges.add(edge)
+            path.append(cell)
+        path = path[path.index(path[-1]):]
+        return [ordered(i, j) for i, j in zip(path, path[1:])]
+
+    def generate_cycle():
+        for i in range(cycle_sample_limit):
+            cycle = generate_cycle_once()
+            if cycle is not None:
+                return cycle
+        raise DWIGException('unable to find a vaild random walk cycle in {} samples.  try increasing the number of steps or decreasing alpha'.format(cycle_sample_limit))
+
+    def generate_good_cycle():
+        for i in range(cycle_reject_limit):
+            cycle = generate_cycle()
+            if len(cycle) >= min_cycle_length:
+                for edge in cycle:
+                    cycle_count[edge] += 1
+                    if cycle_count[edge] >= steps:
+                        incident[edge[0]].remove(edge)
+                        incident[edge[1]].remove(edge)
+                return cycle
+        raise DWIGException('hit cycle rejection limit of {}.  try relaxing the cycle constraints'.format(cycle_reject_limit))
+
+    cell_couplings = {}
+    num_cycles = math.floor(alpha * len(cells))
+    for _ in range(num_cycles):
+        cycle = generate_good_cycle()
+        add_values(cell_couplings, {edge: -1 for edge in cycle})
+        cell_couplings[random.choice(cycle)] += 2
+
+    # build hardware fields and couplings
+    fields = {}    
+    couplings = {}
+
+    # embed cell couplings into site couplings
+    active_cells = set(chain.from_iterable(cell_couplings))
+
+    intracell_coupling = -max(abs(v) for k, v in cell_couplings.items())
+    for i, j in qpu.couplers:
+        if i.chimera_cell not in active_cells or j.chimera_cell not in active_cells:
+            continue
+        if i.chimera_cell == j.chimera_cell:
+            couplings[i, j] = intracell_coupling
+        else:
+            cell_coupler = ordered(i.chimera_cell, j.chimera_cell)
+            if cell_coupler in cell_couplings:
+                couplings[i, j] = cell_couplings[cell_coupler]
+
+    # add gadgets
+    gadgets_num = math.floor(gadget_fraction * len(cells))
+    for cell in random.choices(cells_list, k=gadgets_num):
+        sites = sites_of_cell[cell]
+        add_values(fields, scale({
+            sites[0]: -1,   sites[1]: -2/3, sites[2]: 2/3,  sites[3]: -1,
+            sites[4]: 1/3,  sites[5]: 1,    sites[6]: -1,   sites[7]: 1,
+        }, steps))
+        add_values(couplings, scale({
+            (sites[0], sites[4]): +1, (sites[0], sites[5]): -1, (sites[0], sites[6]): -1, (sites[0], sites[7]): -1,
+            (sites[1], sites[4]): -1, (sites[1], sites[5]): -1, (sites[1], sites[6]): +1, (sites[1], sites[7]): -1, 
+            (sites[2], sites[4]): -1, (sites[2], sites[5]): -1, (sites[2], sites[6]): -1, (sites[2], sites[7]): -1,
+            (sites[3], sites[4]): -1, (sites[3], sites[5]): -1, (sites[3], sites[6]): -1, (sites[3], sites[7]): -1,
+        }, steps))
+
+    couplings = {coupler: value for coupler, value in couplings.items() if value != 0}
+    if not simple_ground_state:
+        ground_state = randomize_ground_state(fields, couplings)
+    else:
+        ground_state = {site: 1 for site in set(chain.from_iterable(couplings))}
+
+    config = QPUConfiguration(qpu, fields, couplings)
+    return QPUAssignment(config, ground_state, description='planted ground state, most likely non-unique')
 
