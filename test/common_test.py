@@ -27,6 +27,13 @@ def json_comp(parser, capfd, ground_truth_file, cli_args):
     json_output = run_dwig_cli(parser, cli_args)
     resout, reserr = capfd.readouterr()
 
+    # The exact value of 'evaluation' may vary across different runs because it
+    # depends on the order of iterating over set/dict objects. See how this value
+    # is computed in the method 'eval' of QPUAssignment in structure.py file.
+    if 'solutions' in ground_truth:
+        del ground_truth['solutions'][0]['evaluation']
+        del json_output['solutions'][0]['evaluation']
+
     assert(ground_truth == json_output)
 
 
