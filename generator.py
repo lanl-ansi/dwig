@@ -603,7 +603,7 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
 
     def randomize_ground_state(fields, couplings):
         active_sites = set(chain.from_iterable(couplings))
-        ground_state = {site: random.choice([-1, 1]) for site in active_sites}
+        ground_state = {site: random.choice([-1, 1]) for site in sorted(active_sites)}
         for site, spin in ground_state.items():
             if spin == -1 and site in fields:
                 fields[site] *= -1
@@ -637,7 +637,7 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
         touched_edges = set()
         while path[-1] not in touched_cells:
             touched_cells.add(path[-1])
-            remaining_edges = list(set(incident[path[-1]]) - touched_edges)
+            remaining_edges = sorted(set(incident[path[-1]]) - touched_edges)
             if len(remaining_edges) == 0:
                 return None
             edge = random.choice(remaining_edges)
