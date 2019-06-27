@@ -619,7 +619,7 @@ def generate_fclg(qpu, steps=2, alpha=0.2, gadget_fraction=0.1, simple_ground_st
     cells_list = sorted(cells)
     cell_couplers = {
         ordered(i.chimera_cell, j.chimera_cell) for i, j in qpu.couplers
-        if i.chimera_cell in cells and j.chimera_cell in cells
+        if i.chimera_cell != j.chimera_cell and i.chimera_cell in cells and j.chimera_cell in cells
     }
 
     # build adjacent list
@@ -638,7 +638,7 @@ def generate_fclg(qpu, steps=2, alpha=0.2, gadget_fraction=0.1, simple_ground_st
         while path[-1] not in touched_cells:
             touched_cells.add(path[-1])
             remaining_edges = list(set(incident[path[-1]]) - touched_edges)
-            if remaining_edges == 0:
+            if len(remaining_edges) == 0:
                 return None
             edge = random.choice(remaining_edges)
             cell = the_other(edge, path[-1])
