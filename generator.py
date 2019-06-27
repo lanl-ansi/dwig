@@ -570,7 +570,7 @@ def _update_fc(fields, couplings, new_fields, new_couplings, strict = True):
         couplings[k] = v
 
 
-def generate_fclg(qpu, steps=2, alpha=0.2, gadget_fraction=0.1, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_state=False, min_cycle_length=3, cycle_reject_limit=5000, cycle_sample_limit=10000):
     '''This function builds frustrated clustered loops and gadgets as described
     by https://journals.aps.org/prx/abstract/10.1103/PhysRevX.8.031016.
     '''
