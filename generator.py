@@ -568,3 +568,48 @@ def _update_fc(fields, couplings, new_fields, new_couplings, strict = True):
             assert(k not in couplings)
         couplings[k] = v
 
+
+def generate_xran(qpu, coupling_values=None, coupling_weights=None, field=False, field_values=None, field_weights=None):
+    def parse_list(list_str):
+        return [float(num) for num in list_str.split(',')]
+
+    # parse arguments
+    if coupling_values is None:
+        coupling_values = [-1, 0, 1]
+    else:
+        coupling_values = parse_list(coupling_values)
+
+    if coupling_weights is None:
+        coupling_weights = [1] * len(coupling_values)
+    else:
+        coupling_weights = parse_list(coupling_weights)
+
+    if len(coupling_values) != len(coupling_weights):
+        raise DWIGException('expected len(coupling_values) == len(coupling_prob)')
+
+    if field:
+        if field_values is None:
+            field_values = coupling_values
+        else:
+            field_values = parse_list(field_values)
+
+        if field_weights is None:
+            field_weights = [1] * len(field_values)
+        else:
+            field_weights = parse_list(field_weights)
+
+        if len(field_values) != len(field_weights):
+            raise DWIGException('expected len(field_values) == len(field_prob)')
+
+    # generate the problem
+    if field:
+        values = random.choices(field_values, weights=field_weights, k=len(qpu.sites))
+        fields = {site: value for site, value in zip(sorted(qpu.sites), values)}
+    else:
+        fields = {}
+
+    values = random.choices(coupling_values, weights=coupling_weights, k=len(qpu.couplers))
+    couplings = {coupler: value for coupler, value in zip(sorted(qpu.couplers), values)}
+
+    return QPUConfiguration(qpu, fields, couplings)
+

@@ -70,6 +70,8 @@ def build_case(args):
         qpu = qpu.chimera_degree_filter(effective_chimera_degree)
 
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
+    elif args.generator == 'xran':
+        qpu_config = generator.generate_xran(qpu, args.coupling_values, args.coupling_weights, args.field, args.field_values, args.field_weights)
     else:
         assert(False) # CLI failed
 
@@ -232,6 +234,13 @@ def build_cli_parser():
     parser_wscn.add_argument('-wf', '--weak-field', help='strength of the weak field', type=float, default=0.44)
     parser_wscn.add_argument('-sf', '--strong-field', help='strength of the strong field', type=float, default=-1)
 
+    parser_xran = subparsers.add_parser('xran', help='generates a random problem with extended options')
+    parser_xran.set_defaults(generator='xran')
+    parser_xran.add_argument('-cv', '--coupling_values', help='the canditate values for couplings separated by ",", default to be "-1,0,1"', type=str, default=None)
+    parser_xran.add_argument('-cw', '--coupling_weights', help='the weights of coupling values sperated by ",", default to be uniform', type=str, default=None)
+    parser_xran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+    parser_xran.add_argument('-fv', '--field_values', help='the canditate values for fields separated by ",", default to be same as coupling values', type=str, default=None)
+    parser_xran.add_argument('-fw', '--field_weights', help='the weights of coupling fields sperated by ",", default to be uniform', type=str, default=None)
 
     return parser
 
