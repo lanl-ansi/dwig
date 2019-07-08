@@ -155,8 +155,9 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
                 chip_id = solver.properties['chip_id']
 
             #TODO remove try/except logic, if there is a better way to check the connection
-            except: 
+            except Exception as e:
                print_err('QPU connection details not found or there was a connection error')
+               print_err('  '+str(e))
                print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
                ignore_connection = True
         else:
