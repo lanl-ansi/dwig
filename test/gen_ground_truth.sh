@@ -32,3 +32,9 @@ rm data/*.json
 ../dwig.py -ic -pp -cd 12 -tl -rs 0 wscn > data/wscn_i_3.json
 ../dwig.py -ic -pp -cd 16 -tl -rs 0 wscn > data/wscn_i_4.json
 
+../dwig.py -ic -pp -cd 12 -tl -rs 0 fclg -gf 0.1 -mll 5 -a 0.1 > data/fclg_i_1.json
+../dwig.py -ic -pp -cd 13 -tl -rs 0 fclg -gf 0.2 > data/fclg_i_2.json
+../dwig.py -ic -pp -cd 14 -tl -rs 0 fclg -gf 0.3 -mll 0 > data/fclg_i_3.json
+../dwig.py -ic -pp -cd 15 -tl -rs 0 fclg -gf 0.4 -sgs -s 2 > data/fclg_i_4.json
+../dwig.py -ic -pp -cd 16 -tl -rs 0 fclg -gf 0.5 -sgs > data/fclg_i_5.json
+

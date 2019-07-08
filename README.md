@@ -58,6 +58,7 @@ The D-Wig toolset currently supports three types of problem generation,
 2. __ran__ - fields are couplers are set uniformly at random
 3. __fl__ - frustrated loops
 4. __wscn__ - weak-strong cluster networks
+5. __fclg__ - frustrated cluster loops and gadgets
 
 A detailed list of command line options for each problem type can be viewed via,
 ```
@@ -156,6 +157,24 @@ For the weak-strong cluster network formulation,
   pages={031015},
   year={2016},
   publisher={APS}
+}
+```
+
+For the frustrated cluster loops and gadgets formulation,
+```
+@article{albash2018advantage,
+  title = {Demonstration of a Scaling Advantage for a Quantum Annealer over Simulated Annealing},
+  author = {Albash, Tameem and Lidar, Daniel A.},
+  journal = {Phys. Rev. X},
+  volume = {8},
+  issue = {3},
+  pages = {031016},
+  numpages = {26},
+  year = {2018},
+  month = {Jul},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevX.8.031016},
+  url = {https://link.aps.org/doi/10.1103/PhysRevX.8.031016}
 }
 ```
 

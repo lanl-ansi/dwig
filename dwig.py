@@ -17,6 +17,8 @@ from common import validate_bqp_data
 from common import json_dumps_kwargs
 #from common import get_chimera_adjacency
 
+# caches remote qpu info when making multiple calls to build_case
+_qpu_remote = None
 
 def main(args, output_stream=sys.stdout):
     case = build_case(args)
@@ -70,8 +72,11 @@ def build_case(args):
         qpu = qpu.chimera_degree_filter(effective_chimera_degree)
 
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
+    elif args.generator == 'fclg':
+        qpu_config = generator.generate_fclg(qpu, args.steps, args.alpha, args.gadget_fraction, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'xran':
         qpu_config = generator.generate_xran(qpu, args.coupling_values, args.coupling_weights, args.field, args.field_values, args.field_weights)
+
     else:
         assert(False) # CLI failed
 
@@ -130,30 +135,37 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     solver_name = None
     cell_size = 8
 
+    global _qpu_remote
+
     if not ignore_connection:
-        try:
-            client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile)
-            endpoint = client.endpoint
+        if _qpu_remote == None:
+            try:
+                client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile)
+                endpoint = client.endpoint
 
-            solver = client.get_solver()
-            solver_name = solver.name
-            couplers = solver.undirected_edges
-            sites = solver.nodes
+                solver = client.get_solver()
+                solver_name = solver.name
+                couplers = solver.undirected_edges
+                sites = solver.nodes
 
-            solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
-            if hardware_chimera_degree != solver_chimera_degree:
-                print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
-                hardware_chimera_degree = solver_chimera_degree
+                solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
+                if hardware_chimera_degree != solver_chimera_degree:
+                    print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
+                    hardware_chimera_degree = solver_chimera_degree
 
-            site_range = Range(*solver.properties['h_range'])
-            coupler_range = Range(*solver.properties['j_range'])
-            chip_id = solver.properties['chip_id']
+                site_range = Range(*solver.properties['h_range'])
+                coupler_range = Range(*solver.properties['j_range'])
+                chip_id = solver.properties['chip_id']
 
-        #TODO remove try/except logic, if there is a better way to check the connection
-        except: 
-           print_err('QPU connection details not found or there was a connection error')
-           print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
-           ignore_connection = True
+            #TODO remove try/except logic, if there is a better way to check the connection
+            except Exception as e:
+               print_err('QPU connection details not found or there was a connection error')
+               print_err('  '+str(e))
+               print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
+               ignore_connection = True
+        else:
+            print_err('info: using cached QPU details')
+            return _qpu_remote
 
     if ignore_connection:
         site_range = Range(-2.0, 2.0)
@@ -182,7 +194,9 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
         for i,j in couplers:
             assert(i < j)
 
-    return ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, endpoint=endpoint, solver_name=solver_name)
+    if _qpu_remote == None:
+        _qpu_remote = ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, endpoint=endpoint, solver_name=solver_name)
+    return _qpu_remote
 
 
 def build_cli_parser():
@@ -233,6 +247,16 @@ def build_cli_parser():
     parser_wscn.set_defaults(generator='wscn')
     parser_wscn.add_argument('-wf', '--weak-field', help='strength of the weak field', type=float, default=0.44)
     parser_wscn.add_argument('-sf', '--strong-field', help='strength of the strong field', type=float, default=-1)
+
+    parser_fclg = subparsers.add_parser('fclg', help='generates a frustrated clustered loop and gadgets problem')
+    parser_fclg.set_defaults(generator='fclg')
+    parser_fclg.add_argument('-s', '--steps', help='the number of allowed steps in output Hamiltonian', type=int, default=3)
+    parser_fclg.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.2)
+    parser_fclg.add_argument('-gf', '--gadget-fraction', help='', type=float, default=0.1)
+    parser_fclg.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
+    parser_fclg.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
+    parser_fclg.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=5000)
+    parser_fclg.add_argument('-lsl', '--loop-sample-limit', help='the maximum amount of random walk samples', type=int, default=10000)
 
     parser_xran = subparsers.add_parser('xran', help='generates a random problem with extended options')
     parser_xran.set_defaults(generator='xran')
