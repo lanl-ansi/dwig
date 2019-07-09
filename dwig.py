@@ -157,6 +157,8 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
                 coupler_range = Range(*solver.properties['j_range'])
                 chip_id = solver.properties['chip_id']
 
+                client.close()
+
             #TODO remove try/except logic, if there is a better way to check the connection
             except Exception as e:
                print_err('QPU connection details not found or there was a connection error')
