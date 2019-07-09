@@ -1,7 +1,10 @@
 import sys
 
+import pytest
+
 sys.path.append('.')
 import dwig
+from common import DWIGException
 
 from common_test import json_comp
 from common_test import run_dwig_cli
@@ -34,3 +37,24 @@ class TestXranGeneration:
     # ../dwig.py -ic -pp -tl -rs 0 -cd 8 xran -cv 4,3,2,1 -cw 0,0,1,2 -f -fv 3,2.5 -fw 5,1 > data/xran_i_6.json
     def test_xran_i_6(self, capfd):
         json_comp(self.parser, capfd, 'xran_i_6.json', ['-ic', '-pp', '-tl', '-rs', '0', '-cd', '8', 'xran', '-cv','4,3,2,1', '-cw', '0,0,1,2', '-f', '-fv', '3,2.5', '-fw', '5,1'])
+
+    # ../dwig.py -ic -pp -tl -rs 0 -cd 10 xran > data/xran_i_7.json
+    def test_xran_i_7(self, capfd):
+        json_comp(self.parser, capfd, 'xran_i_7.json', ['-ic', '-pp', '-tl', '-rs', '0', '-cd', '10', 'xran'])
+
+    # ../dwig.py -ic -pp -tl -rs 0 -cd 10 xran -f > data/xran_i_8.json
+    def test_xran_i_8(self, capfd):
+        json_comp(self.parser, capfd, 'xran_i_8.json', ['-ic', '-pp', '-tl', '-rs', '0', '-cd', '10', 'xran', '-f'])
+
+
+class TestXranFailure:
+    def setup_class(self):
+        self.parser = dwig.build_cli_parser()
+
+    def test_bad_coupler_weights_length(self, capfd):
+        with pytest.raises(DWIGException):
+            run_dwig_cli(self.parser, ['-ic', 'xran', '-cv', '1,2,3', '-cw', '1,2'])
+
+    def test_bad_field_weights_length(self, capfd):
+        with pytest.raises(DWIGException):
+            run_dwig_cli(self.parser, ['-ic', 'xran', '-cv', '1,2', '-cw', '1,2', '-f', '-fv', '1,2,3', '-fw', '1,2,3,4'])

@@ -44,3 +44,4 @@ rm data/*.json
 ../dwig.py -ic -pp -tl -rs 0 -cd 16 xran -cv " -1,1" -cw 1,1 -f -fv " -1,1" -fw 1,1> data/xran_i_4.json
 ../dwig.py -ic -pp -tl -rs 0 -cd 12 xran -cv 1,2,3,4 -cw 0,1,0,1 -f -fv " -3,4" -fw 1,2 > data/xran_i_5.json
 ../dwig.py -ic -pp -tl -rs 0 -cd 8 xran -cv 4,3,2,1 -cw 0,0,1,2 -f -fv 3,2.5 -fw 5,1 > data/xran_i_6.json
+../dwig.py -ic -pp -tl -rs 0 -cd 10 xran > data/xran_i_7.json
