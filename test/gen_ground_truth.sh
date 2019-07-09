@@ -38,3 +38,9 @@ rm data/*.json
 ../dwig.py -ic -pp -cd 15 -tl -rs 0 fclg -gf 0.4 -sgs -s 2 > data/fclg_i_4.json
 ../dwig.py -ic -pp -cd 16 -tl -rs 0 fclg -gf 0.5 -sgs > data/fclg_i_5.json
 
+../dwig.py -ic -pp -tl -rs 0 -cd 8 xran -cv " -5,-1,1" -cw 2,1,1 > data/xran_i_1.json
+../dwig.py -ic -pp -tl -rs 0 -cd 12 xran -cv " -3,-1,1,3" -cw 7,1,1,7 > data/xran_i_2.json
+../dwig.py -ic -pp -tl -rs 0 -cd 16 xran -cv " -1,-0.5,0,0.5,1" -cw 3,1.5,1,2,2.5 > data/xran_i_3.json
+../dwig.py -ic -pp -tl -rs 0 -cd 16 xran -cv " -1,1" -cw 1,1 -f -fv " -1,1" -fw 1,1> data/xran_i_4.json
+../dwig.py -ic -pp -tl -rs 0 -cd 12 xran -cv 1,2,3,4 -cw 0,1,0,1 -f -fv " -3,4" -fw 1,2 > data/xran_i_5.json
+../dwig.py -ic -pp -tl -rs 0 -cd 8 xran -cv 4,3,2,1 -cw 0,0,1,2 -f -fv 3,2.5 -fw 5,1 > data/xran_i_6.json
