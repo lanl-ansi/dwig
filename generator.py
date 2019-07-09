@@ -1,7 +1,8 @@
 import random, math
 
 from collections import namedtuple
-from itertools import product, chain
+from itertools import product, chain, accumulate
+from bisect import bisect
 
 from common import DWIGException
 from common import print_err
@@ -749,13 +750,20 @@ def generate_xran(qpu, coupling_values=None, coupling_weights=None, field=False,
 
     # generate the problem
     if field:
-        values = random.choices(field_values, weights=field_weights, k=len(qpu.sites))
+        values = _random_choices(field_values, weights=field_weights, k=len(qpu.sites))
         fields = {site: value for site, value in zip(sorted(qpu.sites), values)}
     else:
         fields = {}
 
-    values = random.choices(coupling_values, weights=coupling_weights, k=len(qpu.couplers))
+    values = _random_choices(coupling_values, weights=coupling_weights, k=len(qpu.couplers))
     couplings = {coupler: value for coupler, value in zip(sorted(qpu.couplers), values)}
 
     return QPUConfiguration(qpu, fields, couplings)
+
+
+def _random_choices(population, weights, k):
+    cum_weights = list(accumulate(weights))
+    sum_weights = cum_weights[-1]
+    cum_weights = [w/sum_weights for w in cum_weights]
+    return [population[bisect(cum_weights, random.random())] for _ in range(k)]
 
