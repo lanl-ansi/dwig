@@ -693,7 +693,7 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
 
     # add gadgets
     gadgets_num = math.floor(gadget_fraction * len(active_cells))
-    for cell in random.sample(list(active_cells), k=gadgets_num):
+    for cell in random.sample(sorted(active_cells), k=gadgets_num):
         sites = sites_of_cell[cell]
         add_values(fields, scale({
             sites[0]: -1,   sites[1]: -2/3, sites[2]: 2/3,  sites[3]: -1,
