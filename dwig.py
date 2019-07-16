@@ -140,24 +140,21 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     if not ignore_connection:
         if _qpu_remote == None:
             try:
-                client = Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile)
-                endpoint = client.endpoint
+                with Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile) as client:
+                    endpoint = client.endpoint
+                    solver = client.get_solver()
+                    solver_name = solver.name
+                    couplers = solver.undirected_edges
+                    sites = solver.nodes
 
-                solver = client.get_solver()
-                solver_name = solver.name
-                couplers = solver.undirected_edges
-                sites = solver.nodes
+                    solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
+                    if hardware_chimera_degree != solver_chimera_degree:
+                        print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
+                        hardware_chimera_degree = solver_chimera_degree
 
-                solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
-                if hardware_chimera_degree != solver_chimera_degree:
-                    print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
-                    hardware_chimera_degree = solver_chimera_degree
-
-                site_range = Range(*solver.properties['h_range'])
-                coupler_range = Range(*solver.properties['j_range'])
-                chip_id = solver.properties['chip_id']
-
-                client.close()
+                    site_range = Range(*solver.properties['h_range'])
+                    coupler_range = Range(*solver.properties['j_range'])
+                    chip_id = solver.properties['chip_id']
 
             #TODO remove try/except logic, if there is a better way to check the connection
             except Exception as e:
