@@ -715,3 +715,51 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
     config = QPUConfiguration(qpu, fields, couplings)
     return QPUAssignment(config, ground_state, description='planted ground state, most likely non-unique')
 
+
+def generate_cran(qpu, field=False, chain_ratio=0.5, chain_strength=10, chain_length=20, chain_reject_limit=1000):
+    def ordered(i, j):
+        return (i, j) if i < j else (j, i)
+
+    # build adjacent list
+    neighbors = {}
+    for i, j in qpu.couplers:
+        neighbors.setdefault(i, []).append(j)
+        neighbors.setdefault(j, []).append(i)
+
+    sites_list = sorted(qpu.sites)
+
+    # generate chains
+    def generate_chain_trial():
+        touched_sites = set()
+        chain = [random.choice(sites_list)]
+        while len(chain) < chain_length:
+            touched_sites.add(chain[-1])
+            remaining_neighbors = sorted(set(neighbors[chain[-1]]) - touched_sites)
+            if len(remaining_neighbors) == 0:
+                return None
+            chain.append(random.choice(remaining_neighbors))
+        return chain
+
+    def generate_chain():
+        for _ in range(chain_reject_limit):
+            chain = generate_chain_trial()
+            if chain is not None:
+                return chain
+        raise DWIGException('unable to find a vaild random walk chain in {} samples.  try decreasing chain length'.format(cycle_sample_limit))
+
+    min_chain_couplers = math.floor(chain_ratio * len(qpu.couplers))
+    chain_couplers = set()
+
+    while len(chain_couplers) < min_chain_couplers:
+        chain = generate_chain()
+        chain_couplers.update(ordered(i, j) for i, j in zip(chain, chain[1:]))
+
+    couplings = {coupler: random.choice([-1, 1]) for coupler in (qpu.couplers - chain_couplers)}
+    for coupler in chain_couplers:
+        couplings[coupler] = -chain_strength
+
+    if field:
+        fields = {site: random.choice([-1, 1]) for site in qpu.sites}
+
+    return QPUConfiguration(qpu, fields, couplings)
+

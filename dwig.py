@@ -74,6 +74,8 @@ def build_case(args):
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
     elif args.generator == 'fclg':
         qpu_config = generator.generate_fclg(qpu, args.steps, args.alpha, args.gadget_fraction, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
+    elif args.generator == 'cran':
+        qpu_config = generator.generate_cran(qpu, args.field, args.chain_ratio, args.chain_strength, args.chain_length, args.chain_reject_limit)
     else:
         assert(False) # CLI failed
 
@@ -253,6 +255,14 @@ def build_cli_parser():
     parser_fclg.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
     parser_fclg.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=5000)
     parser_fclg.add_argument('-lsl', '--loop-sample-limit', help='the maximum amount of random walk samples', type=int, default=10000)
+
+    parser_cran = subparsers.add_parser('cran', help='generates a chained random problem')
+    parser_cran.set_defaults(generator='cran')
+    parser_cran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+    parser_cran.add_argument('-cr', '--chain_ratio', help='minimum chain couplers ratio', type=float, default=0.5)
+    parser_cran.add_argument('-cs', '--chain_strength', help='chain strength', type=float, default=10)
+    parser_cran.add_argument('-cl', '--chain_length', help='length of a single chain (chains may overlap)', type=int, default=20)
+    parser_cran.add_argument('-crl', '--chain-reject-limit', help='the maximum amount of chains to be reject', type=int, default=1000)
 
     return parser
 
