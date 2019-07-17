@@ -716,7 +716,7 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
     return QPUAssignment(config, ground_state, description='planted ground state, most likely non-unique')
 
 
-def generate_cran(qpu, field=False, chain_ratio=0.5, chain_strength=10, chain_length=20, chain_reject_limit=1000):
+def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_strength=10, chain_length=20, chain_reject_limit=1000):
     def ordered(i, j):
         return (i, j) if i < j else (j, i)
 
@@ -759,7 +759,7 @@ def generate_cran(qpu, field=False, chain_ratio=0.5, chain_strength=10, chain_le
         couplings[coupler] = -chain_strength
 
     if field:
-        fields = {site: random.choice([-1, 1]) for site in qpu.sites}
+        fields = {site: random.choice([-field_strength, field_strength]) for site in qpu.sites}
 
     return QPUConfiguration(qpu, fields, couplings)
 

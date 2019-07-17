@@ -75,7 +75,7 @@ def build_case(args):
     elif args.generator == 'fclg':
         qpu_config = generator.generate_fclg(qpu, args.steps, args.alpha, args.gadget_fraction, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'cran':
-        qpu_config = generator.generate_cran(qpu, args.field, args.chain_ratio, args.chain_strength, args.chain_length, args.chain_reject_limit)
+        qpu_config = generator.generate_cran(qpu, args.field, args.field_strength, args.chain_ratio, args.chain_strength, args.chain_length, args.chain_reject_limit)
     else:
         assert(False) # CLI failed
 
@@ -259,6 +259,7 @@ def build_cli_parser():
     parser_cran = subparsers.add_parser('cran', help='generates a chained random problem')
     parser_cran.set_defaults(generator='cran')
     parser_cran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
+    parser_cran.add_argument('-fs', '--field_strength', help='field strength', type=float, default=1.0)
     parser_cran.add_argument('-cr', '--chain_ratio', help='minimum chain couplers ratio', type=float, default=0.5)
     parser_cran.add_argument('-cs', '--chain_strength', help='chain strength', type=float, default=10)
     parser_cran.add_argument('-cl', '--chain_length', help='length of a single chain (chains may overlap)', type=int, default=20)
