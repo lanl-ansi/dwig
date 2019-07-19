@@ -760,6 +760,8 @@ def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_s
 
     if field:
         fields = {site: random.choice([-field_strength, field_strength]) for site in qpu.sites}
+    else:
+        fields = {}
 
     return QPUConfiguration(qpu, fields, couplings)
 
