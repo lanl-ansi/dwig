@@ -747,11 +747,13 @@ def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_s
                 return chain
         raise DWIGException('unable to find a vaild random walk chain in {} samples.  try decreasing chain length'.format(cycle_sample_limit))
 
+    chain_sites = set()
     min_chain_couplers = math.floor(chain_ratio * len(qpu.couplers))
     chain_couplers = set()
 
     while len(chain_couplers) < min_chain_couplers:
         chain = generate_chain()
+        chain_sites.update(chain)
         chain_couplers.update(ordered(i, j) for i, j in zip(chain, chain[1:]))
 
     couplings = {coupler: random.choice([-1, 1]) for coupler in (qpu.couplers - chain_couplers)}
@@ -759,7 +761,7 @@ def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_s
         couplings[coupler] = -chain_strength
 
     if field:
-        fields = {site: random.choice([-field_strength, field_strength]) for site in qpu.sites}
+        fields = {site: random.choice([-field_strength, field_strength]) for site in qpu.sites - chain_sites}
     else:
         fields = {}
 
