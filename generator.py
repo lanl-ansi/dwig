@@ -732,7 +732,7 @@ def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_s
     def generate_chain_trial():
         touched_sites = set()
         chain = [random.choice(sites_list)]
-        while len(chain) < chain_length:
+        while len(chain) - 1 < chain_length:
             touched_sites.add(chain[-1])
             remaining_neighbors = sorted(set(neighbors[chain[-1]]) - touched_sites)
             if len(remaining_neighbors) == 0:
