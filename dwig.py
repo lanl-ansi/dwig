@@ -260,9 +260,9 @@ def build_cli_parser():
     parser_cran.set_defaults(generator='cran')
     parser_cran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     parser_cran.add_argument('-fs', '--field_strength', help='field strength', type=float, default=1.0)
-    parser_cran.add_argument('-cr', '--chain_ratio', help='minimum chain couplers ratio', type=float, default=0.5)
+    parser_cran.add_argument('-cr', '--chain_ratio', help='minimum chain couplers ratio', type=float, default=0.2)
     parser_cran.add_argument('-cs', '--chain_strength', help='chain strength', type=float, default=10)
-    parser_cran.add_argument('-cl', '--chain_length', help='length of a single chain (chains may overlap)', type=int, default=20)
+    parser_cran.add_argument('-cl', '--chain_length', help='length of a single chain (chains may overlap)', type=int, default=1)
     parser_cran.add_argument('-crl', '--chain-reject-limit', help='the maximum amount of chains to be reject', type=int, default=1000)
 
     return parser

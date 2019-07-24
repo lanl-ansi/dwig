@@ -716,7 +716,7 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
     return QPUAssignment(config, ground_state, description='planted ground state, most likely non-unique')
 
 
-def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_strength=10, chain_length=20, chain_reject_limit=1000):
+def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.2, chain_strength=10, chain_length=1, chain_reject_limit=1000):
     def ordered(i, j):
         return (i, j) if i < j else (j, i)
 
@@ -760,10 +760,37 @@ def generate_cran(qpu, field=False, field_strength=1.0, chain_ratio=0.5, chain_s
     for coupler in chain_couplers:
         couplings[coupler] = -chain_strength
 
+    fields = {}
     if field:
-        fields = {site: random.choice([-field_strength, field_strength]) for site in qpu.sites - chain_sites}
-    else:
-        fields = {}
+        uf = UnionFind(max(s.index for s in qpu.sites) + 1)
+        for i, j in chain_couplers:
+            uf.union(i.index, j.index)
+
+        site_groups = {}
+        for s in qpu.sites:
+            group = uf.find(s.index)
+            if group not in site_groups:
+                site_groups[group] = []
+            site_groups[group].append(s)
+
+        for group in site_groups.values():
+            value = random.choice([-field_strength, field_strength]) * 1/len(group)
+            fields.update({s: value for s in group})
 
     return QPUConfiguration(qpu, fields, couplings)
 
+
+class UnionFind:
+    def __init__(self, n):
+        self._parent = list(range(n))
+
+    def union(self, a, b):
+        a = self.find(a)
+        b = self.find(b)
+        self._parent[a] = b
+
+    def find(self, a):
+        while a != self._parent[a]:
+            self._parent[a] = self._parent[self._parent[a]]
+            a = self._parent[a]
+        return a
