@@ -716,7 +716,7 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
     return QPUAssignment(config, ground_state, description='planted ground state, most likely non-unique')
 
 
-def generate_xran(qpu, coupling_values=None, coupling_weights=None, field=False, field_values=None, field_weights=None):
+def generate_xran(qpu, coupling_values=None, coupling_weights=None, field=False, field_values=None, field_weights=None, random_gauge_transformation=False):
     def parse_list(list_str):
         return [float(num) for num in list_str.split(',')]
 
@@ -757,6 +757,20 @@ def generate_xran(qpu, coupling_values=None, coupling_weights=None, field=False,
 
     values = _random_choices(coupling_values, weights=coupling_weights, k=len(qpu.couplers))
     couplings = {coupler: value for coupler, value in zip(sorted(qpu.couplers), values)}
+
+    if random_gauge_transformation:
+        adjacent = {}
+        for i, j in qpu.couplers:
+            adjacent.setdefault(i, []).append((i, j))
+            adjacent.setdefault(j, []).append((i, j))
+
+        for site in qpu.sites:
+            if random.random() < 0.5:
+                if site in fields:
+                    fields[site] *= -1
+                for pair in adjacent[site]:
+                    if pair in couplings:
+                        couplings[pair] *= -1
 
     return QPUConfiguration(qpu, fields, couplings)
 

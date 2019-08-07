@@ -75,7 +75,7 @@ def build_case(args):
     elif args.generator == 'fclg':
         qpu_config = generator.generate_fclg(qpu, args.steps, args.alpha, args.gadget_fraction, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'xran':
-        qpu_config = generator.generate_xran(qpu, args.coupling_values, args.coupling_weights, args.field, args.field_values, args.field_weights)
+        qpu_config = generator.generate_xran(qpu, args.coupling_values, args.coupling_weights, args.field, args.field_values, args.field_weights, args.random_gauge_transformation)
 
     else:
         assert(False) # CLI failed
@@ -264,6 +264,7 @@ def build_cli_parser():
     parser_xran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     parser_xran.add_argument('-fv', '--field_values', help='the canditate values for fields separated by ",", default to be same as coupling values', type=str, default=None)
     parser_xran.add_argument('-fw', '--field_weights', help='the weights of coupling fields sperated by ",", default to be uniform', type=str, default=None)
+    parser_xran.add_argument('-rgt', '--random_gauge_transformation', help='Flip each spin by half chance using gauge transformation', action='store_true', default=False)
 
     return parser
 
