@@ -52,7 +52,7 @@ def build_case(args):
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
     if args.generator == 'const':
-        qpu_config = generator.generate_const(qpu, args.coupling, args.field)
+        qpu_config = generator.generate_const(qpu, args.coupling, args.field, args.random_gauge_transformation)
     elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.scale, args.simple_ground_state)
     elif args.generator == 'fl':
@@ -218,10 +218,11 @@ def build_cli_parser():
 
     subparsers = parser.add_subparsers()
 
-    parser_ran = subparsers.add_parser('const', help='generates a problem with constant coupling and/or field')
-    parser_ran.set_defaults(generator='const')
-    parser_ran.add_argument('-cp', '--coupling', help='set all couplers to the given value', type=float, default=0.0)
-    parser_ran.add_argument('-f', '--field', help='set all fields to the given value', type=float, default=0.0)
+    parser_const = subparsers.add_parser('const', help='generates a problem with constant coupling and/or field')
+    parser_const.set_defaults(generator='const')
+    parser_const.add_argument('-cp', '--coupling', help='set all couplers to the given value', type=float, default=0.0)
+    parser_const.add_argument('-f', '--field', help='set all fields to the given value', type=float, default=0.0)
+    parser_const.add_argument('-rgt', '--random-gauge-transformation', help='flip each spin by half chance using gauge transformation', action='store_true', default=False)
 
     parser_ran = subparsers.add_parser('ran', help='generates a random problem')
     parser_ran.set_defaults(generator='ran')
@@ -259,12 +260,12 @@ def build_cli_parser():
 
     parser_xran = subparsers.add_parser('xran', help='generates a random problem with extended options')
     parser_xran.set_defaults(generator='xran')
-    parser_xran.add_argument('-cv', '--coupling_values', help='the canditate values for couplings separated by ",", default to be "-1,0,1"', type=str, default=None)
-    parser_xran.add_argument('-cw', '--coupling_weights', help='the weights of coupling values sperated by ",", default to be uniform', type=str, default=None)
+    parser_xran.add_argument('-cv', '--coupling-values', help='the canditate values for couplings separated by ",", default to be "-1,0,1"', type=str, default=None)
+    parser_xran.add_argument('-cw', '--coupling-weights', help='the weights of coupling values sperated by ",", default to be uniform', type=str, default=None)
     parser_xran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
-    parser_xran.add_argument('-fv', '--field_values', help='the canditate values for fields separated by ",", default to be same as coupling values', type=str, default=None)
-    parser_xran.add_argument('-fw', '--field_weights', help='the weights of coupling fields sperated by ",", default to be uniform', type=str, default=None)
-    parser_xran.add_argument('-rgt', '--random_gauge_transformation', help='Flip each spin by half chance using gauge transformation', action='store_true', default=False)
+    parser_xran.add_argument('-fv', '--field-values', help='the canditate values for fields separated by ",", default to be same as coupling values', type=str, default=None)
+    parser_xran.add_argument('-fw', '--field-weights', help='the weights of coupling fields sperated by ",", default to be uniform', type=str, default=None)
+    parser_xran.add_argument('-rgt', '--random-gauge-transformation', help='flip each spin by half chance using gauge transformation', action='store_true', default=False)
 
     return parser
 

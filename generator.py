@@ -15,7 +15,7 @@ from structure import ChimeraCoordinate
 # a problem and return the data as a QPUConfiguration object
 
 
-def generate_const(qpu, coupling=0.0, field=0.0):
+def generate_const(qpu, coupling=0.0, field=0.0, random_gauge_transformation=False):
     fields = {}
     couplings = {}
 
@@ -24,6 +24,20 @@ def generate_const(qpu, coupling=0.0, field=0.0):
 
     if coupling != 0.0:
         couplings = {coupler : coupling for coupler in qpu.couplers}
+
+    if random_gauge_transformation:
+        adjacent = {}
+        for i, j in qpu.couplers:
+            adjacent.setdefault(i, []).append((i, j))
+            adjacent.setdefault(j, []).append((i, j))
+
+        for site in qpu.sites:
+            if random.random() < 0.5:
+                if site in fields:
+                    fields[site] *= -1
+                for pair in adjacent[site]:
+                    if pair in couplings:
+                        couplings[pair] *= -1
 
     return QPUConfiguration(qpu, fields, couplings)
 
