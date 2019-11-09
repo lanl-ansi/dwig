@@ -251,7 +251,7 @@ def build_cli_parser():
     parser_fclg = subparsers.add_parser('fclg', help='generates a frustrated clustered loop and gadgets problem')
     parser_fclg.set_defaults(generator='fclg')
     parser_fclg.add_argument('-s', '--steps', help='the number of allowed steps in output Hamiltonian', type=int, default=3)
-    parser_fclg.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.35)
+    parser_fclg.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.30)
     parser_fclg.add_argument('-gf', '--gadget-fraction', help='', type=float, default=0.1)
     parser_fclg.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
     parser_fclg.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
