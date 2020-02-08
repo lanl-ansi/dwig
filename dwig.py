@@ -52,9 +52,11 @@ def build_case(args):
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
     if args.generator == 'const':
-        qpu_config = generator.generate_const(qpu, args.coupling, args.field)
+        qpu_config = generator.generate_const(qpu, args.coupling, args.field, args.random_gauge_transformation)
     elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.scale, args.simple_ground_state)
+    elif args.generator == 'cbfm':
+        qpu_config = generator.generate_jh_distribution(qpu, [args.j1_val, args.j2_val], [args.j1_pr, args.j2_pr], [args.h1_val, args.h2_val], [args.h1_pr, args.h2_pr], args.random_gauge_transformation)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_chimera_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
@@ -215,10 +217,11 @@ def build_cli_parser():
 
     subparsers = parser.add_subparsers()
 
-    parser_ran = subparsers.add_parser('const', help='generates a problem with constant coupling and/or field')
-    parser_ran.set_defaults(generator='const')
-    parser_ran.add_argument('-cp', '--coupling', help='set all couplers to the given value', type=float, default=0.0)
-    parser_ran.add_argument('-f', '--field', help='set all fields to the given value', type=float, default=0.0)
+    parser_const = subparsers.add_parser('const', help='generates a problem with constant coupling and/or field')
+    parser_const.set_defaults(generator='const')
+    parser_const.add_argument('-cp', '--coupling', help='set all couplers to the given value', type=float, default=0.0)
+    parser_const.add_argument('-f', '--field', help='set all fields to the given value', type=float, default=0.0)
+    parser_const.add_argument('-rgt', '--random-gauge-transformation', help='flip each spin by half chance using gauge transformation', action='store_true', default=False)
 
     parser_ran = subparsers.add_parser('ran', help='generates a random problem')
     parser_ran.set_defaults(generator='ran')
@@ -227,6 +230,18 @@ def build_cli_parser():
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     parser_ran.add_argument('-sc', '--scale', help='scale feild and coupling values', type=float, default=1.0)
     parser_ran.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
+
+    parser_cbfm = subparsers.add_parser('cbfm', help='generates a corrupted biased ferromagnet problem')
+    parser_cbfm.set_defaults(generator='cbfm')
+    parser_cbfm.add_argument('-j1-val', help='the value of the first coupling', type=float, default=-1.0)
+    parser_cbfm.add_argument('-j1-pr',  help='the probability of the first coupling', type=float, default=0.625)
+    parser_cbfm.add_argument('-j2-val', help='the value of the second coupling', type=float, default=0.2)
+    parser_cbfm.add_argument('-j2-pr',  help='the probability of the second coupling', type=float, default=0.375)
+    parser_cbfm.add_argument('-h1-val', help='the value of the first field', type=float, default=-0.015)
+    parser_cbfm.add_argument('-h1-pr',  help='the probability of the first field', type=float, default=0.625)
+    parser_cbfm.add_argument('-h2-val', help='the value of the second field', type=float, default=0.015)
+    parser_cbfm.add_argument('-h2-pr',  help='the probability of the second field', type=float, default=0.375)
+    parser_cbfm.add_argument('-rgt', '--random-gauge-transformation', help='flip each spin by half chance using gauge transformation', action='store_true', default=False)
 
     parser_fl = subparsers.add_parser('fl', help='generates a frustrated loop problem')
     parser_fl.set_defaults(generator='fl')
