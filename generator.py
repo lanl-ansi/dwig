@@ -30,7 +30,7 @@ def generate_const(qpu, coupling=0.0, field=0.0, random_gauge_transformation=Fal
             adjacent.setdefault(i, []).append((i, j))
             adjacent.setdefault(j, []).append((i, j))
 
-        for site in qpu.sites:
+        for site in sorted(qpu.sites):
             if random.random() < 0.5:
                 if site in fields:
                     fields[site] *= -1
@@ -60,7 +60,7 @@ def generate_jh_distribution(qpu, coupling_vals=[-1.0], couplings_pr=[1.0], fiel
     fields_dist = [i for i in zip(fields_cdf, field_vals)]
 
     fields = {}
-    for site in qpu.sites:
+    for site in sorted(qpu.sites):
         rnd = random.random()
         for cdf, val in fields_dist:
             if rnd <= cdf:
@@ -68,7 +68,7 @@ def generate_jh_distribution(qpu, coupling_vals=[-1.0], couplings_pr=[1.0], fiel
                 break
 
     couplings = {}
-    for coupling in qpu.couplers:
+    for coupling in sorted(qpu.couplers):
         rnd = random.random()
         for cdf, val in couplings_dist:
             if rnd <= cdf:
@@ -81,7 +81,7 @@ def generate_jh_distribution(qpu, coupling_vals=[-1.0], couplings_pr=[1.0], fiel
             adjacent.setdefault(i, []).append((i, j))
             adjacent.setdefault(j, []).append((i, j))
 
-        for site in qpu.sites:
+        for site in sorted(qpu.sites):
             if random.random() < 0.5:
                 if site in fields:
                     fields[site] *= -1
