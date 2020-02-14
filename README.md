@@ -103,8 +103,8 @@ The D-WIG development team would like to thank Denny Dahl for suggesting the D-W
 
 For the RAN-pr formulation,
 ```
-@article{Zdeborova2016statistical,
-  author = {Lenka Zdeborova and Florent Krzakala},
+@article{zdeborova2016statistical,
+  author = {Zdeborova, Lenka and Krzakala, Florent},
   title = {Statistical physics of inference: thresholds and algorithms},
   journal = {Advances in Physics},
   volume = {65},
@@ -175,6 +175,18 @@ For the frustrated cluster loops and gadgets formulation,
   publisher = {American Physical Society},
   doi = {10.1103/PhysRevX.8.031016},
   url = {https://link.aps.org/doi/10.1103/PhysRevX.8.031016}
+}
+```
+
+For the corrupted biased ferromagnet,
+```
+@article{pang2020structure,
+  author="Pang, Yuchen and Coffrin, Carleton and Lokhov, Andrey Y. and Vuffray, Marc",
+  title="The Potential of Quantum Annealing for Rapid Solution Structure Identification",
+  booktitle="Integration of Constraint Programming, Artificial Intelligence, and Operations Research",
+  editor="Hebrard, Emmanuel and Musliu, Nysret",
+  year="2020",
+  publisher="Springer International Publishing"
 }
 ```
 
