@@ -41,7 +41,7 @@ def generate_const(qpu, coupling=0.0, field=0.0, random_gauge_transformation=Fal
     return QPUConfiguration(qpu, fields, couplings)
 
 
-def generate_jh_distribution(qpu, coupling_vals=[-1.0], couplings_pr=[1.0], field_vals=[-1.0], fields_pr=[1.0], random_gauge_transformation=False):
+def generate_disordered(qpu, coupling_vals=[-1.0], couplings_pr=[1.0], field_vals=[-1.0], fields_pr=[1.0], random_gauge_transformation=False):
     assert(len(coupling_vals) == len(couplings_pr))
     assert(len(field_vals) == len(fields_pr))
 

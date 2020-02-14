@@ -56,7 +56,7 @@ def build_case(args):
     elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.scale, args.simple_ground_state)
     elif args.generator == 'cbfm':
-        qpu_config = generator.generate_jh_distribution(qpu, [args.j1_val, args.j2_val], [args.j1_pr, args.j2_pr], [args.h1_val, args.h2_val], [args.h1_pr, args.h2_pr], args.random_gauge_transformation)
+        qpu_config = generator.generate_disordered(qpu, [args.j1_val, args.j2_val], [args.j1_pr, args.j2_pr], [args.h1_val, args.h2_val], [args.h1_pr, args.h2_pr], args.random_gauge_transformation)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_chimera_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
