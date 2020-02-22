@@ -15,7 +15,6 @@ import generator
 from common import print_err
 from common import validate_bqp_data
 from common import json_dumps_kwargs
-#from common import get_chimera_adjacency
 
 # caches remote qpu info when making multiple calls to build_case
 _qpu_remote = None
@@ -237,7 +236,6 @@ def build_cli_parser():
     parser_gd.set_defaults(generator='gd')
     parser_gd.add_argument('-cval', '--coupling-values', help='the candidate coupling values separated by spaces', type=float, default=[], nargs='*')
     parser_gd.add_argument('-cpr', '--coupling-probabilities', help='the probabilities of coupling values separated by spaces', type=float, default=[], nargs='*')
-    #parser_gd.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     parser_gd.add_argument('-fval', '--field-values', help='the candidate field values separated by spaces', type=float, default=[], nargs='*')
     parser_gd.add_argument('-fpr', '--field-probabilities', help='the probabilities of field values spaces', type=float, default=[], nargs='*')
     parser_gd.add_argument('-rgt', '--random-gauge-transformation', help='flip each spin by half chance using gauge transformation', action='store_true', default=False)
