@@ -13,35 +13,12 @@ from structure import ChimeraCoordinate
 # Generators take an instance of ChimeraQPU (qpu) and a generate 
 # a problem and return the data as a QPUConfiguration object
 
-
-def generate_const(qpu, coupling=0.0, field=0.0, random_gauge_transformation=False):
-    fields = {}
-    couplings = {}
-
-    if field != 0.0:
-        fields = {site : field for site in qpu.sites}
-
-    if coupling != 0.0:
-        couplings = {coupler : coupling for coupler in qpu.couplers}
-
-    if random_gauge_transformation:
-        adjacent = {}
-        for i, j in qpu.couplers:
-            adjacent.setdefault(i, []).append((i, j))
-            adjacent.setdefault(j, []).append((i, j))
-
-        for site in sorted(qpu.sites):
-            if random.random() < 0.5:
-                if site in fields:
-                    fields[site] *= -1
-                for pair in adjacent[site]:
-                    if pair in couplings:
-                        couplings[pair] *= -1
-
-    return QPUConfiguration(qpu, fields, couplings)
-
-
 def generate_disordered(qpu, coupling_vals=[], couplings_pr=[], field_vals=[], fields_pr=[], random_gauge_transformation=False):
+    '''This function builds random couplings and fields based on independent
+    probability distributions it is used to implement the gd, cbfm and const
+    problem classes.
+    '''
+
     assert(len(coupling_vals) == len(couplings_pr))
     assert(len(field_vals) == len(fields_pr))
 

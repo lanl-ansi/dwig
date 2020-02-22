@@ -51,7 +51,7 @@ def build_case(args):
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
     if args.generator == 'const':
-        qpu_config = generator.generate_const(qpu, args.coupling, args.field, args.random_gauge_transformation)
+        qpu_config = generator.generate_disordered(qpu, [args.coupling], [1.0], [args.field], [1.0], args.random_gauge_transformation)
     elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.scale, args.simple_ground_state)
     elif args.generator == 'gd':
