@@ -1,0 +1,579 @@
+{
+  "description": "This is a randomly generated B-QP built by D-WIG (https://github.com/lanl-ansi/dwig) using the gd algorithm.  A random number seed of 0 was used.",
+  "id": 856226606,
+  "linear_terms": [
+    {
+      "coeff": -0.01,
+      "id": 0
+    },
+    {
+      "coeff": 0.01,
+      "id": 1
+    },
+    {
+      "coeff": 0.01,
+      "id": 2
+    },
+    {
+      "coeff": 0.01,
+      "id": 3
+    },
+    {
+      "coeff": 0.01,
+      "id": 4
+    },
+    {
+      "coeff": -0.01,
+      "id": 5
+    },
+    {
+      "coeff": 0.01,
+      "id": 6
+    },
+    {
+      "coeff": 0.01,
+      "id": 7
+    },
+    {
+      "coeff": 0.01,
+      "id": 8
+    },
+    {
+      "coeff": -0.01,
+      "id": 9
+    },
+    {
+      "coeff": -0.01,
+      "id": 10
+    },
+    {
+      "coeff": 0.01,
+      "id": 11
+    },
+    {
+      "coeff": -0.01,
+      "id": 12
+    },
+    {
+      "coeff": -0.01,
+      "id": 13
+    },
+    {
+      "coeff": 0.01,
+      "id": 14
+    },
+    {
+      "coeff": -0.01,
+      "id": 15
+    },
+    {
+      "coeff": -0.01,
+      "id": 128
+    },
+    {
+      "coeff": -0.01,
+      "id": 129
+    },
+    {
+      "coeff": 0.01,
+      "id": 130
+    },
+    {
+      "coeff": 0.01,
+      "id": 131
+    },
+    {
+      "coeff": -0.01,
+      "id": 132
+    },
+    {
+      "coeff": -0.01,
+      "id": 133
+    },
+    {
+      "coeff": -0.01,
+      "id": 134
+    },
+    {
+      "coeff": -0.01,
+      "id": 135
+    },
+    {
+      "coeff": -0.01,
+      "id": 136
+    },
+    {
+      "coeff": 0.01,
+      "id": 137
+    },
+    {
+      "coeff": -0.01,
+      "id": 138
+    },
+    {
+      "coeff": -0.01,
+      "id": 139
+    },
+    {
+      "coeff": 0.01,
+      "id": 140
+    },
+    {
+      "coeff": -0.01,
+      "id": 141
+    },
+    {
+      "coeff": -0.01,
+      "id": 142
+    },
+    {
+      "coeff": 0.01,
+      "id": 143
+    }
+  ],
+  "metadata": {
+    "chimera_cell_size": 8,
+    "chimera_degree": 16,
+    "dwig_generator": "gd"
+  },
+  "offset": 0.0,
+  "quadratic_terms": [
+    {
+      "coeff": 1.0,
+      "id_head": 4,
+      "id_tail": 0
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 5,
+      "id_tail": 0
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 6,
+      "id_tail": 0
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 7,
+      "id_tail": 0
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 128,
+      "id_tail": 0
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 4,
+      "id_tail": 1
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 5,
+      "id_tail": 1
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 6,
+      "id_tail": 1
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 7,
+      "id_tail": 1
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 129,
+      "id_tail": 1
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 4,
+      "id_tail": 2
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 5,
+      "id_tail": 2
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 6,
+      "id_tail": 2
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 7,
+      "id_tail": 2
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 130,
+      "id_tail": 2
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 4,
+      "id_tail": 3
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 5,
+      "id_tail": 3
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 6,
+      "id_tail": 3
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 7,
+      "id_tail": 3
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 131,
+      "id_tail": 3
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 12,
+      "id_tail": 4
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 13,
+      "id_tail": 5
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 14,
+      "id_tail": 6
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 15,
+      "id_tail": 7
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 12,
+      "id_tail": 8
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 13,
+      "id_tail": 8
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 14,
+      "id_tail": 8
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 15,
+      "id_tail": 8
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 136,
+      "id_tail": 8
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 12,
+      "id_tail": 9
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 13,
+      "id_tail": 9
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 14,
+      "id_tail": 9
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 15,
+      "id_tail": 9
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 137,
+      "id_tail": 9
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 12,
+      "id_tail": 10
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 13,
+      "id_tail": 10
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 14,
+      "id_tail": 10
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 15,
+      "id_tail": 10
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 138,
+      "id_tail": 10
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 12,
+      "id_tail": 11
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 13,
+      "id_tail": 11
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 14,
+      "id_tail": 11
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 15,
+      "id_tail": 11
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 139,
+      "id_tail": 11
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 134,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 135,
+      "id_tail": 128
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 132,
+      "id_tail": 129
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 133,
+      "id_tail": 129
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 134,
+      "id_tail": 129
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 135,
+      "id_tail": 129
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 132,
+      "id_tail": 130
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 133,
+      "id_tail": 130
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 134,
+      "id_tail": 130
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 135,
+      "id_tail": 130
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 132,
+      "id_tail": 131
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 133,
+      "id_tail": 131
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 134,
+      "id_tail": 131
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 135,
+      "id_tail": 131
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 140,
+      "id_tail": 132
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 141,
+      "id_tail": 133
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 134
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 143,
+      "id_tail": 135
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 140,
+      "id_tail": 136
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 141,
+      "id_tail": 136
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 142,
+      "id_tail": 136
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 143,
+      "id_tail": 136
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 140,
+      "id_tail": 137
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 141,
+      "id_tail": 137
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 142,
+      "id_tail": 137
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 143,
+      "id_tail": 137
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 140,
+      "id_tail": 138
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 141,
+      "id_tail": 138
+    },
+    {
+      "coeff": 0.2,
+      "id_head": 142,
+      "id_tail": 138
+    },
+    {
+      "coeff": 1.0,
+      "id_head": 143,
+      "id_tail": 138
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 140,
+      "id_tail": 139
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 141,
+      "id_tail": 139
+    },
+    {
+      "coeff": -1.0,
+      "id_head": 142,
+      "id_tail": 139
+    },
+    {
+      "coeff": -0.2,
+      "id_head": 143,
+      "id_tail": 139
+    }
+  ],
+  "scale": 1.0,
+  "variable_domain": "spin",
+  "variable_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143
+  ],
+  "version": "1.0.0"
+}

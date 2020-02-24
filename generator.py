@@ -13,67 +13,48 @@ from structure import ChimeraCoordinate
 # Generators take an instance of ChimeraQPU (qpu) and a generate 
 # a problem and return the data as a QPUConfiguration object
 
+def generate_disordered(qpu, coupling_vals=[], couplings_pr=[], field_vals=[], fields_pr=[], random_gauge_transformation=False):
+    '''This function builds random couplings and fields based on independent
+    probability distributions it is used to implement the gd, cbfm and const
+    problem classes.
+    '''
 
-def generate_const(qpu, coupling=0.0, field=0.0, random_gauge_transformation=False):
-    fields = {}
-    couplings = {}
-
-    if field != 0.0:
-        fields = {site : field for site in qpu.sites}
-
-    if coupling != 0.0:
-        couplings = {coupler : coupling for coupler in qpu.couplers}
-
-    if random_gauge_transformation:
-        adjacent = {}
-        for i, j in qpu.couplers:
-            adjacent.setdefault(i, []).append((i, j))
-            adjacent.setdefault(j, []).append((i, j))
-
-        for site in sorted(qpu.sites):
-            if random.random() < 0.5:
-                if site in fields:
-                    fields[site] *= -1
-                for pair in adjacent[site]:
-                    if pair in couplings:
-                        couplings[pair] *= -1
-
-    return QPUConfiguration(qpu, fields, couplings)
-
-
-def generate_disordered(qpu, coupling_vals=[-1.0], couplings_pr=[1.0], field_vals=[-1.0], fields_pr=[1.0], random_gauge_transformation=False):
     assert(len(coupling_vals) == len(couplings_pr))
     assert(len(field_vals) == len(fields_pr))
 
     assert(sum(couplings_pr) <= 1.0 and all(pr >= 0.0 for pr in couplings_pr))
     assert(sum(fields_pr) <= 1.0 and all(pr >= 0.0 for pr in fields_pr))
 
-    couplings_cdf = [couplings_pr[0]]
-    for (i,pr) in enumerate(couplings_pr[1:]):
-        couplings_cdf.append(couplings_cdf[i-1] + pr)
-
-    fields_cdf = [fields_pr[0]]
-    for (i,pr) in enumerate(fields_pr[1:]):
-        fields_cdf.append(fields_cdf[i-1] + pr)
-
-    couplings_dist = [i for i in zip(couplings_cdf, coupling_vals)]
-    fields_dist = [i for i in zip(fields_cdf, field_vals)]
-
     fields = {}
-    for site in sorted(qpu.sites):
-        rnd = random.random()
-        for cdf, val in fields_dist:
-            if rnd <= cdf:
-                fields[site] = val
-                break
-
     couplings = {}
-    for coupling in sorted(qpu.couplers):
-        rnd = random.random()
-        for cdf, val in couplings_dist:
-            if rnd <= cdf:
-                couplings[coupling] = val
-                break
+
+    if len(fields_pr) > 0:
+        fields_cdf = [fields_pr[0]]
+        for (i,pr) in enumerate(fields_pr[1:]):
+            fields_cdf.append(fields_cdf[i-1] + pr)
+
+        fields_dist = [i for i in zip(fields_cdf, field_vals)]
+
+        for site in sorted(qpu.sites):
+            rnd = random.random()
+            for cdf, val in fields_dist:
+                if rnd <= cdf:
+                    fields[site] = val
+                    break
+
+    if len(couplings_pr) > 0:
+        couplings_cdf = [couplings_pr[0]]
+        for (i,pr) in enumerate(couplings_pr[1:]):
+            couplings_cdf.append(couplings_cdf[i-1] + pr)
+
+        couplings_dist = [i for i in zip(couplings_cdf, coupling_vals)]
+
+        for coupling in sorted(qpu.couplers):
+            rnd = random.random()
+            for cdf, val in couplings_dist:
+                if rnd <= cdf:
+                    couplings[coupling] = val
+                    break
 
     if random_gauge_transformation:
         adjacent = {}
