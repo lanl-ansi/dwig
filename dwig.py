@@ -15,7 +15,6 @@ import generator
 from common import print_err
 from common import validate_bqp_data
 from common import json_dumps_kwargs
-#from common import get_chimera_adjacency
 
 # caches remote qpu info when making multiple calls to build_case
 _qpu_remote = None
@@ -52,11 +51,13 @@ def build_case(args):
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
     if args.generator == 'const':
-        qpu_config = generator.generate_const(qpu, args.coupling, args.field, args.random_gauge_transformation)
+        qpu_config = generator.generate_disordered(qpu, [args.coupling], [1.0], [args.field], [1.0], args.random_gauge_transformation)
     elif args.generator == 'ran':
         qpu_config = generator.generate_ran(qpu, args.probability, args.steps, args.field, args.scale, args.simple_ground_state)
+    elif args.generator == 'gd':
+        qpu_config = generator.generate_disordered(qpu, args.coupling_values, args.coupling_probabilities, args.field_values, args.field_probabilities, args.random_gauge_transformation)
     elif args.generator == 'cbfm':
-        qpu_config = generator.generate_jh_distribution(qpu, [args.j1_val, args.j2_val], [args.j1_pr, args.j2_pr], [args.h1_val, args.h2_val], [args.h1_pr, args.h2_pr], args.random_gauge_transformation)
+        qpu_config = generator.generate_disordered(qpu, [args.j1_val, args.j2_val], [args.j1_pr, args.j2_pr], [args.h1_val, args.h2_val], [args.h1_pr, args.h2_pr], args.random_gauge_transformation)
     elif args.generator == 'fl':
         qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_chimera_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
@@ -230,6 +231,14 @@ def build_cli_parser():
     parser_ran.add_argument('-f', '--field', help='include a random field', action='store_true', default=False)
     parser_ran.add_argument('-sc', '--scale', help='scale feild and coupling values', type=float, default=1.0)
     parser_ran.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
+
+    parser_gd = subparsers.add_parser('gd', help='generates a generic disordered problem from distribution parameters')
+    parser_gd.set_defaults(generator='gd')
+    parser_gd.add_argument('-cval', '--coupling-values', help='the candidate coupling values separated by spaces', type=float, default=[], nargs='*')
+    parser_gd.add_argument('-cpr', '--coupling-probabilities', help='the probabilities of coupling values separated by spaces', type=float, default=[], nargs='*')
+    parser_gd.add_argument('-fval', '--field-values', help='the candidate field values separated by spaces', type=float, default=[], nargs='*')
+    parser_gd.add_argument('-fpr', '--field-probabilities', help='the probabilities of field values spaces', type=float, default=[], nargs='*')
+    parser_gd.add_argument('-rgt', '--random-gauge-transformation', help='flip each spin by half chance using gauge transformation', action='store_true', default=False)
 
     parser_cbfm = subparsers.add_parser('cbfm', help='generates a corrupted biased ferromagnet problem')
     parser_cbfm.set_defaults(generator='cbfm')
