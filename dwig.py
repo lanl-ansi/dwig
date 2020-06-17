@@ -229,7 +229,7 @@ def build_cli_parser():
     parser.add_argument('-ccl', '--chimera-cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
 
     parser.add_argument('-ccb', '--chimera-cell-box', help='two chimera cell coordinates define a box that is used to filter the hardware graph', nargs=4, type=int)
-    parser.add_argument('-ces', '--chimera-edge-set', help='a set of spin pairs in that is used to filter the hardware graph', nargs='+', type=spin_pair)
+    parser.add_argument('-ces', '--chimera-edge-set', help='a set of spin pairs that is used to filter the hardware graph', nargs='+', type=spin_pair)
 
 
     subparsers = parser.add_subparsers()
