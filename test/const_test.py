@@ -38,7 +38,7 @@ class TestConstGeneration:
 
     #../dwig.py -ic -pp -cs 0,4 0,5 1,4 1,5 0,10 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_7.json
     def test_const_i_7(self, capfd):
-        json_comp(self.parser, capfd, 'const_i_7.json', ['-ic', '-pp', '-cs', '0,4', '0,5', '1,4', '1,5', '0,10', '5', '-tl', '-rs', '0', '-os', 'const', '-cp', '0.2', '-f', '-0.5'])
+        json_comp(self.parser, capfd, 'const_i_7.json', ['-ic', '-pp', '-cs', '0,4', '0,5', '1,4', '1,5', '0,10', '-tl', '-rs', '0', '-os', 'const', '-cp', '0.2', '-f', '-0.5'])
 
     #../dwig.py -ic -pp -ss 0 1 4 5 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_8.json
     def test_const_i_8(self, capfd):
