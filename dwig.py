@@ -52,9 +52,13 @@ def build_case(args):
         print_err('filtering QPU to the chimera cell box {} by {}'.format(chimera_cell_1, chimera_cell_2))
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
 
-    if args.chimera_edge_set != None:
-        print_err('filtering QPU to the edge set {}'.format(args.chimera_edge_set))
-        qpu = qpu.edge_filter(args.chimera_edge_set)
+    if args.spin_set != None:
+        print_err('filtering QPU to the spin set {}'.format(args.spin_set))
+        qpu = qpu.spin_filter(args.spin_set)
+
+    if args.coupler_set != None:
+        print_err('filtering QPU to the coupler set {}'.format(args.coupler_set))
+        qpu = qpu.coupler_filter(args.coupler_set)
 
 
     if args.generator == 'const':
@@ -229,7 +233,8 @@ def build_cli_parser():
     parser.add_argument('-ccl', '--chimera-cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
 
     parser.add_argument('-ccb', '--chimera-cell-box', help='two chimera cell coordinates define a box that is used to filter the hardware graph', nargs=4, type=int)
-    parser.add_argument('-ces', '--chimera-edge-set', help='a set of spin pairs that is used to filter the hardware graph', nargs='+', type=spin_pair)
+    parser.add_argument('-cs', '--coupler-set', help='a set of spin pairs that is used to filter the hardware graph couplers', nargs='+', type=spin_pair)
+    parser.add_argument('-ss', '--spin-set', help='a set of spins that is used to filter the hardware graph', nargs='+', type=int)
 
 
     subparsers = parser.add_subparsers()
