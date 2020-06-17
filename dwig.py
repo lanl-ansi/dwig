@@ -33,6 +33,8 @@ def build_case(args):
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
+    #print_err(args.chimera_edge_set)
+
     qpu = get_qpu(args.profile, args.ignore_connection, args.hardware_chimera_degree)
     #print_err(qpu)
 
@@ -49,6 +51,11 @@ def build_case(args):
         chimera_cell_2 = tuple(args.chimera_cell_box[2:4])
         print_err('filtering QPU to the chimera cell box {} by {}'.format(chimera_cell_1, chimera_cell_2))
         qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
+
+    if args.chimera_edge_set != None:
+        print_err('filtering QPU to the edge set {}'.format(args.chimera_edge_set))
+        qpu = qpu.edge_filter(args.chimera_edge_set)
+
 
     if args.generator == 'const':
         qpu_config = generator.generate_disordered(qpu, [args.coupling], [1.0], [args.field], [1.0], args.random_gauge_transformation)
@@ -198,6 +205,14 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     return _qpu_remote
 
 
+def spin_pair(s):
+    try:
+        x, y = map(int, s.split(','))
+        return x, y
+    except:
+        raise argparse.ArgumentTypeError("a spin pair must be x,y intergers")
+
+
 def build_cli_parser():
     parser = argparse.ArgumentParser()
 
@@ -214,6 +229,7 @@ def build_cli_parser():
     parser.add_argument('-ccl', '--chimera-cell-limit', help='a limit the number of chimera cells used in the problem', type=int)
 
     parser.add_argument('-ccb', '--chimera-cell-box', help='two chimera cell coordinates define a box that is used to filter the hardware graph', nargs=4, type=int)
+    parser.add_argument('-ces', '--chimera-edge-set', help='a set of spin pairs in that is used to filter the hardware graph', nargs='+', type=spin_pair)
 
 
     subparsers = parser.add_subparsers()

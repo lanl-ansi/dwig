@@ -237,6 +237,33 @@ class ChimeraQPU(object):
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
+    def edge_filter(self, edge_set):
+        edge_sites = set([])
+        for (i,j) in edge_set:
+            edge_sites.add(i)
+            edge_sites.add(j)
+
+        filtered_sites = set([])
+        for site in self.sites:
+            if site.index in edge_sites:
+                filtered_sites.add(site.index)
+
+        filtered_couplers = []
+        for i,j in self.couplers:
+            if (i.index in filtered_sites and j.index in filtered_sites):
+                coupler = (i.index,j.index)
+                if coupler in edge_set:
+                    filtered_couplers.append(coupler)
+
+        if len(filtered_couplers) != len(edge_set):
+            print_err('warning: given an edge set of size {} but found only {} active couplings from this set'.format(len(edge_set), len(filtered_couplers)))
+            filtered_sites = set([])
+            for (i,j) in filtered_couplers:
+                filtered_sites.add(i)
+                filtered_sites.add(j)
+
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
+
 
     def chimera_cell(self, chimera_coordinate):
         return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)
