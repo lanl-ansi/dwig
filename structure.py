@@ -237,6 +237,49 @@ class ChimeraQPU(object):
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
+    def spin_filter(self, spin_set):
+        spin_set = set(spin_set)
+
+        filtered_sites = set([])
+        for site in self.sites:
+            if site.index in spin_set:
+                filtered_sites.add(site.index)
+
+        filtered_couplers = []
+        for i,j in self.couplers:
+            if (i.index in filtered_sites and j.index in filtered_sites):
+                coupler = (i.index,j.index)
+                filtered_couplers.append(coupler)
+
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
+
+    def coupler_filter(self, coupler_set):
+        coupler_sites = set([])
+        for (i,j) in coupler_set:
+            coupler_sites.add(i)
+            coupler_sites.add(j)
+
+        filtered_sites = set([])
+        for site in self.sites:
+            if site.index in coupler_sites:
+                filtered_sites.add(site.index)
+
+        filtered_couplers = []
+        for i,j in self.couplers:
+            if (i.index in filtered_sites and j.index in filtered_sites):
+                coupler = (i.index, j.index)
+                if coupler in coupler_set:
+                    filtered_couplers.append(coupler)
+
+        if len(filtered_couplers) != len(coupler_sites):
+            print_err('warning: given a coupler set of size {} but found only {} active couplings from this set'.format(len(coupler_sites), len(filtered_couplers)))
+            filtered_sites = set([])
+            for (i,j) in filtered_couplers:
+                filtered_sites.add(i)
+                filtered_sites.add(j)
+
+        return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
+
 
     def chimera_cell(self, chimera_coordinate):
         return self.chimera_cell_coordinates(chimera_coordinate.row, chimera_coordinate.col)

@@ -4,7 +4,13 @@ rm data/*.json
 ../dwig.py -ic -pp -cd  1 -tl -rs 0 -os const -cp 0.2 > data/const_i_2.json
 ../dwig.py -ic -pp -cd  1 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_3.json
 ../dwig.py -ic -pp -cd 16 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_4.json
+
 ../dwig.py -ic -pp -ccb 1 1 2 5 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_5.json
+
+../dwig.py -ic -pp -cs 0,4 0,5 1,4 1,5 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_6.json
+../dwig.py -ic -pp -cs 0,4 0,5 1,4 1,5 0,10 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_7.json
+../dwig.py -ic -pp -ss 0 1 4 5 -tl -rs 0 -os const -cp 0.2 -f -0.5 > data/const_i_8.json
+
 
 ../dwig.py -ic -pp -cd  1 -tl -rs 0 -os ran > data/ran1_i_1.json
 ../dwig.py -ic -pp -cd  1 -tl -rs 0 -os ran -f > data/ran1_i_2.json
