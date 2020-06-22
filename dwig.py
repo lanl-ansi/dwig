@@ -70,7 +70,7 @@ def build_case(args):
     elif args.generator == 'cbfm':
         qpu_config = generator.generate_disordered(qpu, [args.j1_val, args.j2_val], [args.j1_pr, args.j2_pr], [args.h1_val, args.h2_val], [args.h1_pr, args.h2_pr], args.random_gauge_transformation)
     elif args.generator == 'fl':
-        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args.multicell, args.cluster_chimera_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
+        qpu_config = generator.generate_fl(qpu, args.steps, args.alpha, args._lambda, args.multicell, args.cluster_chimera_cells, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
     elif args.generator == 'wscn':
         if args.chimera_cell_limit != None:
             print_err('weak-strong cluster networks cannot be constricted with a cell limit.')
@@ -214,7 +214,7 @@ def spin_pair(s):
         x, y = map(int, s.split(','))
         return x, y
     except:
-        raise argparse.ArgumentTypeError("a spin pair must be x,y intergers")
+        raise argparse.ArgumentTypeError("a spin pair must be x,y integers")
 
 
 def build_cli_parser():
@@ -279,6 +279,7 @@ def build_cli_parser():
     parser_fl.add_argument('-a', '--alpha', help='site-to-loop ratio', type=float, default=0.2)
     parser_fl.add_argument('-mc', '--multicell', help='reject loops that are within one chimera cell', action='store_true', default=False)
     parser_fl.add_argument('-ccc', '--cluster-chimera-cells', help='treats each chimera cell as a single logical spin', action='store_true', default=False)
+    parser_fl.add_argument('-l', '--lambda', help='a scaling parameter that changes the relative strength of inter-cell couplers', type=float, default=1.0, dest='_lambda')
     parser_fl.add_argument('-sgs', '--simple-ground-state', help='makes the planted ground state be all spins -1', action='store_true', default=False)
     parser_fl.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
     parser_fl.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=1000)

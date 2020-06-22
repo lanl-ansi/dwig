@@ -125,7 +125,7 @@ def generate_ran(qpu, probability=0.5, steps=1, feild=False, scale=1.0, simple_g
     return QPUAssignment(config, spins, 0, discription)
 
 
-def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
+def generate_fl(qpu, steps=2, alpha=0.2, _lambda=1.0, multicell=False, cluster_cells=False, simple_ground_state=False, min_cycle_length=7, cycle_reject_limit=1000, cycle_sample_limit=10000):
     '''This function builds a frustrated loop problems as described by,
     https://arxiv.org/abs/1502.02098 and https://arxiv.org/abs/1701.04579.
     Because random walks are used for finding cycles in the graph and 
@@ -280,6 +280,14 @@ def generate_fl(qpu, steps=2, alpha=0.2, multicell=False, cluster_cells=False, s
 
         spins = site_spins
         couplings = site_couplings
+
+
+    # rescale intra-cell couplers by lambda
+    for coupler, value in couplings.items():
+        i,j = coupler
+        if i.chimera_cell != j.chimera_cell:
+            couplings[coupler] = _lambda*value
+
 
     # it is possible that couplings cancel eliminating some sites from the active set
     active_sites = set()

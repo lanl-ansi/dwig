@@ -136,13 +136,29 @@ For the FL-k formulation,
 }
 ```
 
-For the FCL-k formulation,
+For the FCL-k formulation (`fl` with the `--cluster-chimera-cells` option),
 ```
 @article{king2017quantum,
   title={Quantum Annealing amid Local Ruggedness and Global Frustration},
   author={King, James and Yarkoni, Sheir and Raymond, Jack and Ozfidan, Isil and King, Andrew D and Nevisi, Mayssam Mohammadi and Hilton, Jeremy P, and McGeoch, Catherine C},
   journal={arXiv preprint arXiv:1701.04579},
   year={2017}
+}
+```
+
+For the DCL-k formulation (`fl` with the `--cluster-chimera-cells` and `--lambda` options),
+```
+@article{mandra2018qst,
+  title={A deceptive step towards quantum speedup detection},
+  author = {Salvatore Mandr{\`{a}} and Helmut G Katzgraber},
+  journal = {Quantum Science and Technology},
+  volume = {3},
+  number = {4},
+  month = {jul},
+  year = {2018},
+  publisher = {{IOP} Publishing},
+  doi = {10.1088/2058-9565/aac8b2},
+  url = {https://doi.org/10.1088%2F2058-9565%2Faac8b2},
 }
 ```
 
@@ -185,7 +201,7 @@ For the corrupted biased ferromagnet,
   title="The Potential of Quantum Annealing for Rapid Solution Structure Identification",
   booktitle="Integration of Constraint Programming, Artificial Intelligence, and Operations Research",
   editor="Hebrard, Emmanuel and Musliu, Nysret",
-  year="2020",
+  year={2019},
   publisher="Springer International Publishing"
 }
 ```
