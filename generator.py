@@ -761,3 +761,50 @@ def generate_fclg(qpu, steps=3, alpha=0.2, gadget_fraction=0.1, simple_ground_st
     config = QPUConfiguration(qpu, fields, couplings)
     return QPUAssignment(config, ground_state, description='planted ground state, most likely non-unique')
 
+
+def generate_ssn(qpu, field=1.0, coupling=1.0, cell_offset=0):
+    fields = {}
+    couplings = {}
+
+    for crow in range(1, qpu.chimera_degree_view+1):
+        for ccol in range(1, qpu.chimera_degree_view+1):
+            cc = qpu.chimera_cell_coordinates(crow, ccol)
+
+            if ((cc + cell_offset + (crow-1 % 2)) % 2) == 0:
+                #print("cc: ", cc, " crow: ", crow, " ccol: ", ccol)
+                sites = qpu.chimera_cell_sites[cc]
+
+                active_sites = [site for site in sites]
+
+                if crow > 1:
+                    cc_above = qpu.chimera_cell_coordinates(crow - 1, ccol)
+                    #print("cc_above: ", cc_above)
+                    for site in qpu.chimera_cell_sites[cc_above]:
+                        if site.chimera_cell_row == 0:
+                            active_sites.append(site)
+
+                if ccol < qpu.chimera_degree_view:
+                    cc_right = qpu.chimera_cell_coordinates(crow, ccol + 1)
+                    #print("cc_right: ", cc_right)
+                    for site in qpu.chimera_cell_sites[cc_right]:
+                        if site.chimera_cell_row == 1:
+                            active_sites.append(site)
+
+                #print("")
+
+                active_sites = set(active_sites)
+
+                for s in active_sites:
+                    fields[s] = field
+
+                for i,j in qpu.couplers:
+                    if (i in active_sites and j in active_sites):
+                        coupler = (i,j)
+                        couplings[coupler] = coupling
+
+    #print(qpu.couplers)
+
+    return QPUConfiguration(qpu, fields, couplings)
+
+
+

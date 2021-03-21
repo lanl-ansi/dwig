@@ -88,6 +88,8 @@ def build_case(args):
         qpu_config = generator.generate_wscn(qpu, args.weak_field, args.strong_field)
     elif args.generator == 'fclg':
         qpu_config = generator.generate_fclg(qpu, args.steps, args.alpha, args.gadget_fraction, args.simple_ground_state, args.min_loop_length, args.loop_reject_limit, args.loop_sample_limit)
+    elif args.generator == 'ssn':
+        qpu_config = generator.generate_ssn(qpu, args.field, args.coupling, args.cell_offset)
     else:
         assert(False) # CLI failed
 
@@ -298,6 +300,12 @@ def build_cli_parser():
     parser_fclg.add_argument('-mll', '--min-loop-length', help='the minimum length of a loop', type=int, default=7)
     parser_fclg.add_argument('-lrl', '--loop-reject-limit', help='the maximum amount of loops to be reject', type=int, default=5000)
     parser_fclg.add_argument('-lsl', '--loop-sample-limit', help='the maximum amount of random walk samples', type=int, default=10000)
+
+    parser_ssn = subparsers.add_parser('ssn', help='generates a tiled collection of independent single cell plus neighbors experiments')
+    parser_ssn.set_defaults(generator='ssn')
+    parser_ssn.add_argument('-cp', '--coupling', help='set all couplers to the given value', type=float, default=0.0)
+    parser_ssn.add_argument('-f', '--field', help='set all fields to the given value', type=float, default=0.0)
+    parser_ssn.add_argument('-co', '--cell-offset', help='a unit cell offset used to determine the tiling pattern', type=int, default=0)
 
     return parser
 
