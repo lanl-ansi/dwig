@@ -770,7 +770,7 @@ def generate_ssn(qpu, field=1.0, coupling=1.0, cell_offset=0):
         for ccol in range(1, qpu.chimera_degree_view+1):
             cc = qpu.chimera_cell_coordinates(crow, ccol)
 
-            if ((cc + cell_offset + (crow-1 % 2)) % 2) == 0:
+            if ((cc + cell_offset + (crow-1 % 2)) % 2) == 0 and cc in qpu.chimera_cell_sites:
                 #print("cc: ", cc, " crow: ", crow, " ccol: ", ccol)
                 sites = qpu.chimera_cell_sites[cc]
 
@@ -779,16 +779,18 @@ def generate_ssn(qpu, field=1.0, coupling=1.0, cell_offset=0):
                 if crow > 1:
                     cc_above = qpu.chimera_cell_coordinates(crow - 1, ccol)
                     #print("cc_above: ", cc_above)
-                    for site in qpu.chimera_cell_sites[cc_above]:
-                        if site.chimera_cell_row == 0:
-                            active_sites.append(site)
+                    if cc_above in qpu.chimera_cell_sites:
+                        for site in qpu.chimera_cell_sites[cc_above]:
+                            if site.chimera_cell_row == 0:
+                                active_sites.append(site)
 
                 if ccol < qpu.chimera_degree_view:
                     cc_right = qpu.chimera_cell_coordinates(crow, ccol + 1)
                     #print("cc_right: ", cc_right)
-                    for site in qpu.chimera_cell_sites[cc_right]:
-                        if site.chimera_cell_row == 1:
-                            active_sites.append(site)
+                    if cc_right in qpu.chimera_cell_sites:
+                        for site in qpu.chimera_cell_sites[cc_right]:
+                            if site.chimera_cell_row == 1:
+                                active_sites.append(site)
 
                 #print("")
 
