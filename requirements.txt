@@ -19,7 +19,7 @@ numpy==1.16.4
 packaging==19.0
 plucky==0.4.3
 pluggy==0.12.0
-py==1.8.0
+py==1.10.0
 pyparsing==2.4.0
 PySocks==1.7.0
 pytest==4.6.3
