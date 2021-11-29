@@ -435,9 +435,6 @@ class PegasusQPU(object):
         filtered_couplers = [(i.index, j.index) for i, j in self.couplers if \
             (i.index in filtered_sites and j.index in filtered_sites)]
 
-        print_err(len(filtered_couplers))
-        print_err(len(graph.edges))
-
         return PegasusQPU(
             filtered_sites, filtered_couplers, self.site_range,
             self.coupler_range, self.chip_id, self.endpoint, self.solver_name)
