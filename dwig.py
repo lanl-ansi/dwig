@@ -5,10 +5,12 @@ from __future__ import print_function
 import sys, os, json, argparse, random, math, datetime
 
 from dwave.cloud import Client
-import dwave_networkx
+from dwave.cloud.client import qpu
+import dwave_networkx as dnx
 
 from structure import QPUAssignment
 from structure import ChimeraQPU
+from structure import PegasusQPU
 from structure import Range
 
 import generator
@@ -22,10 +24,11 @@ _qpu_remote = None
 def main(args, output_stream=sys.stdout):
     case = build_case(args)
     validate_bqp_data(case)
+
     if args.pretty_print:
-        print(json.dumps(case, **json_dumps_kwargs), file=output_stream)
+        print(json.dumps(case, **json_dumps_kwargs), file = output_stream)
     else:
-        print(json.dumps(case, sort_keys=True), file=output_stream)
+        print(json.dumps(case, sort_keys = True), file = output_stream)
 
 
 def build_case(args):
@@ -33,24 +36,26 @@ def build_case(args):
         print_err('setting random seed to: {}'.format(args.seed))
         random.seed(args.seed)
 
-    #print_err(args.chimera_edge_set)
+    qpu = get_qpu(args.profile, args.ignore_connection, args.hardware_lattice_size)
 
-    qpu = get_qpu(args.profile, args.ignore_connection, args.hardware_chimera_degree)
-    #print_err(qpu)
+    if "2000Q" in qpu.solver_name:
+        if args.lattice_size != None:
+            print_err('filtering QPU to chimera of degree {}'.format(args.lattice_size))
+            qpu = qpu.chimera_degree_filter(args.lattice_size)
 
-    if args.chimera_degree != None:
-        print_err('filtering QPU to chimera of degree {}'.format(args.chimera_degree))
-        qpu = qpu.chimera_degree_filter(args.chimera_degree)
+        if args.chimera_cell_limit != None:
+            print_err('filtering QPU to the first {} chimera cells'.format(args.chimera_cell_limit))
+            qpu = qpu.cell_filter(args.chimera_cell_limit)
 
-    if args.chimera_cell_limit != None:
-        print_err('filtering QPU to the first {} chimera cells'.format(args.chimera_cell_limit))
-        qpu = qpu.cell_filter(args.chimera_cell_limit)
-
-    if args.chimera_cell_box != None:
-        chimera_cell_1 = tuple(args.chimera_cell_box[0:2])
-        chimera_cell_2 = tuple(args.chimera_cell_box[2:4])
-        print_err('filtering QPU to the chimera cell box {} by {}'.format(chimera_cell_1, chimera_cell_2))
-        qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
+        if args.chimera_cell_box != None:
+            chimera_cell_1 = tuple(args.chimera_cell_box[0:2])
+            chimera_cell_2 = tuple(args.chimera_cell_box[2:4])
+            print_err('filtering QPU to the chimera cell box {} by {}'.format(chimera_cell_1, chimera_cell_2))
+            qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
+    elif "Advantage" in qpu.solver_name:
+        if args.lattice_size != None:
+            print_err('filtering QPU to Pegasus lattice of degree {}'.format(args.lattice_size))
+            qpu = qpu.pegasus_degree_filter(args.lattice_size)
 
     if args.spin_set != None:
         print_err('filtering QPU to the spin set {}'.format(args.spin_set))
@@ -59,7 +64,6 @@ def build_case(args):
     if args.coupler_set != None:
         print_err('filtering QPU to the coupler set {}'.format(args.coupler_set))
         qpu = qpu.coupler_filter(args.coupler_set)
-
 
     if args.generator == 'const':
         qpu_config = generator.generate_disordered(qpu, [args.coupling], [1.0], [args.field], [1.0], args.random_gauge_transformation)
@@ -102,12 +106,9 @@ def build_case(args):
             if not coupler in config.couplings:
                 config.couplings[coupler] = 0.0
 
-    #print_err(qpu_config)
     if args.omit_solution:
         if isinstance(qpu_config, QPUAssignment):
             qpu_config = qpu_config.qpu_config
-
-
 
     data = qpu_config.build_dict(args.include_zeros)
 
@@ -122,6 +123,7 @@ def build_case(args):
 
 def build_metadata(args, qpu):
     metadata = {}
+
     if not qpu.endpoint is None:
         metadata['dw_endpoint'] = qpu.endpoint
     if not qpu.solver_name is None:
@@ -129,8 +131,9 @@ def build_metadata(args, qpu):
     if not qpu.chip_id is None:
         metadata['dw_chip_id'] = qpu.chip_id
 
-    metadata['chimera_cell_size'] = qpu.cell_size
-    metadata['chimera_degree'] = qpu.chimera_degree
+    if "2000Q" in qpu.solver_name:
+        metadata['chimera_cell_size'] = qpu.cell_size
+        metadata['chimera_degree'] = qpu.chimera_degree
 
     metadata['dwig_generator'] = args.generator
 
@@ -140,7 +143,7 @@ def build_metadata(args, qpu):
     return metadata
 
 
-def get_qpu(profile, ignore_connection, hardware_chimera_degree):
+def get_qpu(profile, ignore_connection, hardware_lattice_size):
     chip_id = None
     endpoint = None
     solver_name = None
@@ -151,17 +154,21 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
     if not ignore_connection:
         if _qpu_remote == None:
             try:
-                with Client.from_config(config_file=os.getenv("HOME")+"/dwave.conf", profile=profile) as client:
+                config_path = os.getenv("HOME") + "/dwave.conf"
+                
+                with Client.from_config(config_file = config_path, profile = profile) as client:
                     endpoint = client.endpoint
                     solver = client.get_solver()
                     solver_name = solver.name
                     couplers = solver.undirected_edges
                     sites = solver.nodes
 
-                    solver_chimera_degree = int(math.ceil(math.sqrt(len(sites)/cell_size)))
-                    if hardware_chimera_degree != solver_chimera_degree:
-                        print_err('Warning: the hardware chimera degree was specified as {}, while the solver {} has a degree of {}'.format(hardware_chimera_degree, solver_name, solver_chimera_degree))
-                        hardware_chimera_degree = solver_chimera_degree
+                    if "2000Q" in solver.name:
+                        solver_chimera_degree = int(math.ceil(math.sqrt(len(sites) / cell_size)))
+
+                        if hardware_lattice_size != solver_chimera_degree:
+                            print_err('Warning: the hardware lattice size was specified as {}, while the solver {} has a degree of {}'.format(hardware_lattice_size, solver_name, solver_chimera_degree))
+                            hardware_lattice_size = solver_chimera_degree
 
                     site_range = Range(*solver.properties['h_range'])
                     coupler_range = Range(*solver.properties['j_range'])
@@ -170,42 +177,64 @@ def get_qpu(profile, ignore_connection, hardware_chimera_degree):
             #TODO remove try/except logic, if there is a better way to check the connection
             except Exception as e:
                print_err('QPU connection details not found or there was a connection error')
-               print_err('  '+str(e))
-               print_err('assuming full yield square chimera of degree {}'.format(hardware_chimera_degree))
+               print_err('  ' + str(e))
+               print_err('assuming full yield square chimera of degree {}'.format(hardware_lattice_size))
                ignore_connection = True
         else:
             print_err('info: using cached QPU details')
             return _qpu_remote
 
     if ignore_connection:
-        site_range = Range(-2.0, 2.0)
-        coupler_range = Range(-1.0, 1.0)
+        if "2000Q" in solver_name:
+            site_range = Range(-2.0, 2.0)
+            coupler_range = Range(-1.0, 1.0)
+            graph = dnx.chimera_graph(
+                hardware_lattice_size, hardware_lattice_size,  cell_size // 2)
+        elif "Advantage" in solver_name:
+            site_range = Range(-4.0, 4.0)
+            coupler_range = Range(-1.0, 1.0)
+            graph = dnx.pegasus_graph(hardware_lattice_size, nice_coordinates = True)
 
-        # the hard coded 4 here assumes an 4x2 unit cell
-        graph = dwave_networkx.chimera_graph(hardware_chimera_degree, hardware_chimera_degree, cell_size//2)
         edges = graph.edges()
-        #arcs = get_chimera_adjacency(hardware_chimera_degree, hardware_chimera_degree, cell_size//2)
-        #print(arcs)
 
-        # turn arcs into couplers
-        # this step is nessisary to be consistent with the solver.properties['couplers'] data
+        # Convert edges into couplers. This is necessary to be consistent with the
+        # solver.properties['couplers'] objects, which are simply index tuples.
         couplers = []
-        for i,j in edges:
+
+        for i, j in edges:
+            # A qubit should not be coupled to itself.
             assert(i != j)
+
             if i < j:
-                couplers.append((i,j))
+                # Add a coupler where `i` is the tail.
+                couplers.append((i, j))
             else:
-                couplers.append((j,i))
+                # Add a coupler where `j` is the tail.
+                couplers.append((j, i))
+
+        # Convert the list of couplers to a set.
         couplers = set(couplers)
 
-        sites = set([coupler[0] for coupler in couplers]+[coupler[1] for coupler in couplers])
+        # Get the set of all site indices from coupler indices.
+        sites = set([coupler[0] for coupler in couplers] + \
+            [coupler[1] for coupler in couplers])
 
-        # sanity check on coupler consistency across both branches
-        for i,j in couplers:
+        for i, j in couplers:
+            # Sanity check on coupler index consistency.
             assert(i < j)
 
     if _qpu_remote == None:
-        _qpu_remote = ChimeraQPU(sites, couplers, cell_size, hardware_chimera_degree, site_range, coupler_range, chip_id=chip_id, endpoint=endpoint, solver_name=solver_name)
+        if "2000Q" in solver_name:
+            _qpu_remote = ChimeraQPU(
+                sites, couplers, cell_size, hardware_lattice_size,
+                site_range, coupler_range, chip_id = chip_id,
+                endpoint = endpoint, solver_name = solver_name)
+        elif "Advantage" in solver_name:
+            _qpu_remote = PegasusQPU(
+                sites, couplers, site_range, coupler_range,
+                chip_id = chip_id, endpoint = endpoint,
+                solver_name = solver_name)
+
     return _qpu_remote
 
 
@@ -225,8 +254,8 @@ def build_cli_parser():
 
     parser.add_argument('-tl', '--timeless', help='omit generation timestamp', action='store_true', default=False)
     parser.add_argument('-rs', '--seed', help='seed for the random number generator', type=int)
-    parser.add_argument('-cd', '--chimera-degree', help='the size of a square chimera graph to utilize', type=int)
-    parser.add_argument('-hcd', '--hardware-chimera-degree', help='the size of the square chimera graph on the hardware', type=int, default=16)
+    parser.add_argument('-ls', '--lattice-size', help='the size of a square chimera graph to utilize', type=int)
+    parser.add_argument('-hls', '--hardware-lattice-size', help='the size of the square chimera graph on the hardware', type=int, default=16)
     parser.add_argument('-pp', '--pretty-print', help='pretty print json output', action='store_true', default=False)
     parser.add_argument('-os', '--omit-solution', help='omit any solutions produced by the problem generator', action='store_true', default=False)
     parser.add_argument('-iz', '--include-zeros', help='include zero values in output', action='store_true', default=False)

@@ -37,6 +37,7 @@ def generate_disordered(qpu, coupling_vals=[], couplings_pr=[], field_vals=[], f
 
         for site in sorted(qpu.sites):
             rnd = random.random()
+            
             for cdf, val in fields_dist:
                 if rnd <= cdf:
                     fields[site] = val
@@ -428,7 +429,7 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
 
     #print(min_row_col, max_row_col)
 
-    ws_cluters = []
+    ws_clusters = []
     s_clusters = []
 
     for sc in strong_cultsers:
@@ -437,36 +438,36 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
             wc_1 = ChimeraCoordinate(sc.row-1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col-1)
             wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         elif sc.row == min_row_col and sc.col == max_row_col:
             wc_1 = ChimeraCoordinate(sc.row-1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col+1)
             wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         elif sc.row == max_row_col and sc.col == min_row_col:
             wc_1 = ChimeraCoordinate(sc.row+1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col-1)
             wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         elif sc.row == max_row_col and sc.col == max_row_col:
             wc_1 = ChimeraCoordinate(sc.row+1, sc.col)
             wc_2 = ChimeraCoordinate(sc.row, sc.col-1)
             wc = _select_weak_cluster(qpu, sc, wc_1, wc_2)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         # Row Cases
         elif sc.row == min_row_col and (sc.col != min_row_col or sc.col != max_row_col):
             wc = ChimeraCoordinate(sc.row-1, sc.col)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         elif sc.row == max_row_col and (sc.col != min_row_col or sc.col != max_row_col):
             wc = ChimeraCoordinate(sc.row+1, sc.col)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         # Column Cases
         elif (sc.row != min_row_col or sc.row != max_row_col) and sc.col == min_row_col:
             wc = ChimeraCoordinate(sc.row, sc.col-1)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         elif (sc.row != min_row_col or sc.row != max_row_col) and sc.col == max_row_col:
             wc = ChimeraCoordinate(sc.row, sc.col+1)
-            ws_cluters.append(WeakStrongCluster(wc, sc))
+            ws_clusters.append(WeakStrongCluster(wc, sc))
         # Interior Case
         elif (sc.row != min_row_col or sc.row != max_row_col) and (sc.col != min_row_col or sc.col != max_row_col):
             wc = ChimeraCoordinate(sc.row, sc.col+1)
@@ -474,7 +475,7 @@ def _build_wscbc(qpu, weak_field, strong_field, chimera_degree_view):
         else:
             assert(False) # Case missing from SWC generator
 
-    for wsc in ws_cluters:
+    for wsc in ws_clusters:
         wsc_fields, wsc_couplings = _build_wsc(qpu, weak_field, strong_field, wsc)
         _update_fc(fields, couplings, wsc_fields, wsc_couplings)
 

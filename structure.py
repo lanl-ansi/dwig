@@ -1,4 +1,5 @@
 import copy, random, math
+import dwave_networkx as dnx
 
 from collections import namedtuple
 
@@ -103,11 +104,11 @@ class QPUConfiguration(object):
             'version': bqpjson_version,
             'id': random.randint(0, 2**31 - 1),
             'variable_domain': 'spin',
-            'variable_ids':[site.index for site in sorted_sites],
+            'variable_ids': [site.index for site in sorted_sites],
             'scale': self.scale,
             'offset': self.offset,
-            'linear_terms':linear_terms_data,
-            'quadratic_terms':quadratic_terms_data
+            'linear_terms': linear_terms_data,
+            'quadratic_terms': quadratic_terms_data
         }
 
         return data_dict
@@ -154,34 +155,58 @@ Range = namedtuple('Range', ['lb', 'ub'])
 
 
 class ChimeraQPU(object):
+    # All of these parameters are associated with a Chimera cell. This would
+    # change for the PegasusCPU class. Sites and couplers will be needed, cell
+    # size will be needed, chimera_degree will not be used, neither will
+    # chimera_degree_view. Degree is base number of cells, i.e., if n = 2, 2x2
+    # chimera cells. We will want something like Pegasus degree.
+    # chimera_degree is kind of like the hardware degree, derived from the spin indices
+    # chimera_degree_view is the size of the subsetted square you want to consider
     def __init__(self, sites, couplers, cell_size, chimera_degree, site_range, coupler_range, chimera_degree_view = None, chip_id = None, endpoint = None, solver_name = None):
         if chimera_degree_view == None:
             self.chimera_degree_view = chimera_degree
         else:
             self.chimera_degree_view = chimera_degree_view
-
+        
+        # unique to the architecture
         self.cell_size = int(cell_size)
+
+        # this is returned by dwave
         self.chip_id = chip_id
 
+        # url of the solver and its name
         self.endpoint = endpoint
         self.solver_name = solver_name
 
+        # these are all the possible sites... i.e., each site is a qubit
         self.sites = set([ChimeraSite(site, chimera_degree) for site in sites])
 
+        # integers associated with each qubit: lookup from qubit integer to chimera site data structure.
         site_lookup = { cn.index : cn for cn in self.sites }
+
+        # mapping all of the qubit chimera site object pairs (coupling)
         self.couplers = set([(site_lookup[i],site_lookup[j]) for i,j in couplers])
         self.chimera_degree = int(chimera_degree)
-        self.site_range = site_range
-        self.coupler_range = coupler_range
 
+        # a tuple (0, max_site_id)... range of integers, not all indices exist, possibly
+        self.site_range = site_range
+
+        # a tuple (0, max_coupler_id)... max coupler id should always be the length of the coupler list
+        self.coupler_range = coupler_range
 
         self.chimera_cells = set()
         self.chimera_cell_sites = {}
+
         for site in self.sites:
+            # trying to get all unique chimera cell ids
             self.chimera_cells.add(site.chimera_cell)
+
             if site.chimera_cell not in self.chimera_cell_sites:
                 self.chimera_cell_sites[site.chimera_cell] = set([])
+
+            # adding qubit objects to each chimera cell
             self.chimera_cell_sites[site.chimera_cell].add(site)
+
         #print(self.chimera_cell_sites)
 
         for i,j in couplers:
@@ -194,18 +219,26 @@ class ChimeraQPU(object):
     def chimera_degree_filter(self, chimera_degree_view):
         assert(chimera_degree_view >= 1)
 
+        # is_chimera_degree says if a qubit is within a chimera graph of a certain degree
         filtered_sites = set([n.index for n in self.sites if n.is_chimera_degree(chimera_degree_view)])
+
+        # filter all the couplers that apply to the qubits from above
         filtered_couplers = [(i.index, j.index) for i,j in self.couplers if (i.index in filtered_sites and j.index in filtered_sites)]
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
+    # tries to fill in the subgraph diagonally
+    # in new Pegasus class, do not reimplement cell_filter, not needed
     def cell_filter(self, max_cell):
         assert(max_cell >= 1)
         # TODO add warning if max_cell is larger than chimera_degree_view**2
 
+        # chimera row indices start from 0... probably, number of rows belo
         chimera_rows = max(s.chimera_row for s in self.sites)+1
+
         cell_distances = {}
         for s in self.sites:
+            # euclidean distance of cell from upper left?
             cell_distances[s.chimera_cell] = (s.chimera_cell_distance, s.chimera_row)
 
         cells = sorted(cell_distances, key=cell_distances.get)
@@ -216,10 +249,13 @@ class ChimeraQPU(object):
 
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
+    # Allows you to define the box, even within the middle of the graph. each cell is the upper part and lower part
     def chimera_cell_box_filter(self, chimera_cell_1, chimera_cell_2):
+        # Starting and ending rows in the box, and columns.
         chimera_rows = (chimera_cell_1[0], chimera_cell_2[0])
         chimera_columns = (chimera_cell_1[1], chimera_cell_2[1])
 
+        # Checks to make sure the box you've specified is valid
         assert(chimera_rows[0] >= 0 and chimera_rows[0] <= self.chimera_degree_view)
         assert(chimera_rows[1] >= 0 and chimera_rows[1] <= self.chimera_degree_view)
         assert(chimera_rows[0] <= chimera_rows[1])
@@ -227,6 +263,7 @@ class ChimeraQPU(object):
         assert(chimera_columns[1] >= 0 and chimera_columns[1] <= self.chimera_degree_view)
         assert(chimera_columns[0] <= chimera_columns[1])
 
+        # filtering all qubits and couplers that reside within the box, only
         filtered_sites = set([])
         for site in self.sites:
             if site.chimera_row >= chimera_rows[0] and site.chimera_row <= chimera_rows[1] and \
@@ -238,6 +275,7 @@ class ChimeraQPU(object):
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
     def spin_filter(self, spin_set):
+        # collection of integer ids. sites are qpu objects
         spin_set = set(spin_set)
 
         filtered_sites = set([])
@@ -254,6 +292,8 @@ class ChimeraQPU(object):
         return ChimeraQPU(filtered_sites, filtered_couplers, self.cell_size, self.chimera_degree, self.site_range, self.coupler_range, self.chimera_degree_view, self.chip_id, self.endpoint, self.solver_name)
 
     def coupler_filter(self, coupler_set):
+        # coupler_set is a vector of integer tuples
+        # coupler_sites is the vector of coupler objects
         coupler_sites = set([])
         for (i,j) in coupler_set:
             coupler_sites.add(i)
@@ -271,6 +311,7 @@ class ChimeraQPU(object):
                 if coupler in coupler_set:
                     filtered_couplers.append(coupler)
 
+        # check if one of the couplers doesn't exist in the hardware and error out, if so
         if len(filtered_couplers) != len(coupler_sites):
             print_err('warning: given a coupler set of size {} but found only {} active couplings from this set'.format(len(coupler_sites), len(filtered_couplers)))
             filtered_sites = set([])
@@ -288,6 +329,7 @@ class ChimeraQPU(object):
         assert(chimera_row > 0 and chimera_row <= self.chimera_degree_view)
         assert(chimera_column > 0 and chimera_column <= self.chimera_degree_view)
 
+        # flattened index for the chimera cell
         return (chimera_row-1)*(self.chimera_degree) + (chimera_column-1)
 
     def __str__(self):
@@ -296,9 +338,15 @@ class ChimeraQPU(object):
             ' '.join(['('+str(i)+', '+str(j)+')' for i,j in self.couplers])
 
 
+# Class for an individual qubit
 class ChimeraSite(object):
     def __init__(self, index, chimera_degree, unit_cell_size = 8):
+        # Deriving associated cell information from the qubit data alone
         self.index = index
+
+        # Focus on being able to grow the box of Pegasus graph. May need more than two indices for the Pegasus graph.
+        
+        # We need to know the numbering convention of the Chimera layout to derive the below.
         self.chimera_cell = self.index//unit_cell_size
         self.chimera_cell_row = (self.index%unit_cell_size)//(unit_cell_size/2)
         self.chimera_row = self.chimera_cell//chimera_degree
@@ -314,3 +362,82 @@ class ChimeraSite(object):
     # required so sorting works properly and problem generation is consistent
     def __lt__(self, other):
         return self.index < other.index
+
+class PegasusSite(object):
+    def __init__(self, index):
+        # Index of the qubit.
+        self.index = index
+
+    # "String" definition for naming the Pegasus site.
+    def __str__(self):
+        return str(self.index)
+
+    # "Less than" definition, later required for problem generation.
+    def __lt__(self, other):
+        return self.index < other.index
+
+
+class PegasusQPU(object):
+    def __init__(
+        self, sites, couplers, site_range, coupler_range,
+        chip_id = None, endpoint = None, solver_name = None):
+        # Cell size, unique to the Pegasus architecture.
+        self.cell_size = 24
+
+        # Initialize the set of all possible sites.
+        self.sites = set([PegasusSite(site_index) for site_index in sites])
+
+        # Map site indices to site objects via the `site_lookup` dictionary.
+        site_lookup = {site.index : site for site in self.sites}
+
+        # Define the set of couplers with respect to the site objects.
+        self.couplers = set([(site_lookup[i], site_lookup[j]) for i, j in couplers])
+
+        # Tuple that stores the minimum and maximum site indices.
+        self.site_range = site_range
+
+        # Tuple the stores the minimum and maximum coupler indices.
+        self.coupler_range = coupler_range
+
+        for i, j in couplers:
+            # Coupler indices should appear in sites.
+            assert(i in sites)
+            assert(j in sites)
+
+        for i, j in couplers:
+            # A qubit can't be coupled to itself.
+            assert(i != j)
+
+        # This is specific to the D-Wave solver being used.
+        self.chip_id = chip_id
+
+        # URL of the solver endpoint.
+        self.endpoint = endpoint
+
+        # Name of the solver corresponding to the endpoint.
+        self.solver_name = solver_name
+
+    def pegasus_degree_filter(self, pegasus_degree):
+        # Ensure the Pegasus degree is valid.
+        assert(pegasus_degree >= 2)
+
+        # Get flattened indices of the expected Pegasus subgraph.
+        pegasus_coordinates = dnx.pegasus_coordinates(16) # Specific for the Advantage.
+        graph = dnx.pegasus_graph(pegasus_degree, nice_coordinates = True) # Subgraph size.
+        linear_indices = [pegasus_coordinates.nice_to_linear(x) for x in list(graph.nodes)]
+
+        # Get the index set of all nodes.
+        linear_node_set = set(linear_indices)
+        qpu_site_indices = set([x.index for x in self.sites])
+        filtered_sites = linear_node_set.intersection(qpu_site_indices)
+
+        # Filter couplers to include only the sites from above.
+        filtered_couplers = [(i.index, j.index) for i, j in self.couplers if \
+            (i.index in filtered_sites and j.index in filtered_sites)]
+
+        print_err(len(filtered_couplers))
+        print_err(len(graph.edges))
+
+        return PegasusQPU(
+            filtered_sites, filtered_couplers, self.site_range,
+            self.coupler_range, self.chip_id, self.endpoint, self.solver_name)
