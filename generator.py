@@ -31,7 +31,7 @@ def generate_disordered(qpu, coupling_vals=[], couplings_pr=[], field_vals=[], f
     if len(fields_pr) > 0:
         fields_cdf = [fields_pr[0]]
         for (i,pr) in enumerate(fields_pr[1:]):
-            fields_cdf.append(fields_cdf[i-1] + pr)
+            fields_cdf.append(fields_cdf[i] + pr)
 
         fields_dist = [i for i in zip(fields_cdf, field_vals)]
 
@@ -45,7 +45,7 @@ def generate_disordered(qpu, coupling_vals=[], couplings_pr=[], field_vals=[], f
     if len(couplings_pr) > 0:
         couplings_cdf = [couplings_pr[0]]
         for (i,pr) in enumerate(couplings_pr[1:]):
-            couplings_cdf.append(couplings_cdf[i-1] + pr)
+            couplings_cdf.append(couplings_cdf[i] + pr)
 
         couplings_dist = [i for i in zip(couplings_cdf, coupling_vals)]
 
