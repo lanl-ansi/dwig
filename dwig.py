@@ -54,8 +54,8 @@ def build_case(args):
             qpu = qpu.chimera_cell_box_filter(chimera_cell_1, chimera_cell_2)
     elif "Advantage" in qpu.solver_name:
         if args.lattice_size != None:
-            print_err('filtering QPU to Pegasus lattice of degree {}'.format(args.lattice_size))
-            qpu = qpu.pegasus_degree_filter(args.lattice_size)
+            print_err('filtering QPU to Pegasus lattice of size parameter {}'.format(args.lattice_size))
+            qpu = qpu.pegasus_lattice_size_filter(args.lattice_size)
 
     if args.spin_set != None:
         print_err('filtering QPU to the spin set {}'.format(args.spin_set))
@@ -243,7 +243,7 @@ def spin_pair(s):
         x, y = map(int, s.split(','))
         return x, y
     except:
-        raise argparse.ArgumentTypeError("a spin pair must be x,y intergers")
+        raise argparse.ArgumentTypeError("a spin pair must be x,y integers")
 
 
 def build_cli_parser():
