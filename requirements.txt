@@ -15,7 +15,7 @@ importlib-metadata==0.18
 jsonschema==2.6.0
 more-itertools==7.0.0
 networkx==2.3
-numpy==1.16.4
+numpy==1.22.0
 packaging==19.0
 plucky==0.4.3
 pluggy==0.12.0
